@@ -1,0 +1,6 @@
+wechat:
+  mp:
+    appId: wx8483137e5d79b797
+    secret: 33956bffeb03975f38827202c6521b99
+    token: jue
+    aesKey:

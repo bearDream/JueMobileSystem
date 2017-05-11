@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.NumberMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Number">
+    <id column="num_id" jdbcType="INTEGER" property="numId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="is_expired" jdbcType="TINYINT" property="isExpired" />
+    <result column="people_num" jdbcType="INTEGER" property="peopleNum" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    num_id, user_id, business_id, number, is_expired, people_num, add_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_number
+    where num_id = #{numId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_number
+    where num_id = #{numId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Number">
+    insert into t_number (num_id, user_id, business_id, 
+      number, is_expired, people_num, 
+      add_time)
+    values (#{numId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{businessId,jdbcType=INTEGER}, 
+      #{number,jdbcType=INTEGER}, #{isExpired,jdbcType=TINYINT}, #{peopleNum,jdbcType=INTEGER}, 
+      #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Number">
+    insert into t_number
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="numId != null">
+        num_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="isExpired != null">
+        is_expired,
+      </if>
+      <if test="peopleNum != null">
+        people_num,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="numId != null">
+        #{numId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="isExpired != null">
+        #{isExpired,jdbcType=TINYINT},
+      </if>
+      <if test="peopleNum != null">
+        #{peopleNum,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Number">
+    update t_number
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="isExpired != null">
+        is_expired = #{isExpired,jdbcType=TINYINT},
+      </if>
+      <if test="peopleNum != null">
+        people_num = #{peopleNum,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where num_id = #{numId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Number">
+    update t_number
+    set user_id = #{userId,jdbcType=INTEGER},
+      business_id = #{businessId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      is_expired = #{isExpired,jdbcType=TINYINT},
+      people_num = #{peopleNum,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where num_id = #{numId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.DishMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Dish">
+    <id column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Dish">
+    <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dish_id, dish_name, dish_desc, add_time
+  </sql>
+  <sql id="Blob_Column_List">
+    dish_content
+  </sql>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_dish
+    <where>
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="dishName != null">
+        and dish_name = #{dishName,jdbcType=VARCHAR}
+      </if>
+      <if test="dishContent != null">
+        and dish_content = #{dishContent}
+      </if>
+      <if test="dishDesc != null">
+        and dish_desc = #{dishDescContent,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_dish
+    where dish_id = #{dishId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_dish
+    where dish_id = #{dishId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Dish">
+    insert into t_dish (dish_id, dish_name, dish_desc, 
+      add_time, dish_content)
+    values (#{dishId,jdbcType=INTEGER}, #{dishName,jdbcType=VARCHAR}, #{dishDesc,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{dishContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Dish">
+    insert into t_dish
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
+        dish_id,
+      </if>
+      <if test="dishName != null">
+        dish_name,
+      </if>
+      <if test="dishDesc != null">
+        dish_desc,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="dishContent != null">
+        dish_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dishId != null">
+        #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="dishName != null">
+        #{dishName,jdbcType=VARCHAR},
+      </if>
+      <if test="dishDesc != null">
+        #{dishDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishContent != null">
+        #{dishContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Dish">
+    update t_dish
+    <set>
+      <if test="dishName != null">
+        dish_name = #{dishName,jdbcType=VARCHAR},
+      </if>
+      <if test="dishDesc != null">
+        dish_desc = #{dishDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dishContent != null">
+        dish_content = #{dishContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where dish_id = #{dishId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Dish">
+    update t_dish
+    set dish_name = #{dishName,jdbcType=VARCHAR},
+      dish_desc = #{dishDesc,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      dish_content = #{dishContent,jdbcType=LONGVARCHAR}
+    where dish_id = #{dishId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Dish">
+    update t_dish
+    set dish_name = #{dishName,jdbcType=VARCHAR},
+      dish_desc = #{dishDesc,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where dish_id = #{dishId,jdbcType=INTEGER}
+  </update>
+</mapper>

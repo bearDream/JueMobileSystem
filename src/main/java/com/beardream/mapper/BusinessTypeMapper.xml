@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.BusinessTypeMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.BusinessType">
+    <id column="business_type_id" jdbcType="INTEGER" property="businessTypeId" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.BusinessType">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    business_type_id, type_name, parent_id, add_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_business_type
+    where business_type_id = #{businessTypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_business_type
+    where business_type_id = #{businessTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.BusinessType">
+    insert into t_business_type (business_type_id, type_name, parent_id, 
+      add_time, content)
+    values (#{businessTypeId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.BusinessType">
+    insert into t_business_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="businessTypeId != null">
+        business_type_id,
+      </if>
+      <if test="typeName != null">
+        type_name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="businessTypeId != null">
+        #{businessTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null">
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.BusinessType">
+    update t_business_type
+    <set>
+      <if test="typeName != null">
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where business_type_id = #{businessTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.BusinessType">
+    update t_business_type
+    set type_name = #{typeName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where business_type_id = #{businessTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.BusinessType">
+    update t_business_type
+    set type_name = #{typeName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where business_type_id = #{businessTypeId,jdbcType=INTEGER}
+  </update>
+</mapper>

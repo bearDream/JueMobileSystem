@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.EvaluateMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Evaluate">
+    <id column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="object_id" jdbcType="INTEGER" property="objectId" />
+    <result column="evaluate_type" jdbcType="TINYINT" property="evaluateType" />
+    <result column="star" jdbcType="TINYINT" property="star" />
+    <result column="is_anonymous" jdbcType="TINYINT" property="isAnonymous" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Evaluate">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    evaluate_id, user_id, object_id, evaluate_type, star, is_anonymous, add_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_evaluate
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_evaluate
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Evaluate">
+    insert into t_evaluate (evaluate_id, user_id, object_id, 
+      evaluate_type, star, is_anonymous, 
+      add_time, content)
+    values (#{evaluateId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{objectId,jdbcType=INTEGER}, 
+      #{evaluateType,jdbcType=TINYINT}, #{star,jdbcType=TINYINT}, #{isAnonymous,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Evaluate">
+    insert into t_evaluate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="evaluateId != null">
+        evaluate_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="objectId != null">
+        object_id,
+      </if>
+      <if test="evaluateType != null">
+        evaluate_type,
+      </if>
+      <if test="star != null">
+        star,
+      </if>
+      <if test="isAnonymous != null">
+        is_anonymous,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="evaluateId != null">
+        #{evaluateId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="objectId != null">
+        #{objectId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateType != null">
+        #{evaluateType,jdbcType=TINYINT},
+      </if>
+      <if test="star != null">
+        #{star,jdbcType=TINYINT},
+      </if>
+      <if test="isAnonymous != null">
+        #{isAnonymous,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Evaluate">
+    update t_evaluate
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="objectId != null">
+        object_id = #{objectId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateType != null">
+        evaluate_type = #{evaluateType,jdbcType=TINYINT},
+      </if>
+      <if test="star != null">
+        star = #{star,jdbcType=TINYINT},
+      </if>
+      <if test="isAnonymous != null">
+        is_anonymous = #{isAnonymous,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Evaluate">
+    update t_evaluate
+    set user_id = #{userId,jdbcType=INTEGER},
+      object_id = #{objectId,jdbcType=INTEGER},
+      evaluate_type = #{evaluateType,jdbcType=TINYINT},
+      star = #{star,jdbcType=TINYINT},
+      is_anonymous = #{isAnonymous,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Evaluate">
+    update t_evaluate
+    set user_id = #{userId,jdbcType=INTEGER},
+      object_id = #{objectId,jdbcType=INTEGER},
+      evaluate_type = #{evaluateType,jdbcType=TINYINT},
+      star = #{star,jdbcType=TINYINT},
+      is_anonymous = #{isAnonymous,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where evaluate_id = #{evaluateId,jdbcType=INTEGER}
+  </update>
+</mapper>

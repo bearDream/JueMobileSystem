@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.BusinessMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Business">
+    <id column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="tel" jdbcType="INTEGER" property="tel" />
+    <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
+    <result column="is_show" jdbcType="TINYINT" property="isShow" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Business">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    business_id, user_id, name, address, tel, business_image, is_show, add_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    <include refid="Blob_Column_List" />
+    from t_business
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </select>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_business
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null">
+        and address = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="tel != null">
+        and tel = #{tel,jdbcType=INTEGER}
+      </if>
+      <if test="businessImage != null">
+        and business_image = #{businessImage,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow != null">
+        and is_show = #{isShow,jdbcType=TINYINT}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=LONGVARCHAR}
+      </if>
+    </where>
+    order by add_time desc
+</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_business
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Business">
+    insert into t_business (business_id, user_id, name, 
+      address, tel, business_image, 
+      is_show, add_time, content
+      )
+    values (#{businessId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{tel,jdbcType=INTEGER}, #{businessImage,jdbcType=VARCHAR}, 
+      #{isShow,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Business">
+    insert into t_business
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="businessImage != null">
+        business_image,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="businessId != null">
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=INTEGER},
+      </if>
+      <if test="businessImage != null">
+        #{businessImage,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Business">
+    update t_business
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=INTEGER},
+      </if>
+      <if test="businessImage != null">
+        business_image = #{businessImage,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Business">
+    update t_business
+    set user_id = #{userId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=INTEGER},
+      business_image = #{businessImage,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Business">
+    update t_business
+    set user_id = #{userId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=INTEGER},
+      business_image = #{businessImage,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where business_id = #{businessId,jdbcType=INTEGER}
+  </update>
+</mapper>

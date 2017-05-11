@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Order">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="order_pice" jdbcType="REAL" property="orderPice" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
+    <result column="weixing_tranid" jdbcType="VARCHAR" property="weixingTranid" />
+    <result column="tran_time" jdbcType="TIMESTAMP" property="tranTime" />
+    <result column="tran_money" jdbcType="TIMESTAMP" property="tranMoney" />
+    <result column="prepay_id" jdbcType="VARCHAR" property="prepayId" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, user_id, dish_id, add_time, order_pice, remark, order_status, weixing_tranid, 
+    tran_time, tran_money, prepay_id, openid, business_id, evaluate_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Order">
+    insert into t_order (order_id, user_id, dish_id, 
+      add_time, order_pice, remark, 
+      order_status, weixing_tranid, tran_time, 
+      tran_money, prepay_id, openid, 
+      business_id, evaluate_id)
+    values (#{orderId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{dishId,jdbcType=INTEGER}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{orderPice,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, 
+      #{orderStatus,jdbcType=TINYINT}, #{weixingTranid,jdbcType=VARCHAR}, #{tranTime,jdbcType=TIMESTAMP}, 
+      #{tranMoney,jdbcType=TIMESTAMP}, #{prepayId,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{businessId,jdbcType=INTEGER}, #{evaluateId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Order">
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="dishId != null">
+        dish_id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="orderPice != null">
+        order_pice,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="weixingTranid != null">
+        weixing_tranid,
+      </if>
+      <if test="tranTime != null">
+        tran_time,
+      </if>
+      <if test="tranMoney != null">
+        tran_money,
+      </if>
+      <if test="prepayId != null">
+        prepay_id,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="evaluateId != null">
+        evaluate_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="dishId != null">
+        #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderPice != null">
+        #{orderPice,jdbcType=REAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="weixingTranid != null">
+        #{weixingTranid,jdbcType=VARCHAR},
+      </if>
+      <if test="tranTime != null">
+        #{tranTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tranMoney != null">
+        #{tranMoney,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prepayId != null">
+        #{prepayId,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateId != null">
+        #{evaluateId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Order">
+    update t_order
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="dishId != null">
+        dish_id = #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderPice != null">
+        order_pice = #{orderPice,jdbcType=REAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="weixingTranid != null">
+        weixing_tranid = #{weixingTranid,jdbcType=VARCHAR},
+      </if>
+      <if test="tranTime != null">
+        tran_time = #{tranTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tranMoney != null">
+        tran_money = #{tranMoney,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prepayId != null">
+        prepay_id = #{prepayId,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluateId != null">
+        evaluate_id = #{evaluateId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Order">
+    update t_order
+    set user_id = #{userId,jdbcType=INTEGER},
+      dish_id = #{dishId,jdbcType=INTEGER},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      order_pice = #{orderPice,jdbcType=REAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      weixing_tranid = #{weixingTranid,jdbcType=VARCHAR},
+      tran_time = #{tranTime,jdbcType=TIMESTAMP},
+      tran_money = #{tranMoney,jdbcType=TIMESTAMP},
+      prepay_id = #{prepayId,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      business_id = #{businessId,jdbcType=INTEGER},
+      evaluate_id = #{evaluateId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+</mapper>

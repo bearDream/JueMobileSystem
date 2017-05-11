@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.ModuleMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Module">
+    <id column="module_id" jdbcType="INTEGER" property="moduleId" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="module_content" jdbcType="VARCHAR" property="moduleContent" />
+    <result column="controllerkey" jdbcType="VARCHAR" property="controllerkey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    module_id, module_name, module_content, controllerkey
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_module
+    where module_id = #{moduleId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_module
+    <where>
+      <if test="moduleId != null">
+        and module_id = #{moduleId}
+      </if>
+      <if test="moduleName != null">
+        and module_name = #{moduleName}
+      </if>
+      <if test="moduleContent != null">
+        and module_content = #{moduleContent}
+      </if>
+      <if test="controllerkey != null">
+        and controllerkey = #{controllerkey}
+      </if>
+    </where>
+    order by module_id asc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_module
+    where module_id = #{moduleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Module" useGeneratedKeys="true" keyProperty="moduleId">
+    insert into t_module (module_id, module_name, module_content, 
+      controllerkey)
+    values (#{moduleId,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, #{moduleContent,jdbcType=VARCHAR}, 
+      #{controllerkey,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Module" useGeneratedKeys="true" keyProperty="moduleId">
+    insert into t_module
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="moduleId != null">
+        module_id,
+      </if>
+      <if test="moduleName != null">
+        module_name,
+      </if>
+      <if test="moduleContent != null">
+        module_content,
+      </if>
+      <if test="controllerkey != null">
+        controllerkey,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleName != null">
+        #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleContent != null">
+        #{moduleContent,jdbcType=VARCHAR},
+      </if>
+      <if test="controllerkey != null">
+        #{controllerkey,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Module" keyProperty="moduleId">
+    update t_module
+    <set>
+      <if test="moduleName != null">
+        module_name = #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleContent != null">
+        module_content = #{moduleContent,jdbcType=VARCHAR},
+      </if>
+      <if test="controllerkey != null">
+        controllerkey = #{controllerkey,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where module_id = #{moduleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Module" keyProperty="moduleId">
+    update t_module
+    set module_name = #{moduleName,jdbcType=VARCHAR},
+      module_content = #{moduleContent,jdbcType=VARCHAR},
+      controllerkey = #{controllerkey,jdbcType=VARCHAR}
+    where module_id = #{moduleId,jdbcType=INTEGER}
+  </update>
+
+  <update id="truncate">
+    truncate TABLE t_module
+  </update>
+</mapper>

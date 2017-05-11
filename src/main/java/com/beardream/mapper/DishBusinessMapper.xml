@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.DishBusinessMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.DishBusiness">
+    <id column="dish_business_id" jdbcType="INTEGER" property="dishBusinessId" />
+    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
+    <result column="is_favorable" jdbcType="BIT" property="isFavorable" />
+    <result column="is_show" jdbcType="BIT" property="isShow" />
+    <result column="is_top" jdbcType="BIT" property="isTop" />
+    <result column="order_count" jdbcType="INTEGER" property="orderCount" />
+    <result column="dish_price" jdbcType="REAL" property="dishPrice" />
+    <result column="favorable_price" jdbcType="REAL" property="favorablePrice" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dish_business_id, dish_id, business_id, dish_type, is_favorable, is_show, is_top, 
+    order_count, dish_price, favorable_price, addtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_dish_business
+    where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_dish_business
+    where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.DishBusiness">
+    insert into t_dish_business (dish_business_id, dish_id, business_id, 
+      dish_type, is_favorable, is_show, 
+      is_top, order_count, dish_price, 
+      favorable_price, addtime)
+    values (#{dishBusinessId,jdbcType=INTEGER}, #{dishId,jdbcType=INTEGER}, #{businessId,jdbcType=INTEGER}, 
+      #{dishType,jdbcType=VARCHAR}, #{isFavorable,jdbcType=BIT}, #{isShow,jdbcType=BIT}, 
+      #{isTop,jdbcType=BIT}, #{orderCount,jdbcType=INTEGER}, #{dishPrice,jdbcType=REAL}, 
+      #{favorablePrice,jdbcType=REAL}, #{addtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.DishBusiness">
+    insert into t_dish_business
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dishBusinessId != null">
+        dish_business_id,
+      </if>
+      <if test="dishId != null">
+        dish_id,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="dishType != null">
+        dish_type,
+      </if>
+      <if test="isFavorable != null">
+        is_favorable,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="isTop != null">
+        is_top,
+      </if>
+      <if test="orderCount != null">
+        order_count,
+      </if>
+      <if test="dishPrice != null">
+        dish_price,
+      </if>
+      <if test="favorablePrice != null">
+        favorable_price,
+      </if>
+      <if test="addtime != null">
+        addtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dishBusinessId != null">
+        #{dishBusinessId,jdbcType=INTEGER},
+      </if>
+      <if test="dishId != null">
+        #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="dishType != null">
+        #{dishType,jdbcType=VARCHAR},
+      </if>
+      <if test="isFavorable != null">
+        #{isFavorable,jdbcType=BIT},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=BIT},
+      </if>
+      <if test="isTop != null">
+        #{isTop,jdbcType=BIT},
+      </if>
+      <if test="orderCount != null">
+        #{orderCount,jdbcType=INTEGER},
+      </if>
+      <if test="dishPrice != null">
+        #{dishPrice,jdbcType=REAL},
+      </if>
+      <if test="favorablePrice != null">
+        #{favorablePrice,jdbcType=REAL},
+      </if>
+      <if test="addtime != null">
+        #{addtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.DishBusiness">
+    update t_dish_business
+    <set>
+      <if test="dishId != null">
+        dish_id = #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=INTEGER},
+      </if>
+      <if test="dishType != null">
+        dish_type = #{dishType,jdbcType=VARCHAR},
+      </if>
+      <if test="isFavorable != null">
+        is_favorable = #{isFavorable,jdbcType=BIT},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=BIT},
+      </if>
+      <if test="isTop != null">
+        is_top = #{isTop,jdbcType=BIT},
+      </if>
+      <if test="orderCount != null">
+        order_count = #{orderCount,jdbcType=INTEGER},
+      </if>
+      <if test="dishPrice != null">
+        dish_price = #{dishPrice,jdbcType=REAL},
+      </if>
+      <if test="favorablePrice != null">
+        favorable_price = #{favorablePrice,jdbcType=REAL},
+      </if>
+      <if test="addtime != null">
+        addtime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.DishBusiness">
+    update t_dish_business
+    set dish_id = #{dishId,jdbcType=INTEGER},
+      business_id = #{businessId,jdbcType=INTEGER},
+      dish_type = #{dishType,jdbcType=VARCHAR},
+      is_favorable = #{isFavorable,jdbcType=BIT},
+      is_show = #{isShow,jdbcType=BIT},
+      is_top = #{isTop,jdbcType=BIT},
+      order_count = #{orderCount,jdbcType=INTEGER},
+      dish_price = #{dishPrice,jdbcType=REAL},
+      favorable_price = #{favorablePrice,jdbcType=REAL},
+      addtime = #{addtime,jdbcType=TIMESTAMP}
+    where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
+  </update>
+</mapper>

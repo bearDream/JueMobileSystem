@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.LogMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Log">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="log_addtime" jdbcType="TIMESTAMP" property="logAddtime" />
+    <result column="actionkey" jdbcType="VARCHAR" property="actionkey" />
+    <result column="log_content" jdbcType="VARCHAR" property="logContent" />
+    <result column="controllerkey" jdbcType="VARCHAR" property="controllerkey" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="log_ip" jdbcType="VARCHAR" property="logIp" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Log">
+    <result column="params" jdbcType="LONGVARCHAR" property="params" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, log_addtime, actionkey, log_content, controllerkey, user_id, log_ip
+  </sql>
+  <sql id="Blob_Column_List">
+    params
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_log
+    <where>
+      <if test="logId != null">
+        and log_id = #{logId,jdbcType=INT}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INT}
+      </if>
+      <if test="logAddtime != null">
+        and log_addtime = #{logAddtime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by log_addtime desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Log" keyProperty="logiId">
+    insert into t_log (log_id, log_addtime, actionkey, 
+      log_content, controllerkey, user_id, 
+      log_ip, params)
+    values (#{logId,jdbcType=INTEGER}, #{logAddtime,jdbcType=TIMESTAMP}, #{actionkey,jdbcType=VARCHAR}, 
+      #{logContent,jdbcType=VARCHAR}, #{controllerkey,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{logIp,jdbcType=VARCHAR}, #{params,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Log" keyProperty="logiId">
+    insert into t_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        log_id,
+      </if>
+      <if test="logAddtime != null">
+        log_addtime,
+      </if>
+      <if test="actionkey != null">
+        actionkey,
+      </if>
+      <if test="logContent != null">
+        log_content,
+      </if>
+      <if test="controllerkey != null">
+        controllerkey,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="logIp != null">
+        log_ip,
+      </if>
+      <if test="params != null">
+        params,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=INTEGER},
+      </if>
+      <if test="logAddtime != null">
+        #{logAddtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actionkey != null">
+        #{actionkey,jdbcType=VARCHAR},
+      </if>
+      <if test="logContent != null">
+        #{logContent,jdbcType=VARCHAR},
+      </if>
+      <if test="controllerkey != null">
+        #{controllerkey,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="logIp != null">
+        #{logIp,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+        #{params,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Log" keyProperty="logiId">
+    update t_log
+    <set>
+      <if test="logAddtime != null">
+        log_addtime = #{logAddtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actionkey != null">
+        actionkey = #{actionkey,jdbcType=VARCHAR},
+      </if>
+      <if test="logContent != null">
+        log_content = #{logContent,jdbcType=VARCHAR},
+      </if>
+      <if test="controllerkey != null">
+        controllerkey = #{controllerkey,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="logIp != null">
+        log_ip = #{logIp,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+        params = #{params,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Log" keyProperty="logiId">
+    update t_log
+    set log_addtime = #{logAddtime,jdbcType=TIMESTAMP},
+      actionkey = #{actionkey,jdbcType=VARCHAR},
+      log_content = #{logContent,jdbcType=VARCHAR},
+      controllerkey = #{controllerkey,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      log_ip = #{logIp,jdbcType=VARCHAR},
+      params = #{params,jdbcType=LONGVARCHAR}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Log" keyProperty="logiId">
+    update t_log
+    set log_addtime = #{logAddtime,jdbcType=TIMESTAMP},
+      actionkey = #{actionkey,jdbcType=VARCHAR},
+      log_content = #{logContent,jdbcType=VARCHAR},
+      controllerkey = #{controllerkey,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      log_ip = #{logIp,jdbcType=VARCHAR}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>

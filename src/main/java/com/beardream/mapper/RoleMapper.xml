@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Role">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_content" jdbcType="VARCHAR" property="roleContent" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="role_yxbz" jdbcType="TINYINT" property="roleYxbz" />
+    <result column="role_type" jdbcType="TINYINT" property="roleType" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Role">
+    <result column="promission" jdbcType="LONGVARCHAR" property="promission" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, role_name, role_content, add_time, role_yxbz, role_type
+  </sql>
+  <sql id="Blob_Column_List">
+    promission
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_role
+    <where>
+      <if test="roleName != null">
+        and role_name = #{roleName,jdbcType=VARCHAR}
+      </if>
+      <if test="roleContent != null">
+        and role_content = #{roleContent,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="roleYxbz != null">
+        and role_yxbz = #{roleYxbz,jdbcType=TINYINT}
+      </if>
+      <if test="roleType != null">
+        and role_type = #{roleType,jdbcType=TINYINT}
+      </if>
+      <if test="promission != null">
+        and promission = #{promission,jdbcType=LONGVARCHAR}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Role">
+    insert into t_role (role_id, role_name, role_content, 
+      add_time, role_yxbz, role_type, 
+      promission)
+    values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{roleContent,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{roleYxbz,jdbcType=TINYINT}, #{roleType,jdbcType=TINYINT}, 
+      #{promission,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Role">
+    insert into t_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="roleContent != null">
+        role_content,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="roleYxbz != null">
+        role_yxbz,
+      </if>
+      <if test="roleType != null">
+        role_type,
+      </if>
+      <if test="promission != null">
+        promission,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleContent != null">
+        #{roleContent,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleYxbz != null">
+        #{roleYxbz,jdbcType=TINYINT},
+      </if>
+      <if test="roleType != null">
+        #{roleType,jdbcType=TINYINT},
+      </if>
+      <if test="promission != null">
+        #{promission,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Role">
+    update t_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleContent != null">
+        role_content = #{roleContent,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleYxbz != null">
+        role_yxbz = #{roleYxbz,jdbcType=TINYINT},
+      </if>
+      <if test="roleType != null">
+        role_type = #{roleType,jdbcType=TINYINT},
+      </if>
+      <if test="promission != null">
+        promission = #{promission,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Role">
+    update t_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_content = #{roleContent,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      role_yxbz = #{roleYxbz,jdbcType=TINYINT},
+      role_type = #{roleType,jdbcType=TINYINT},
+      promission = #{promission,jdbcType=LONGVARCHAR}
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Role">
+    update t_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_content = #{roleContent,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      role_yxbz = #{roleYxbz,jdbcType=TINYINT},
+      role_type = #{roleType,jdbcType=TINYINT}
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+</mapper>

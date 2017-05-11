@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.NutritionMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Nutrition">
+    <id column="nurtrition_id" jdbcType="INTEGER" property="nurtritionId" />
+    <result column="grease" jdbcType="VARCHAR" property="grease" />
+    <result column="heat" jdbcType="VARCHAR" property="heat" />
+    <result column="sugar_content" jdbcType="VARCHAR" property="sugarContent" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    nurtrition_id, grease, heat, sugar_content, add_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_nutrition
+    where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_nutrition
+    <where>
+      <if test="nurtritionId != null">
+        and nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+      </if>
+      <if test="grease != null">
+        and grease = #{grease,jdbcType=VARCHAR}
+      </if>
+      <if test="heat != null">
+        and heat = #{heat,jdbcType=VARCHAR}
+      </if>
+      <if test="sugarContent != null">
+        and sugarContent = #{sugarContent,jdbcType=TIMESTAMP}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_nutrition
+    where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Nutrition">
+    insert into t_nutrition (nurtrition_id, grease, heat, 
+      sugar_content, add_time)
+    values (#{nurtritionId,jdbcType=INTEGER}, #{grease,jdbcType=VARCHAR}, #{heat,jdbcType=VARCHAR}, 
+      #{sugarContent,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Nutrition">
+    insert into t_nutrition
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nurtritionId != null">
+        nurtrition_id,
+      </if>
+      <if test="grease != null">
+        grease,
+      </if>
+      <if test="heat != null">
+        heat,
+      </if>
+      <if test="sugarContent != null">
+        sugar_content,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nurtritionId != null">
+        #{nurtritionId,jdbcType=INTEGER},
+      </if>
+      <if test="grease != null">
+        #{grease,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null">
+        #{heat,jdbcType=VARCHAR},
+      </if>
+      <if test="sugarContent != null">
+        #{sugarContent,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Nutrition">
+    update t_nutrition
+    <set>
+      <if test="grease != null">
+        grease = #{grease,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null">
+        heat = #{heat,jdbcType=VARCHAR},
+      </if>
+      <if test="sugarContent != null">
+        sugar_content = #{sugarContent,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Nutrition">
+    update t_nutrition
+    set grease = #{grease,jdbcType=VARCHAR},
+      heat = #{heat,jdbcType=VARCHAR},
+      sugar_content = #{sugarContent,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+  </update>
+</mapper>

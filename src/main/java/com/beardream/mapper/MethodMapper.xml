@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.MethodMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.Method">
+    <id column="method_id" jdbcType="INTEGER" property="methodId" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="method_content" jdbcType="VARCHAR" property="methodContent" />
+    <result column="module_id" jdbcType="INTEGER" property="moduleId" />
+    <result column="actionkey" jdbcType="VARCHAR" property="actionkey" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    method_id, method_name, method_content, module_id, actionkey
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_method
+    where method_id = #{methodId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_method
+    <where>
+      <if test="methodId != null">
+        and method_id = #{moduleId}
+      </if>
+      <if test="methodName != null">
+        and method_name = #{methodName}
+      </if>
+      <if test="methodContent != null">
+        and method_content = #{methodContent}
+      </if>
+      <if test="moduleId != null">
+        and module_id = #{moduleId}
+      </if>
+      <if test="actionkey != null">
+        and actionkey = #{actionkey}
+      </if>
+    </where>
+    ORDER BY method_id ASC
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_method
+    where method_id = #{methodId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.beardream.model.Method">
+    insert into t_method (method_id, method_name, method_content, 
+      module_id, actionkey)
+    values (#{methodId,jdbcType=INTEGER}, #{methodName,jdbcType=VARCHAR}, #{methodContent,jdbcType=VARCHAR}, 
+      #{moduleId,jdbcType=INTEGER}, #{actionkey,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beardream.model.Method">
+    insert into t_method
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="methodId != null">
+        method_id,
+      </if>
+      <if test="methodName != null">
+        method_name,
+      </if>
+      <if test="methodContent != null">
+        method_content,
+      </if>
+      <if test="moduleId != null">
+        module_id,
+      </if>
+      <if test="actionkey != null">
+        actionkey,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="methodId != null">
+        #{methodId,jdbcType=INTEGER},
+      </if>
+      <if test="methodName != null">
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="methodContent != null">
+        #{methodContent,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="actionkey != null">
+        #{actionkey,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Method">
+    update t_method
+    <set>
+      <if test="methodName != null">
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="methodContent != null">
+        method_content = #{methodContent,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleId != null">
+        module_id = #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="actionkey != null">
+        actionkey = #{actionkey,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where method_id = #{methodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Method">
+    update t_method
+    set method_name = #{methodName,jdbcType=VARCHAR},
+      method_content = #{methodContent,jdbcType=VARCHAR},
+      module_id = #{moduleId,jdbcType=INTEGER},
+      actionkey = #{actionkey,jdbcType=VARCHAR}
+    where method_id = #{methodId,jdbcType=INTEGER}
+  </update>
+
+  <update id="truncate">
+    truncate TABLE t_method
+  </update>
+</mapper>

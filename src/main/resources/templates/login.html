@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>springboot_Demo</title>
+    <script src="/vue.js"></script>
+    <!-- ElementUI -->
+    <script src="/elementUI/index.js"></script>
+    <link rel="stylesheet" href="/elementUI/index.css"></link>
+</head>
+
+<script>
+    var app1;
+    window.onload = function () {
+        app1 = new Vue({
+            el:'#title',
+            data:{
+                text : '登录',
+                isadd : true
+            }
+        });
+    }
+</script>
+<body>
+    <h3 id="title" v-if="isadd">{{text}}</h3>
+    <!--<h1 th:inline="text">Hello.v.2</h1>-->
+    <!--<p th:text="${hello}"></p>-->
+    <el-button @click="visible = true">按钮</el-button>
+    <!--<el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">-->
+        <!--<el-menu-item index="1">处理中心</el-menu-item>-->
+        <!--<el-submenu index="2">-->
+            <!--<template slot="title">我的工作台</template>-->
+            <!--<el-menu-item index="2-1">选项1</el-menu-item>-->
+            <!--<el-menu-item index="2-2">选项2</el-menu-item>-->
+            <!--<el-menu-item index="2-3">选项3</el-menu-item>-->
+        <!--</el-submenu>-->
+        <!--<el-menu-item index="3"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>-->
+    <!--</el-menu>-->
+    <!--<div class="line"></div>-->
+</body>
+</html>
