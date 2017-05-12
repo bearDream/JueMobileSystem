@@ -37,6 +37,16 @@ public class User {
 
     private Integer roleId;
 
+    public Byte getBodyStatus() {
+        return bodyStatus;
+    }
+
+    public void setBodyStatus(Byte bodyStatus) {
+        this.bodyStatus = bodyStatus;
+    }
+
+    private Byte bodyStatus;
+
     public Integer getUserId() {
         return userId;
     }

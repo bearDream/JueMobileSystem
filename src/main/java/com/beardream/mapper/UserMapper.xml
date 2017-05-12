@@ -20,10 +20,11 @@
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="body_status" jdbcType="TINYINT" property="bodyStatus" />
   </resultMap>
   <sql id="Base_Column_List">
     user_id, username, password, tel, real_name, age, sex, id_card, bank_card, address, 
-    weixin, openid, logins, alipay, status, type, level, role_id
+    weixin, openid, logins, alipay, status, type, level, role_id,body_status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -84,6 +85,9 @@
       </if>
       <if test="level != null">
         and level = #{level}
+      </if>
+      <if test="bodyStatus != null">
+        and body_status = #{bodyStatus}
       </if>
     </where>
     order by user_id desc
@@ -164,6 +168,9 @@
       <if test="roleId != null">
         role_id,
       </if>
+      <if test="bodyStatus != null">
+        body_status = #{bodyStatus},
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -220,6 +227,9 @@
       <if test="roleId != null">
         #{roleId,jdbcType=INTEGER},
       </if>
+      <if test="bodyStatus != null">
+        #{bodyStatus},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.User">
@@ -275,6 +285,9 @@
       </if>
       <if test="roleId != null">
         level = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="bodyStatus != null">
+        body_status = #{bodyStatus},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}

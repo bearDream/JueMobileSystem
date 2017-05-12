@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beardream.dao.UserCollectionMapper">
   <resultMap id="BaseResultMap" type="com.beardream.model.UserCollection">
     <id column="collection_id" jdbcType="INTEGER" property="collectionId" />
@@ -11,11 +12,28 @@
   <sql id="Base_Column_List">
     collection_id, user_id, business_dish_id, collection_type, add_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
     <include refid="Base_Column_List" />
     from t_collection
-    where collection_id = #{collectionId,jdbcType=INTEGER}
+    <where>
+      <if test="collectionId != null">
+        and collection_id = #{collectionId,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="businessDishId != null">
+        and business_dish_id = #{businessDishId,jdbcType=INTEGER}
+      </if>
+      <if test="collectionType != null">
+        and collection_type = #{collectionType,jdbcType=TINYINT}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_collection
