@@ -7,6 +7,7 @@ import com.beardream.dao.UserMapper;
 import com.beardream.enums.ResultEnum;
 import com.beardream.exception.UserException;
 import com.beardream.model.User;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,8 +37,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // 开发阶段改为自动登录，不需要每次请求登录
         User user = new User();
+        Gson gson = new Gson();
+
+        //登录成功
+
         user = mUserMapper.findByMobile("13759498504");
-        session.setAttribute(Constants.USER, user);
+        session.setAttribute(Constants.USER, gson.toJson(user));
 
         //生产模式下，执行下面代码判断是否登录
 //        if (session.getAttribute(Constants.USER) == null){
