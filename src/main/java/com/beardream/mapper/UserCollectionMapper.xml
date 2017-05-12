@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.beardream.dao.CollectionMapper">
-  <resultMap id="BaseResultMap" type="com.beardream.model.Collection">
+<mapper namespace="com.beardream.dao.UserCollectionMapper">
+  <resultMap id="BaseResultMap" type="com.beardream.model.UserCollection">
     <id column="collection_id" jdbcType="INTEGER" property="collectionId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="business_dish_id" jdbcType="INTEGER" property="businessDishId" />
@@ -21,13 +21,13 @@
     delete from t_collection
     where collection_id = #{collectionId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.beardream.model.Collection">
+  <insert id="insert" parameterType="com.beardream.model.UserCollection">
     insert into t_collection (collection_id, user_id, business_dish_id, 
       collection_type, add_time)
     values (#{collectionId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{businessDishId,jdbcType=INTEGER}, 
       #{collectionType,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.beardream.model.Collection">
+  <insert id="insertSelective" parameterType="com.beardream.model.UserCollection">
     insert into t_collection
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="collectionId != null">
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Collection">
+  <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.UserCollection">
     update t_collection
     <set>
       <if test="userId != null">
@@ -82,7 +82,7 @@
     </set>
     where collection_id = #{collectionId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.beardream.model.Collection">
+  <update id="updateByPrimaryKey" parameterType="com.beardream.model.UserCollection">
     update t_collection
     set user_id = #{userId,jdbcType=INTEGER},
       business_dish_id = #{businessDishId,jdbcType=INTEGER},

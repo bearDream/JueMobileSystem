@@ -2,7 +2,7 @@ package com.beardream.model;
 
 import java.util.Date;
 
-public class Collection {
+public class UserCollection {
     private Integer collectionId;
 
     private Integer userId;
