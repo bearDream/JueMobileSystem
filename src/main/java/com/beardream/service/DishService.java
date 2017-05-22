@@ -12,19 +12,19 @@ import java.util.List;
 
 /**
  * Created by soft01 on 2017/5/8.
- */
-@Component
-@Service
-public class DishService {
+            */
+    @Component
+    @Service
+    public class DishService {
 
-    @Autowired
-    public DishMapper dishMapper;
+        @Autowired
+        public DishMapper dishMapper;
 
-    public List find(Dish dish){
-        System.out.println(dishMapper.selectByPrimaryKey(1));
-        List<Dish> dishList = dishMapper.findBySelective(dish);
-        return dishList;
-    }
+        public List find(Dish dish){
+            System.out.println(dishMapper.selectByPrimaryKey(1));
+            List<Dish> dishList = dishMapper.findBySelective(dish);
+            return dishList;
+        }
 
     public String post(Dish dish){
         int result;

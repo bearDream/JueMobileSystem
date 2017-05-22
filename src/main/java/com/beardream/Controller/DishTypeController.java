@@ -52,7 +52,7 @@ public class DishTypeController {
             return ResultUtil.error(-1,"该种类的菜品已存在");
             dishType.setAddTime(new Date());
             result = dishTypeMapper.insertSelective(dishType);
-        if (result>0)
+        if (result> 0)
             return  ResultUtil.success("成功添加菜品");
         else
             return ResultUtil.error(-1,"添加失败");
