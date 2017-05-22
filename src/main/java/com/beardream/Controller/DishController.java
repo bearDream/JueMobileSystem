@@ -24,9 +24,8 @@ import java.util.Map;
  * 菜品控制器
  */
 @RestController
-@RequestMapping("/dish")
+@RequestMapping("/api/dish")
 @Api(value = "菜品服务",description = "提供RESTful风格API的菜品的增删改查服务")
-@PermissionModule(text = "菜品管理")
 public class DishController {
 
     @Autowired
@@ -37,7 +36,6 @@ public class DishController {
 
     @ApiOperation("获取单个菜品信息")
     @GetMapping
-    @PermissionMethod(text = "获取菜品信息")
     public Result get(Dish dish, BindingResult bindingResult){
         System.out.println(dish.getDishId());
         return ResultUtil.success(mDishService.find(dish));
@@ -45,7 +43,6 @@ public class DishController {
 
     @ApiOperation("添加菜品")
     @PostMapping
-    @PermissionMethod(text = "添加菜品信息")
     public Result post(Dish dish){
         System.out.println(dish.getDishId());
         return ResultUtil.success(mDishService.post(dish));
@@ -61,13 +58,12 @@ public class DishController {
 
     @ApiOperation("更新菜品")
     @PutMapping
-    @PermissionMethod(text = "更新菜品信息")
     public Result put(Dish dish){
         System.out.println(dish.getDishId());
         return ResultUtil.success(mDishService.put(dish));
     }
 
-    @ApiOperation("分页获取角色")
+    @ApiOperation("分页获取菜品")
     @GetMapping("/getpage")
     @com.beardream.ioc.Log
     public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){

@@ -6,6 +6,8 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="headImgUrl" jdbcType="VARCHAR" property="remark" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="real_name" jdbcType="VARCHAR" property="realName" />
     <result column="age" jdbcType="INTEGER" property="age" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
@@ -24,7 +26,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     user_id, username, password, tel, real_name, age, sex, id_card, bank_card, address, 
-    weixin, openid, logins, alipay, status, type, level, role_id,body_status
+    weixin, openid, logins, alipay, status, type, level, role_id,body_status,remark,headImgUrl
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -55,6 +57,9 @@
       </if>
       <if test="realName != null">
         and real_name = #{realName}
+      </if>
+      <if test="openid != null">
+        and openid = #{openid}
       </if>
       <if test="age != null">
         and age = #{age}
@@ -89,6 +94,12 @@
       <if test="bodyStatus != null">
         and body_status = #{bodyStatus}
       </if>
+      <if test="headImgUrl != null">
+        and headImgUrl = #{headImgUrl}
+      </if>
+      <if test="remark != null">
+        and remark = #{remark}
+      </if>
     </where>
     order by user_id desc
   </select>
@@ -102,14 +113,15 @@
       tel, real_name, age, 
       sex, id_card, bank_card, 
       address, weixin, openid, 
-      logins, alipay, status, role_id
+      logins, alipay, status, role_id, body_status, headImgUrl, remark,
       type, level)
     values (#{userId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{sex,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
       #{logins,jdbcType=INTEGER}, #{alipay,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{type,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{roleId,jdbcType=INTEGER})
+      #{type,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{roleId,jdbcType=INTEGER},
+      #{bodyStatus,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.User">
     insert into t_user
@@ -169,7 +181,13 @@
         role_id,
       </if>
       <if test="bodyStatus != null">
-        body_status = #{bodyStatus},
+        body_status,
+      </if>
+      <if test="headImgUrl != null">
+        headImgUrl,
+      </if>
+      <if test="remark != null">
+        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -228,7 +246,13 @@
         #{roleId,jdbcType=INTEGER},
       </if>
       <if test="bodyStatus != null">
-        #{bodyStatus},
+        #{bodyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="headImgUrl != null">
+        #{headImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -289,6 +313,12 @@
       <if test="bodyStatus != null">
         body_status = #{bodyStatus},
       </if>
+      <if test="headImgUrl != null">
+        headImgUrl = #{headImgUrl},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
@@ -309,8 +339,11 @@
       alipay = #{alipay,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       type = #{type,jdbcType=TINYINT},
-      level = #{level,jdbcType=TINYINT}
-      role_id = #{roleId,jdbcType=INTEGER}
+      level = #{level,jdbcType=TINYINT},
+      role_id = #{roleId,jdbcType=INTEGER},
+      body_status = #{bodyStatus,jdbcType=VARCHAR},
+      headImgUrl = #{headImgUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 

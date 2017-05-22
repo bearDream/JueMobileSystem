@@ -9,6 +9,7 @@ import com.beardream.exception.UserException;
 import com.beardream.model.User;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +28,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper mUserMapper;
 
+    @Value("${env}")
+    String env;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println(">>>Login拦截器>>>>>>>在请求处理之前进行调用（Controller方法调用之前）");
@@ -36,32 +40,31 @@ public class LoginInterceptor implements HandlerInterceptor {
         PrintWriter out = null;
 
         // 开发阶段改为自动登录，不需要每次请求登录
-        User user = new User();
-        Gson gson = new Gson();
-
-        //登录成功
-
-        user = mUserMapper.findByMobile("13759498504");
-        session.setAttribute(Constants.USER, gson.toJson(user));
-
-        //生产模式下，执行下面代码判断是否登录
-//        if (session.getAttribute(Constants.USER) == null){
-//            //未登录
-//            try {
-//                out = response.getWriter();
-//                out.append(Json.toJson(ResultUtil.error(-2,"未登录")));
-//                System.out.println("返回是\n");
-//                System.out.println(ResultEnum.Logout.toString());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//                if (out != null) {
-//                    out.close();
-//                    return false;
-//                }
-//            }
-////            return false;
-//        }
+        if (env.equals("dev")){
+            User user = new User();
+            Gson gson = new Gson();
+            user = mUserMapper.findByMobile("15587186809");
+            session.setAttribute(Constants.USER, gson.toJson(user));
+        }else {
+            //生产模式下，执行下面代码判断是否登录
+            if (session.getAttribute(Constants.USER) == null){
+                //未登录
+                try {
+                    out = response.getWriter();
+                    out.append(Json.toJson(ResultUtil.error(-2,"未登录")));
+                    System.out.println("返回是\n");
+                    System.out.println(ResultEnum.Logout.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (out != null) {
+                        out.close();
+                        return false;
+                    }
+                }
+                return false;
+            }
+        }
         return true;
     }
 

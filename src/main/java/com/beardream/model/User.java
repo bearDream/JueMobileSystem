@@ -9,6 +9,10 @@ public class User {
 
     private String tel;
 
+    private String headImgUrl;
+
+    private String remark;
+
     private String realName;
 
     private Integer age;
@@ -37,6 +41,8 @@ public class User {
 
     private Integer roleId;
 
+    private Byte bodyStatus;
+
     public Byte getBodyStatus() {
         return bodyStatus;
     }
@@ -44,8 +50,6 @@ public class User {
     public void setBodyStatus(Byte bodyStatus) {
         this.bodyStatus = bodyStatus;
     }
-
-    private Byte bodyStatus;
 
     public Integer getUserId() {
         return userId;
@@ -189,5 +193,21 @@ public class User {
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
