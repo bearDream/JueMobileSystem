@@ -19,6 +19,56 @@
     from t_number
     where num_id = #{numId,jdbcType=INTEGER}
   </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_number
+    <where>
+      <if test="numId != null">
+        and num_id = #{numId,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId}
+      </if>
+      <if test="number !=null">
+        and number = #{number,jdbcType=VARCHAR}
+      </if>
+      <if test="isExpired != null">
+        and is_expired = #{isExpired,jdbcType=VARCHAR}
+      </if>
+      <if test="peopleNum != null">
+        and people_num = #{peopleNum,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        AND DATE(add_time)=#{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
+  <!-- 查询过号的后面的所有号 -->
+  <select id="findCurrentNumListBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_number
+    <where>
+      <if test="businessId != null">
+        and business_id = #{businessId}
+      </if>
+      <if test="number !=null">
+        and number > #{number,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        AND DATE_FORMAT(add_time, '%m-%d-%Y') = DATE_FORMAT(#{addTime,jdbcType=TIMESTAMP}, '%m-%d-%Y')
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_number
     where num_id = #{numId,jdbcType=INTEGER}

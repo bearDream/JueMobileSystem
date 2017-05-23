@@ -6,6 +6,7 @@ import com.beardream.Utils.TextUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.model.User;
 import com.google.gson.Gson;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
@@ -132,7 +133,7 @@ public class IndexController {
 
             }else {
                 //用户没有注册
-                user.setUsername(wxMpUser.getNickname());
+                user.setUsername(MimeUtility.encodeText(wxMpUser.getNickname()));
                 user.setSex(wxMpUser.getSex());
                 user.setAddress(wxMpUser.getCountry() + " " + wxMpUser.getCity());
                 user.setHeadImgUrl(wxMpUser.getHeadImgUrl());

@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beardream.dao.BusinessMapper">
   <resultMap id="BaseResultMap" type="com.beardream.model.Business">
     <id column="business_id" jdbcType="INTEGER" property="businessId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="tel" jdbcType="INTEGER" property="tel" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
     <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
+    <result column="business_carousel_image" jdbcType="VARCHAR" property="businessCarouselImage" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
+    <result column="is_take" jdbcType="TINYINT" property="isTake" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Business">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
-    business_id, user_id, name, address, tel, business_image, is_show, add_time
+    business_id, user_id, name, address, tel, business_image, business_carousel_image, is_show, is_take, add_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -33,6 +34,9 @@
     <include refid="Base_Column_List" />
     from t_business
     <where>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
       <if test="userId != null">
         and user_id = #{userId,jdbcType=INTEGER}
       </if>
@@ -43,13 +47,19 @@
         and address = #{address,jdbcType=VARCHAR}
       </if>
       <if test="tel != null">
-        and tel = #{tel,jdbcType=INTEGER}
+        and tel = #{tel,jdbcType=VARCHAR}
       </if>
       <if test="businessImage != null">
         and business_image = #{businessImage,jdbcType=VARCHAR}
       </if>
+      <if test="businessCarouselImage != null">
+        and business_carousel_image = #{businessCarouselImage,jdbcType=VARCHAR}
+      </if>
       <if test="isShow != null">
         and is_show = #{isShow,jdbcType=TINYINT}
+      </if>
+      <if test="isTake != null">
+        and is_take = #{isTake,jdbcType=TINYINT}
       </if>
       <if test="addTime != null">
         and add_time = #{addTime,jdbcType=TIMESTAMP}
@@ -66,12 +76,13 @@
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Business">
     insert into t_business (business_id, user_id, name, 
-      address, tel, business_image, 
-      is_show, add_time, content
+      address, tel, business_image, business_carousel_image,
+      is_show, is_take, add_time, content
       )
     values (#{businessId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{tel,jdbcType=INTEGER}, #{businessImage,jdbcType=VARCHAR}, 
-      #{isShow,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      #{address,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{businessImage,jdbcType=VARCHAR},
+      #{businessCarouselImage,jdbcType=VARCHAR},#{isShow,jdbcType=TINYINT},#{isTake,jdbcType=TINYINT},
+      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Business">
@@ -95,8 +106,14 @@
       <if test="businessImage != null">
         business_image,
       </if>
+      <if test="businessCarouselImage != null">
+        business_carousel_image,
+      </if>
       <if test="isShow != null">
         is_show,
+      </if>
+      <if test="isTake != null">
+        is_take,
       </if>
       <if test="addTime != null">
         add_time,
@@ -119,13 +136,19 @@
         #{address,jdbcType=VARCHAR},
       </if>
       <if test="tel != null">
-        #{tel,jdbcType=INTEGER},
+        #{tel,jdbcType=VARCHAR},
       </if>
       <if test="businessImage != null">
         #{businessImage,jdbcType=VARCHAR},
       </if>
+      <if test="businessCarouselImage != null">
+        #{businessCarouselImage,jdbcType=VARCHAR},
+      </if>
       <if test="isShow != null">
         #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="isTake != null">
+        #{isTake,jdbcType=TINYINT},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -148,13 +171,19 @@
         address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="tel != null">
-        tel = #{tel,jdbcType=INTEGER},
+        tel = #{tel,jdbcType=VARCHAR},
       </if>
       <if test="businessImage != null">
         business_image = #{businessImage,jdbcType=VARCHAR},
       </if>
+      <if test="businessCarouselImage != null">
+        business_carousel_image = #{businessCarouselImage,jdbcType=VARCHAR},
+      </if>
       <if test="isShow != null">
         is_show = #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="isTake != null">
+        is_take = #{isTake,jdbcType=TINYINT},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -170,9 +199,11 @@
     set user_id = #{userId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
-      tel = #{tel,jdbcType=INTEGER},
+      tel = #{tel,jdbcType=VARCHAR},
       business_image = #{businessImage,jdbcType=VARCHAR},
+      business_carousel_image = #{businessCarouselImage,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=TINYINT},
+      is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where business_id = #{businessId,jdbcType=INTEGER}
@@ -182,9 +213,11 @@
     set user_id = #{userId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
-      tel = #{tel,jdbcType=INTEGER},
+      tel = #{tel,jdbcType=VARCHAR},
       business_image = #{businessImage,jdbcType=VARCHAR},
+      business_carousel_image = #{businessCarouselImage,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=TINYINT},
+      is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>

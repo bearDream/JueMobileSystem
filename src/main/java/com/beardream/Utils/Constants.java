@@ -11,5 +11,5 @@ public class Constants {
     public final static String LOGIN_URL = "/login";
 
     //微信验证token的url
-    public final static String TOKEN_URL = "/";
+    public final static String TOKEN_URL = "/api/index";
 }
