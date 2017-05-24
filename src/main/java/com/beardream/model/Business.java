@@ -25,6 +25,26 @@ public class Business {
 
     private String content;
 
+    private Float longtitude;
+
+    private Float latitude;
+
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public Float getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongtitude(Float longtitude) {
+        this.longtitude = longtitude;
+    }
+
     public Integer getBusinessId() {
         return businessId;
     }
