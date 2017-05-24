@@ -24,6 +24,7 @@
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="body_status" jdbcType="TINYINT" property="bodyStatus" />
   </resultMap>
+
   <sql id="Base_Column_List">
     user_id, username, password, tel, real_name, age, sex, id_card, bank_card, address, 
     weixin, openid, logins, alipay, status, type, level, role_id,body_status,remark,headImgUrl

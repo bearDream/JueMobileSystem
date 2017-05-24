@@ -1,6 +1,7 @@
 package com.beardream.dao;
 
 import com.beardream.model.Article;
+import com.beardream.model.UserArticle;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,7 @@ public interface ArticleMapper {
     int updateByPrimaryKeyWithBLOBs(Article record);
 
     int updateByPrimaryKey(Article record);
+
+    //连接查询用户和文章
+    List<UserArticle> findUserArticleBySelective (UserArticle userArticle);
 }

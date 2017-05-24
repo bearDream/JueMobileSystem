@@ -1,6 +1,7 @@
 package com.beardream.dao;
 
 import com.beardream.model.User;
+import com.beardream.model.UserArticle;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,5 @@ public interface UserMapper {
     int insertSelective(User record);
 
     int deleteByPrimaryKey(Integer userId);
+
 }
