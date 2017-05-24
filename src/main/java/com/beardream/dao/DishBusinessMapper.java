@@ -1,6 +1,9 @@
 package com.beardream.dao;
 
 import com.beardream.model.DishBusiness;
+import com.beardream.model.DishBusinessTag;
+
+import java.util.List;
 
 public interface DishBusinessMapper {
     int deleteByPrimaryKey(Integer dishBusinessId);
@@ -10,6 +13,8 @@ public interface DishBusinessMapper {
     int insertSelective(DishBusiness record);
 
     DishBusiness selectByPrimaryKey(Integer dishBusinessId);
+
+    List<DishBusinessTag>findDishBusinessTagBySelective(DishBusinessTag dishBusinessTag);
 
     int updateByPrimaryKeySelective(DishBusiness record);
 

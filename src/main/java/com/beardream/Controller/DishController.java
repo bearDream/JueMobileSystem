@@ -63,9 +63,8 @@ public class DishController {
         return ResultUtil.success(mDishService.put(dish));
     }
 
-    @ApiOperation("分页获取菜品")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
+    @ApiOperation("分页查询商家推荐")
+    @GetMapping("/recommend")
     public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
 //        System.out.println(role.getRoleId());
         System.out.println(pageNum);
