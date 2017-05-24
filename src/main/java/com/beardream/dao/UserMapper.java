@@ -29,6 +29,4 @@ public interface UserMapper {
 
     int deleteByPrimaryKey(Integer userId);
 
-    //连接查询用户和文章
-    List<UserArticle> findUserArticleBySelective (UserArticle UserArticle);
 }

@@ -14,8 +14,6 @@ public class UserArticle {
 
     private Integer articleId;
 
-    private String content;
-
     private String coverImage;
 
     private Byte isShow;
@@ -37,10 +35,6 @@ public class UserArticle {
     public Integer getArticleId() {return articleId;}
 
     public void setArticleId(Integer articleId) {this.articleId = articleId;}
-
-    public String getContent() {return content;}
-
-    public void setContent(String content) {this.content = content;}
 
     public String getCoverImage() {return coverImage;}
 

@@ -11,6 +11,46 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Article">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
+  <!-- user表联合article表查询结果集 -->
+  <resultMap id="UserArticleResultMap" type="com.beardream.model.UserArticle">
+    <id column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="username" jdbcType="VARCHAR" property="username"/>
+    <result column="tel" jdbcType="VARCHAR" property="tel"/>
+    <result column="article_id" jdbcType="INTEGER" property="articleId"/>
+    <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="is_show" jdbcType="TINYINT" property="isShow" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <!-- 用户和文章连接查询-->
+  <select id="findUserArticleBySelective" resultMap="UserArticleResultMap">
+    SELECT
+    u.user_id,u.username,u.tel,a.article_id,a.cover_image,a.is_show,a.add_time
+    FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="username != null">
+        and username = #{username}
+      </if>
+      <if test="tel != null">
+        and tel = #{tel}
+      </if>
+      <if test="articlerId != null">
+        and article_id = #{articleId}
+      </if>
+      <if test="coverImage != null">
+        and cover_image = #{coverImage}
+      </if>
+      <if test="isShow != null">
+        and is_show = #{isShow}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
   <sql id="Base_Column_List">
     article_id, user_id, cover_image, is_show, add_time
   </sql>
