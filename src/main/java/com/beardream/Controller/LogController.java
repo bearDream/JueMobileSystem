@@ -28,7 +28,7 @@ import java.util.Map;
  * 日志控制器
  */
 @RestController
-@RequestMapping("/log")
+@RequestMapping("/api/log")
 @Api(value = "日志服务",description = "提供RESTful风格API的日志的增删改查服务")
 @PermissionModule(text = "日志管理")
 public class LogController {

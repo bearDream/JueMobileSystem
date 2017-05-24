@@ -27,7 +27,7 @@ import java.util.Map;
  * 收藏控制器
  */
 @RestController
-@RequestMapping("/collection")
+@RequestMapping("/api/collection")
 @Api(value = "收藏服务",description = "提供RESTful风格API的收藏的增删改查服务")
 public class CollectionController {
 

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
  * 登陆控制器
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/login")
 public class LoginController {
 
 //    @Autowired

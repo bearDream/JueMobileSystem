@@ -22,7 +22,7 @@ import java.util.Map;
  * 营养价值控制器
  */
 @RestController
-@RequestMapping("/nutrition")
+@RequestMapping("/api/nutrition")
 @Api(value = "营养价值服务",description = "提供RESTful风格API的营养价值的增删改查服务")
 public class NutritionController {
 

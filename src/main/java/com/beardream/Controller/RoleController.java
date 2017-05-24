@@ -34,7 +34,7 @@ import java.util.Map;
  * 权限控制器
  */
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/api/role")
 @Api(value = "角色服务",description = "提供RESTful风格API的角色的增删改查服务")
 @PermissionModule(text = "角色管理")
 public class RoleController {

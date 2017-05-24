@@ -24,7 +24,7 @@ import java.util.List;
  * 商家控制器
  */
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/api/business")
 @Api(value = "商家服务",description = "提供RESTful风格API的商家的增删改查服务")
 @PermissionModule(text = "商家管理")
 public class BuisnessController {

@@ -24,7 +24,7 @@ import java.util.List;
  * 标签控制器
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/tag")
 @Api(value = "标签服务",description = "提供RESTful风格API的标签的增删改查服务")
 @PermissionModule(text = "标签管理")
 public class TagController {
