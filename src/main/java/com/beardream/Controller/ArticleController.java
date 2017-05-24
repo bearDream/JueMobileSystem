@@ -27,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/article")
 @Api(value = "图文服务",description = "提供RESTful风格API的图文的增删改查服务")
 @PermissionModule(text = "菜品管理")
-public class GetArticle {
+public class ArticleController {
     @Autowired
     private ArticleMapper articleMapper;
 
@@ -43,4 +43,7 @@ public class GetArticle {
         map.put("page",page);
         return map;
     }
+
+
+
 }
