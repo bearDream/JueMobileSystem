@@ -11,11 +11,15 @@ public class Business {
 
     private String address;
 
-    private Integer tel;
+    private String tel;
 
     private String businessImage;
 
+    private String businessCarouselImage;
+
     private Byte isShow;
+
+    private Byte isTake;
 
     private Date addTime;
 
@@ -53,11 +57,11 @@ public class Business {
         this.address = address == null ? null : address.trim();
     }
 
-    public Integer getTel() {
+    public String getTel() {
         return tel;
     }
 
-    public void setTel(Integer tel) {
+    public void setTel(String tel) {
         this.tel = tel;
     }
 
@@ -91,5 +95,21 @@ public class Business {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public String getBusinessCarouselImage() {
+        return businessCarouselImage;
+    }
+
+    public void setBusinessCarouselImage(String businessCarouselImage) {
+        this.businessCarouselImage = businessCarouselImage;
+    }
+
+    public Byte getIsTake() {
+        return isTake;
+    }
+
+    public void setIsTake(Byte isTake) {
+        this.isTake = isTake;
     }
 }
