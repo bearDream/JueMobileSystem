@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by soft01 on 2017/5/19.
  */
 @RestController
-@RequestMapping("/api/article")
+@RequestMapping("/api/mobile/article")
 @Api(value = "图文服务",description = "提供RESTful风格API的图文的增删改查服务")
 @PermissionModule(text = "菜品管理")
 public class ArticleController {

@@ -29,7 +29,7 @@ import java.util.*;
  * Created by soft01 on 2017/5/7.
  */
 @RestController
-@RequestMapping("/api/authority")
+@RequestMapping("/api/mobile/authority")
 @Api(value = "权限服务",description = "提供RESTful风格API的权限的增删改查服务")
 @PermissionModule(text = "权限管理")
 public class AuthorityController {

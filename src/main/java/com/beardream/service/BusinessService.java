@@ -1,7 +1,9 @@
 package com.beardream.service;
 
+import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.BusinessMapper;
 import com.beardream.model.Business;
+import com.beardream.model.Result;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +26,28 @@ public class BusinessService {
     public BusinessMapper mBussinessMapper;
 
     //获取单个商家信息
-    public Business find(Business business){
-        System.out.println(mBussinessMapper.selectByPrimaryKey(1));
-        Business BusinessInfo = mBussinessMapper.findBySelective(business).get(0);
-        return BusinessInfo;
+    public Result find(Business business){
+        List<Business> businessInfo = mBussinessMapper.findBySelective(business);
+        if (businessInfo.size() == 0)
+            return ResultUtil.error(-1,"商家不存在");
+        else
+            return ResultUtil.success(businessInfo.get(0));
     }
 
     //post请求
-    public String add(Business business){
+    public Result add(Business business){
         int result;
         if (business==null)
-            return "没有参数";
+            return ResultUtil.error(-1,"没有参数");
         List<Business> BussinessList = mBussinessMapper.findBySelective(business);
         if (BussinessList.size()>0)
-            return "该商家已存在";
+            return ResultUtil.error(-1,"该商家已存在");
         business.setAddTime(new Date());
         result = mBussinessMapper.insertSelective(business);
         if (result>0){
-            return "添加成功";
+            return ResultUtil.success(-1,"添加成功");
         }else{
-            return "添加失败";
+            return ResultUtil.error(-1,"添加失败");
         }
     }
 
@@ -78,4 +82,5 @@ public class BusinessService {
         map.put("page",page);
         return map;
     }
+
 }

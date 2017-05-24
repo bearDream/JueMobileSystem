@@ -31,7 +31,7 @@ import java.util.List;
  * 取号控制器
  */
 @RestController
-@RequestMapping("/api/takeNum")
+@RequestMapping("/api/mobile/takeNum")
 @Api(value = "取号服务",description = "提供RESTful风格API的取号的操作")
 public class TakeNumController {
 
@@ -110,22 +110,37 @@ public class TakeNumController {
             return ResultUtil.success(num.getData());
     }
 
-    // 过号 （商家调用）  eg:商家将当前号设置过期，并推送消息给剩下的所有号，通知他们队列已更新
-    @GetMapping("/passNum")
-    public Result passNum(Number number, HttpSession session){
+    // 叫号 （商家调用）  eg:商家将推送消息给当前号
+    @GetMapping("/callNum")
+    public Result callNum(Number number, HttpSession session){
 
         // 传过来一个商家id和number，将该条记录is_expire设置为 0
-        if (!TextUtil.isEmpty(number.getBusinessId()) && !TextUtil.isEmpty(number.getNumber())){
+        if (number != null && !TextUtil.isEmpty(number.getBusinessId()) && !TextUtil.isEmpty(number.getNumber())){
             return ResultUtil.error(-1,"请选择商家并携带number后又提交");
         }
 
-        // 获取被叫到号的用户id
-        User user = mUserMapper.selectByPrimaryKey(number.getUserId());
+        // 根据number，businessId，is_expire来查找被叫号的顾客
+        Result result = mTakeNumService.callNum(number);
+
+        if (result.getCode() == -1) {
+            return ResultUtil.error(-1,result.getMsg());
+        }else {
+            // 对过号（被叫号的）顾客进行消息推送
+            User user = (User) result.getData();
+            pushMsg(number.getNumber(), number.getNumber(), user.getUserId());
+            return ResultUtil.success(result.getMsg());
+        }
+    }
+
+    // 过号 （商家调用）  设置这个号过期，并推送消息给剩下的所有号，通知他们队列已更新
+    @GetMapping("/passNum")
+    public Result passNum(Number number, HttpSession session){
+        // 传过来一个商家id和number，将该条记录is_expire设置为 0
+        if (number != null && !TextUtil.isEmpty(number.getBusinessId()) && !TextUtil.isEmpty(number.getNumber())){
+            return ResultUtil.error(-1,"请选择商家并携带number后又提交");
+        }
 
         Result result = mTakeNumService.passNum(number);
-
-        // 对过号（被叫号的）顾客进行消息推送
-        refreshNum(number.getNumber(), number.getNumber(), user.getUserId());
 
         if (result.getCode() == -1) {
             return ResultUtil.error(-1,result.getMsg());
@@ -141,7 +156,7 @@ public class TakeNumController {
 
             // 对队列中的其他号进行推送
             for (Number remainList : remainLists) {
-                refreshNum(remainList.getNumId(), curretNum, remainList.getUserId());
+                pushMsg(remainList.getNumId(), curretNum, remainList.getUserId());
             }
 
             return ResultUtil.success(result.getMsg());
@@ -149,7 +164,7 @@ public class TakeNumController {
     }
 
     // 微信推送消息过号
-    public void refreshNum(int takeNum, int CurrentNum, int userId){
+    public void pushMsg(int takeNum, int CurrentNum, int userId){
 
         // 根据userId查找openid
         User user = mUserMapper.selectByPrimaryKey(userId);

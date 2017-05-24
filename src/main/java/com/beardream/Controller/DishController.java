@@ -24,7 +24,7 @@ import java.util.Map;
  * 菜品控制器
  */
 @RestController
-@RequestMapping("/api/dish")
+@RequestMapping("/api/mobile/dish")
 @Api(value = "菜品服务",description = "提供RESTful风格API的菜品的增删改查服务")
 public class DishController {
 

@@ -27,7 +27,7 @@ import java.util.List;
  * 用户控制器
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/mobile/user")
 @Api(value = "用户服务",description = "提供RESTful风格API的用户的增改查服务")
 public class UserController {
 

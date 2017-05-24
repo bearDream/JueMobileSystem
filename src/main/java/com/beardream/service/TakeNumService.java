@@ -3,13 +3,16 @@ package com.beardream.service;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.NumberMapper;
+import com.beardream.dao.UserMapper;
 import com.beardream.model.Business;
 import com.beardream.model.Number;
 import com.beardream.model.Result;
+import com.beardream.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -32,6 +35,9 @@ public class TakeNumService {
 
     @Autowired
     private BusinessMapper mBusinessMapper;
+
+    @Autowired
+    private UserMapper mUserMapper;
 
     // 取号 该方法应该为一个同步方法，避免多用户同时操作该方法,造成取号数据不准确
     public Result takeNum(Number number){
@@ -120,12 +126,54 @@ public class TakeNumService {
         return ResultUtil.success(queue.get(0));
     }
 
+    // 获取商家当前的排队信息
+    public List<Number> getBusinessNum(Business business){
+        // 根据商家id查询当前排队数，等待人数
+        Number number = new Number();
+        // 只要有效的号
+        number.setIsExpired((byte) 1);
+        number.setBusinessId(business.getBusinessId());
+        // 获取排队队列
+        List<Number> queue = mNumberMapper.findBySelective(number);
+
+        Collections.sort(queue, new Comparator<Number>() {
+            @Override
+            public int compare(Number o1, Number o2) {
+                if(o1 instanceof Number && o2 instanceof Number){
+                    Number e1 = (Number) o1;
+                    Number e2 = (Number) o2;
+                    return e1.getNumber().compareTo(e2.getNumber());
+                }
+                throw new ClassCastException("不能转换为Number类型");
+            }
+        });
+
+        return queue;
+    }
+
+    // 叫号  获取这个被叫号的用户的用户信息  根据user_id获取
+    public Result callNum(Number number) {
+        number.setIsExpired((byte) 1);
+        List<Number> numberList = mNumberMapper.findBySelective(number);
+        int userId = numberList.get(0).getUserId();
+
+        User user = mUserMapper.selectByPrimaryKey(userId);
+
+        if (user == null){
+            return ResultUtil.error(-1,"用户不存在");
+        }else {
+            return ResultUtil.success(user);
+        }
+    }
+
     // 过号
     public Result passNum(Number number) {
 
+        // 查找过号的 这个号 的相关信息
         List<Number> numberList = mNumberMapper.findBySelective(number);
 
         if (numberList.size() > 0){
+            // 将该号设置过期
             number.setNumId(numberList.get(0).getNumId());
             number.setAddTime(numberList.get(0).getAddTime());
             number.setIsExpired((byte) 2);

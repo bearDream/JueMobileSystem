@@ -24,7 +24,7 @@ import java.util.List;
  * 菜品类别控制器
  */
 @RestController
-@RequestMapping("/dishtype")
+@RequestMapping("/api/mobile/dishtype")
 @Api(value = "菜品分类服务",description = "提供RESTful风格API的商家的增删改查服务")
 @PermissionModule(text = "菜品分类管理")
 public class DishTypeController {
