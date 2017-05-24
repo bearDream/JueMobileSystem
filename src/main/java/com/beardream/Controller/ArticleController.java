@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/mobile/article")
 @Api(value = "图文服务",description = "提供RESTful风格API的图文的增删改查服务")
-@PermissionModule(text = "菜品管理")
 public class ArticleController {
     @Autowired
     private ArticleMapper articleMapper;
@@ -28,8 +27,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @ApiOperation("分页获取用户图文")
-    @PutMapping("/getpage")
-    @PermissionMethod(text = "分页获取用户图文信息")
+    @GetMapping("/getpage")
     public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
                           UserArticle userArticle){
         System.out.println(pageNum);
