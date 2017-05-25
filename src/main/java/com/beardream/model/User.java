@@ -41,7 +41,17 @@ public class User {
 
     private Integer roleId;
 
+    private Integer point;
+
     private Byte bodyStatus;
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
 
     public Byte getBodyStatus() {
         return bodyStatus;

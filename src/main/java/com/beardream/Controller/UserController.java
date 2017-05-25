@@ -1,5 +1,7 @@
 package com.beardream.Controller;
 
+import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.exception.UserException;
@@ -19,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -35,8 +38,9 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    @ApiOperation("查找用户")
-    public Result get(User user) throws Exception {
+    @ApiOperation("获取用户信息")
+    public Result get(HttpSession session) throws Exception {
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
         return ResultUtil.success(userService.get(user));
     }
 

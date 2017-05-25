@@ -41,6 +41,6 @@ public class UserService{
     }
 
     public Object get(User user)throws Exception {
-        return userMapper.findSelective(user);
+        return userMapper.selectByPrimaryKey(user.getUserId());
     }
 }

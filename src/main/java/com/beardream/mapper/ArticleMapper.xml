@@ -5,6 +5,7 @@
     <id column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
   </resultMap>
@@ -18,13 +19,14 @@
     <result column="tel" jdbcType="VARCHAR" property="tel"/>
     <result column="article_id" jdbcType="INTEGER" property="articleId"/>
     <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
   </resultMap>
   <!-- 用户和文章连接查询-->
   <select id="findUserArticleBySelective" resultMap="UserArticleResultMap">
     SELECT
-    u.user_id,u.username,u.tel,a.article_id,a.cover_image,a.is_show,a.add_time
+    u.user_id,u.username,u.tel,a.article_id,a.cover_image,a.is_show,a.add_time,a.title
     FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id
     <where>
       <if test="userId != null">
@@ -45,6 +47,9 @@
       <if test="isShow != null">
         and is_show = #{isShow}
       </if>
+      <if test="title != null">
+        and title = #{title}
+      </if>
       <if test="addTime != null">
         and add_time = #{addTime}
       </if>
@@ -52,7 +57,7 @@
     order by add_time desc
   </select>
   <sql id="Base_Column_List">
-    article_id, user_id, cover_image, is_show, add_time
+    article_id, user_id, cover_image, is_show, add_time,title
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -71,10 +76,10 @@
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Article">
     insert into t_article (article_id, user_id, cover_image, 
-      is_show, add_time, content
+      is_show, add_time, content, title
       )
     values (#{articleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{coverImage,jdbcType=VARCHAR}, 
-      #{isShow,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      #{isShow,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{title,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Article">
@@ -98,6 +103,9 @@
       <if test="content != null">
         content,
       </if>
+      <if test="title != null">
+        title,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="articleId != null">
@@ -117,6 +125,9 @@
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -138,6 +149,9 @@
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
     </set>
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
@@ -147,7 +161,8 @@
       cover_image = #{coverImage,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR},
+      title = #{title,jdbcType=VARCHAR},
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Article">
@@ -155,6 +170,7 @@
     set user_id = #{userId,jdbcType=INTEGER},
       cover_image = #{coverImage,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=TINYINT},
+      title = #{title,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>

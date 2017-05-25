@@ -45,7 +45,7 @@ public class BusinessService {
         business.setAddTime(new Date());
         result = mBussinessMapper.insertSelective(business);
         if (result>0){
-            return ResultUtil.success(-1,"添加成功");
+            return ResultUtil.success("添加成功");
         }else{
             return ResultUtil.error(-1,"添加失败");
         }
