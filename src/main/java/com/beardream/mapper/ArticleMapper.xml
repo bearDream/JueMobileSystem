@@ -36,7 +36,7 @@
       <if test="tel != null">
         and tel = #{tel}
       </if>
-      <if test="articlerId != null">
+      <if test="articleId != null">
         and article_id = #{articleId}
       </if>
       <if test="coverImage != null">
