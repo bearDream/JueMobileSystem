@@ -11,6 +11,7 @@ import com.beardream.ioc.PermissionModule;
 import com.beardream.model.Result;
 import com.beardream.model.User;
 import com.beardream.service.UserService;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,8 +41,11 @@ public class UserController {
     @GetMapping
     @ApiOperation("获取用户信息")
     public Result get(HttpSession session) throws Exception {
+        // 从session中获取用户的登录信息
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
-        return ResultUtil.success(userService.get(user));
+        // 将用户名转码发送给前端
+        user.setUsername(MimeUtility.decodeText(user.getUsername()));
+        return ResultUtil.success(user);
     }
 
     @PostMapping()

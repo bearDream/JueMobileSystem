@@ -63,12 +63,9 @@ public class DishController {
         return ResultUtil.success(mDishService.put(dish));
     }
 
-    @ApiOperation("分页查询商家推荐")
+    @ApiOperation("分页查询菜品推荐")
     @GetMapping("/recommend")
-    public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
+    public Result getPage(@RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }

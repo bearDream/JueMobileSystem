@@ -24,4 +24,5 @@ public interface DishMapper {
     int updateByPrimaryKeyWithBLOBs(Dish record);
 
     int updateByPrimaryKey(Dish record);
+
 }

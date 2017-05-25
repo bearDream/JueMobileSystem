@@ -8,6 +8,7 @@ import com.beardream.enums.ResultEnum;
 import com.beardream.exception.UserException;
 import com.beardream.model.User;
 import com.google.gson.Gson;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -43,7 +44,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (env.equals("dev")){
             User user = new User();
             Gson gson = new Gson();
-            user = mUserMapper.findByMobile("15587186809");
+            user = mUserMapper.selectByPrimaryKey(12);
+            user.setUsername(MimeUtility.decodeText(user.getUsername()));
+            System.out.println(user.getUsername());
             session.setAttribute(Constants.USER, gson.toJson(user));
         }else {
             //生产模式下，执行下面代码判断是否登录

@@ -7,11 +7,31 @@ public class Dish {
 
     private String dishName;
 
+    private String dishImage;
+
     private String dishDesc;
 
     private Date addTime;
 
     private String dishContent;
+
+    private Integer dishNutritionStatus;
+
+    public String getDishImage() {
+        return dishImage;
+    }
+
+    public void setDishImage(String dishImage) {
+        this.dishImage = dishImage;
+    }
+
+    public Integer getDishNutritionStatus() {
+        return dishNutritionStatus;
+    }
+
+    public void setDishNutritionStatus(Integer dishNutritionStatus) {
+        this.dishNutritionStatus = dishNutritionStatus;
+    }
 
     public Integer getDishId() {
         return dishId;
