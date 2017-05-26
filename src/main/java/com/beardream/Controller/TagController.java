@@ -5,10 +5,7 @@ import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.TagMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
-import com.beardream.model.Business;
-import com.beardream.model.Result;
-import com.beardream.model.Tag;
-import com.beardream.model.User;
+import com.beardream.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +30,9 @@ public class TagController {
 
     @ApiOperation("获取单个标签")
     @GetMapping
-    @PermissionMethod(text = "获取标签信息")
-    public Result get(Tag tag, BindingResult bindingResult){
-        System.out.println(tag.getTagId());
-        return ResultUtil.success(tagMapper.findBySelective(tag));
+    public Result get(Tag tag, DishDishBusinessTag dishDishBusinessTag, BindingResult bindingResult){
+        System.out.println(dishDishBusinessTag.getTagId());
+        return ResultUtil.success(tagMapper.findDishDishBusinessTagBySelective(dishDishBusinessTag));
     }
 
     @ApiOperation("添加标签")

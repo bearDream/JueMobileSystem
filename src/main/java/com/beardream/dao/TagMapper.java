@@ -1,6 +1,8 @@
 package com.beardream.dao;
 
 import com.beardream.model.Business;
+import com.beardream.model.BusinessDishTag;
+import com.beardream.model.DishDishBusinessTag;
 import com.beardream.model.Tag;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -25,4 +27,7 @@ public interface TagMapper {
     int updateByPrimaryKeyWithBLOBs(Tag record);
 
     int updateByPrimaryKey(Tag record);
+
+    //连接dish-dish_business-tag
+    List<DishDishBusinessTag> findDishDishBusinessTagBySelective (DishDishBusinessTag dishDishBusinessTag);
 }

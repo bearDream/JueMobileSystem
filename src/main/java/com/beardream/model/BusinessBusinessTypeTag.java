@@ -2,37 +2,34 @@ package com.beardream.model;
 
 import java.util.Date;
 
-public class BusinessType {
+/**
+ * Created by soft01 on 2017/5/25.
+ */
+public class BusinessBusinessTypeTag {
+    private String businessTypeName;
+
     private Integer businessTypeId;
 
     private Integer tagId;
 
     private Integer businessId;
 
-    private Integer parentId;
+    private Date addTime;
 
     private String typeName;
 
     private String businessName;
 
-    private String businessTel;
+    private String tagName;
 
-    private String addresss;
+    private String businessAddress;
 
     private String content;
 
-    private Date addTime;
+    private String businessTel;
 
     public Integer getBusinessTypeId() {
         return businessTypeId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public void setBusinessTypeId(Integer businessTypeId) {
@@ -55,14 +52,6 @@ public class BusinessType {
         this.businessId = businessId;
     }
 
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
     public String getTypeName() {
         return typeName;
     }
@@ -79,6 +68,22 @@ public class BusinessType {
         this.businessName = businessName;
     }
 
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public String getBusinessAddress() {
+        return businessAddress;
+    }
+
+    public void setBusinessAddress(String businessAddress) {
+        this.businessAddress = businessAddress;
+    }
+
     public String getBusinessTel() {
         return businessTel;
     }
@@ -87,12 +92,20 @@ public class BusinessType {
         this.businessTel = businessTel;
     }
 
-    public String getAddresss() {
-        return addresss;
+    public String getContent() {
+        return content;
     }
 
-    public void setAddresss(String addresss) {
-        this.addresss = addresss;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getBusinessTypeName() {
+        return businessTypeName;
+    }
+
+    public void setBusinessTypeName(String businessTypeName) {
+        this.businessTypeName = businessTypeName;
     }
 
     public Date getAddTime() {

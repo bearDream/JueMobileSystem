@@ -39,9 +39,6 @@
       <if test="businessId != null">
         and business_id = #{businessId,jdbcType=INTEGER}
       </if>
-      <if test="userId != null">
-        and user_id = #{userId,jdbcType=INTEGER}
-      </if>
       <if test="name != null">
         and name = #{name,jdbcType=VARCHAR}
       </if>
@@ -72,6 +69,53 @@
     </where>
     order by add_time desc
 </select>
+  <!-- 商家表、菜品表、标签表查询结果集 -->
+  <resultMap id="BusinessDishTagResultMap" type="com.beardream.model.BusinessDishTag">
+    <id column="business_id" jdbcType="INTEGER" property="businessId"/>
+    <result column="dish_id" jdbcType="INTEGER" property="dishId"/>
+    <result column="tag_id" jdbcType="INTEGER" property="tagId"/>
+    <result column="name" jdbcType="VARCHAR" property="businessName"/>
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName"/>
+    <result column="name" jdbcType="VARCHAR" property="tagName"/>
+    <result column="tel" jdbcType="VARCHAR" property="businessTel"/>
+    <result column="address" jdbcType="VARCHAR" property="businessAddress"/>
+    <result column="add_time" jdbcType="VARCHAR" property="addTime"/>
+  </resultMap>
+  <!-- 商家、菜品、标签连接查询-->
+  <select id="findBusinessDishTagBySelective"  resultMap="BusinessDishTagResultMap">
+    SELECT
+    b.business_id,b.name,b.address,b.tel,b.add_time,
+    d.dish_name,d.dish_id,d.dish_image,
+    t.tag_id,t.name
+
+    from t_business b
+    left outer join t_dish d on b.business_id = d.dish_id
+    left outer join t_tag t on b.business_id = t.tag_id
+    <where>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="dishName != null">
+        and name = #{dishName,jdbcType=VARCHAR}
+      </if>
+      <if test="businessName != null">
+        and name = #{businessName,jdbcType=VARCHAR}
+      </if>
+      <if test="businessAddress != null">
+        and address = #{businessAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="businessTel != null">
+        and tel = #{businessTel,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_business
     where business_id = #{businessId,jdbcType=INTEGER}

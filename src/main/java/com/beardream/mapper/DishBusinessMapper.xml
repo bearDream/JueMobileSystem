@@ -24,50 +24,9 @@
     from t_dish_business
     where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
   </select>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.DishBusinessTag">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.DishBusiness">
     <result column="params" jdbcType="LONGVARCHAR" property="params" />
   </resultMap>
-  <!-- log表联合user表查询结果集 -->
-  <resultMap id="DishBusinessTagResultMap" type="com.beardream.model.DishBusinessTag">
-    <id column="dish_id" jdbcType="INTEGER" property="dishId" />
-    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
-    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
-    <result column="add_time" jdbcType="VARCHAR" property="dishAddTime" />
-    <result column="business_id" jdbcType="INTEGER" property="businessId" />
-    <result column="business_name" jdbcType="VARCHAR" property="businessName" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
-    <result column="is_show" jdbcType="TINYINT" property="isShow" />
-    <result column="addtime" jdbcType="TIMESTAMP" property="businessAddtime" />
-    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
-    <result column="add_time" jdbcType="TIMESTAMP" property="tagAddTime" />
-    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
-  </resultMap>
-
-  <!-- 日志和用户连接查询 -->
-  <select id="findDishBusinessTagBySelective" resultMap="DishBusinessTagResultMap">
-    SELECT
-    *
-    from t_business b  INNER JOIN t_dish d on b.business_id=d.dish_id INNER JOIN t.tag_id on b.business_id= t.tag_id
-    <where>
-      <if test="dishId != null">
-        and dish_id = #{dishId}
-      </if>
-      <if test="dishName != null">
-        and dish_name = #{dishName}
-      </if>
-      <if test="dishImage != null">
-        and dish_image = #{dishImage,jdbcType=VARCHAR}
-      </if>
-      <if test="addTime != null">
-        and addtime = #{addTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="tagName != null">
-        and tag_name = #{tagName}
-      </if>
-    </where>
-    order by add_time desc
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dish_business
     where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
