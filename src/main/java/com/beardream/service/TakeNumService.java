@@ -1,6 +1,7 @@
 package com.beardream.service;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.Utils.Sort;
 import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.NumberMapper;
 import com.beardream.dao.UserMapper;
@@ -60,17 +61,7 @@ public class TakeNumService {
             if (queue.size() == 0){
                 number.setNumber(1);
             }else {
-                Collections.sort(queue, new Comparator<Number>() {
-                    @Override
-                    public int compare(Number o1, Number o2) {
-                        if(o1 instanceof Number && o2 instanceof Number){
-                            Number e1 = (Number) o1;
-                            Number e2 = (Number) o2;
-                            return e1.getNumber().compareTo(e2.getNumber());
-                        }
-                        throw new ClassCastException("不能转换为Number类型");
-                    }
-                });
+                queue = Sort.sortNumberDesc(queue, "desc");
 
                 for (Number number1 : queue){
                     System.out.println(number1);
@@ -111,17 +102,7 @@ public class TakeNumService {
 
         List<Number> queue = mNumberMapper.findBySelective(number);
 
-        Collections.sort(queue, new Comparator<Number>() {
-            @Override
-            public int compare(Number o1, Number o2) {
-                if(o1 instanceof Number && o2 instanceof Number){
-                    Number e1 = (Number) o1;
-                    Number e2 = (Number) o2;
-                    return e1.getNumber().compareTo(e2.getNumber());
-                }
-                throw new ClassCastException("不能转换为Number类型");
-            }
-        });
+        queue = Sort.sortNumberDesc(queue, "desc");
 
         return ResultUtil.success(queue.get(0));
     }
@@ -136,17 +117,7 @@ public class TakeNumService {
         // 获取排队队列
         List<Number> queue = mNumberMapper.findBySelective(number);
 
-        Collections.sort(queue, new Comparator<Number>() {
-            @Override
-            public int compare(Number o1, Number o2) {
-                if(o1 instanceof Number && o2 instanceof Number){
-                    Number e1 = (Number) o1;
-                    Number e2 = (Number) o2;
-                    return e1.getNumber().compareTo(e2.getNumber());
-                }
-                throw new ClassCastException("不能转换为Number类型");
-            }
-        });
+        queue = Sort.sortNumberDesc(queue, "desc");
 
         return queue;
     }
@@ -191,17 +162,7 @@ public class TakeNumService {
         List<Number> remainNumberList = mNumberMapper.findCurrentNumListBySelective(number);
 
         // 将该队列排序
-        Collections.sort(remainNumberList, new Comparator<Number>() {
-            @Override
-            public int compare(Number o1, Number o2) {
-                if(o1 instanceof Number && o2 instanceof Number){
-                    Number e1 = (Number) o1;
-                    Number e2 = (Number) o2;
-                    return e1.getNumber().compareTo(e2.getNumber());
-                }
-                throw new ClassCastException("不能转换为Number类型");
-            }
-        });
+        remainNumberList = Sort.sortNumberDesc(remainNumberList, "desc");
 
         System.out.println("getRemainNums");
         for (Number number1 : remainNumberList) {
@@ -210,4 +171,5 @@ public class TakeNumService {
 
         return remainNumberList;
     }
+
 }

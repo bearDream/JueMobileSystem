@@ -17,20 +17,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by laxzh on 2017/5/6.
  * 商家控制器
  */
 @RestController
-@RequestMapping("/api/business")
+@RequestMapping("/api/mobile/business")
 @Api(value = "商家服务",description = "提供RESTful风格API的商家的增删改查服务")
 public class BuisnessController {
     @Autowired
     private  BusinessMapper businessMapper;
 
     @Autowired
-    private BusinessService businessService;
+    private BusinessService mBusinessService;
 
     @ApiOperation("获取单个商家信息")
     @GetMapping
@@ -81,15 +82,27 @@ public class BuisnessController {
             return  ResultUtil.error(-1,"修改失败");
     }
 
-    @ApiOperation("分页查询商家推荐")
+    // 根据排号桌数最多和最少排序  2、将所有商家查询出来  3、查询附近的商家
+    @ApiOperation("分页查询商家推荐,根据不同条件进行查询")
     @GetMapping("/recommend")
-    public Result getPage(Business business, Tag tag,Dish dish, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Business business, Tag tag,Dish dish,
+                          @RequestParam(value = "waitSort", defaultValue = "desc", required = false)  String waitSort,
+                          @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize,
+                          BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-        if (businessService.getPage(business, pageNum,pageSize)!=null)
-            return ResultUtil.success(businessService.getPage(business, pageNum,pageSize));
-        else
-            return ResultUtil.error(-1,"系统错误");
+
+        // waitSort为1则按照等待人数从多到少排序，为0则按照从少到多排序,并且查出来的商家都是开通取号功能的
+        // 1、先从取号表 连接查询 商家表 中查询出所有 开通取号的商家信息，装在集合中
+        business.setIsTake((byte) 1);
+        Map businessTakeList = mBusinessService.getPage(business, pageNum, pageSize);
+
+        // 2、将开通取号功能的商家进行迭代查询每个商家的等待桌数状态,再将集合按照等待人数多少进行排序
+        List<Business> businessList = mBusinessService.getBusinessTakeInfoSort(businessTakeList, waitSort);
+
+        return ResultUtil.success(businessList);
+
     }
 }

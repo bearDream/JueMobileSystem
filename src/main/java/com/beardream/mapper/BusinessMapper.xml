@@ -18,6 +18,8 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Business">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
+
+
   <sql id="Base_Column_List">
     business_id, user_id, name, address, tel, business_image, business_carousel_image, is_show, is_take, add_time, longtitude, latitude
   </sql>

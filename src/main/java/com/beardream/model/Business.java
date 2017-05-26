@@ -29,6 +29,17 @@ public class Business {
 
     private Float latitude;
 
+    // 该商家等待人数
+    private Integer wait;
+
+    public Integer getWait() {
+        return wait;
+    }
+
+    public void setWait(Integer wait) {
+        this.wait = wait;
+    }
+
     public Float getLatitude() {
         return latitude;
     }

@@ -34,7 +34,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println(">>>Login拦截器>>>>>>>在请求处理之前进行调用（Controller方法调用之前）");
+//        System.out.println(">>>Login拦截器>>>>>>>在请求处理之前进行调用（Controller方法调用之前）");
         HttpSession session = request.getSession();
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
@@ -44,7 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (env.equals("dev")){
             User user = new User();
             Gson gson = new Gson();
-            user = mUserMapper.selectByPrimaryKey(12);
+            user = mUserMapper.selectByPrimaryKey(2);
             user.setUsername(MimeUtility.decodeText(user.getUsername()));
             System.out.println(user.getUsername());
             session.setAttribute(Constants.USER, gson.toJson(user));
@@ -73,11 +73,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        System.out.println(">>>Login拦截器>>>>>>>请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）");
+//        System.out.println(">>>Login拦截器>>>>>>>请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println(">>>Login拦截器>>>>>>>在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）");
+//        System.out.println(">>>Login拦截器>>>>>>>在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）");
     }
 }
