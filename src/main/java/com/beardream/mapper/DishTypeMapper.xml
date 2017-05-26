@@ -47,6 +47,27 @@
     </where>
     order by add_time desc
   </select>
+  <!-- 菜品分类、商家、标签表查询结果集 -->
+  <resultMap id="DishTypeBusinessTagResultMap" type="com.beardream.model.DishTypeBusinessTag">
+    <id column="dishtype_id" jdbcType="INTEGER" property="dishtypeId"/>
+    <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+    <result column="tag_id" jdbcType="INTEGER" property="tagId"/>
+    <result column="dish_id" jdbcType="INTEGER" property="dishId"/>
+    <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+    <result column="name" jdbcType="VARCHAR" property="businessName"/>
+    <result column="tel" jdbcType="VARCHAR" property="businessTel"/>
+    <result column="name" jdbcType="VARCHAR" property="tagName"/>
+    <result column="content" jdbcType="VARCHAR" property="content"/>
+  </resultMap>
+  <!-- 菜品分类、商家、标签连接查询-->
+  <select id="findDishTypeBusinessTagBySelective" resultMap="DishTypeBusinessTagResultMap">
+    select
+    b.business_id,b.add_time,b.name,b.address,b.tel,
+    d.dishtype_id,d.type_name,
+    t.tag_id,t.name
+    from t_business b,t_dish_type d, t_tag t  where  b.business_id=d.dishtype_id and b.business_id=t.tag_id
+    order by add_time desc
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dish_type
     where dishtype_id = #{dishtypeId,jdbcType=INTEGER}

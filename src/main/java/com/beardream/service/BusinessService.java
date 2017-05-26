@@ -3,7 +3,9 @@ package com.beardream.service;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.BusinessMapper;
 import com.beardream.model.Business;
+import com.beardream.model.BusinessDishTag;
 import com.beardream.model.Result;
+import com.beardream.model.UserArticle;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class BusinessService {
             return ResultUtil.success(businessInfo.get(0));
     }
 
+    public BusinessDishTag get(BusinessDishTag businessDishTag){
+        return mBussinessMapper.findBusinessDishTagBySelective(businessDishTag).get(0);
+    }
     //post请求
     public Result add(Business business){
         int result;
@@ -76,8 +81,8 @@ public class BusinessService {
     public Map getPage(Business business, int pageNum, int pageSize) {
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Business> businesses =mBussinessMapper.findBySelective(new Business());
-        PageInfo page = new PageInfo(businesses);
+        List<BusinessDishTag> businessDishTags =mBussinessMapper.findBusinessDishTagBySelective(new BusinessDishTag());
+        PageInfo page = new PageInfo(businessDishTags);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
         return map;

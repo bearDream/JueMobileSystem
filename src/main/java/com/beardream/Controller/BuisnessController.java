@@ -34,11 +34,15 @@ public class BuisnessController {
 
     @ApiOperation("获取单个商家信息")
     @GetMapping
-    public Result get(Business
-                                  business, BindingResult bindingResult) {
+    public Result get(Business business,BusinessDishTag businessDishTag,BindingResult bindingResult){
+        System.out.println(business.getBusinessId());
+        return ResultUtil.success(businessMapper.findBusinessDishTagBySelective(businessDishTag));
+    }
+
+  /* public Result get(Business business, BindingResult bindingResult) {
             System.out.println(business.getBusinessId());
             return ResultUtil.success(businessMapper.findBySelective(business));
-        }
+        }*/
 
     @ApiOperation("添加商家")
     @PostMapping
@@ -83,7 +87,7 @@ public class BuisnessController {
 
     @ApiOperation("分页查询商家推荐")
     @GetMapping("/recommend")
-    public Result getPage(Business business, Tag tag,Dish dish, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Business business,@RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
@@ -91,5 +95,17 @@ public class BuisnessController {
             return ResultUtil.success(businessService.getPage(business, pageNum,pageSize));
         else
             return ResultUtil.error(-1,"系统错误");
+    }
+
+    public Result getBusiness(BusinessDishTag businessDishTag){
+        if (!TextUtil.isEmpty(businessDishTag.getBusinessId())){
+            return ResultUtil.error(-1,"商家ID不能为空");
+        }
+        if (businessService.get(businessDishTag)!=null){
+            return  ResultUtil.success(businessService.get(businessDishTag));
+        }
+        else {
+            return  ResultUtil.error(-1,"商家不存在");
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.beardream.dao;
 
 import com.beardream.model.Business;
+import com.beardream.model.BusinessDishTag;
 import com.beardream.model.DishType;
+import com.beardream.model.DishTypeBusinessTag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -10,7 +12,6 @@ import java.util.List;
 
 @Repository
 @Mapper
-
 public interface DishTypeMapper {
     int deleteByPrimaryKey(Integer dishtypeId);
 
@@ -22,6 +23,7 @@ public interface DishTypeMapper {
 
     List<DishType> findBySelective(DishType dishType);
 
+    List<DishTypeBusinessTag> findDishTypeBusinessTagBySelective (DishTypeBusinessTag dishTypeBusinessTag);
 
     int updateByPrimaryKeySelective(DishType record);
 

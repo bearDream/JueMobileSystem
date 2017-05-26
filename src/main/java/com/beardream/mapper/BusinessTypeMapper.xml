@@ -24,6 +24,83 @@
     from t_business_type
     where business_type_id = #{businessTypeId,jdbcType=INTEGER}
   </select>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_business_type
+    <where>
+      <if test="businessTypeId != null">
+        and business_type_id = #{businessTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="typeName != null">
+        and type_name = #{typeName,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=INTEGER}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and addtime = #{addTime,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+  <!-- 商家表、商家分类表、标签表查询结果集 -->
+  <resultMap id="BusinessBusinessTypeTagResultMap" type="com.beardream.model.BusinessBusinessTypeTag">
+    <id column="business_id" jdbcType="INTEGER" property="businessId"/>
+    <result column="business_type_id" jdbcType="INTEGER" property="businessTypeId"/>
+    <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+    <result column="tag_id" jdbcType="VARCHAR" property="tagId"/>
+    <result column="name" jdbcType="VARCHAR" property="businessName"/>
+    <result column="type_name" jdbcType="VARCHAR" property="businessTypeName"/>
+    <result column="address" jdbcType="VARCHAR" property="businessAddress"/>
+    <result column="tel" jdbcType="VARCHAR" property="businessTel"/>
+    <result column="add_time" jdbcType="VARCHAR" property="addTime"/>
+  </resultMap>
+  <!-- 连接商家、商家分类、标签-->
+  <select id="findBusinessBusinessTypeTagBySelective" resultMap="BusinessBusinessTypeTagResultMap">
+    SELECT
+    p.business_type_id,p.type_name,
+    b.business_id,b.name,b.address,b.tel,b.business_image,b.add_time,
+    t.tag_id,t.name
+    from t_business_type p
+    left outer join t_business b on b.business_id = p.business_type_id
+    left outer join t_tag t on p.business_type_id = t.tag_id
+    <where>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+      <if test="businessTypeId != null">
+        and business_type_id = #{businessTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="tagId != null">
+        and tag_id = #{tagId,jdbcType=INTEGER}
+      </if>
+      <if test="businessName != null">
+        and name = #{businessName,jdbcType=VARCHAR}
+      </if>
+      <if test="businessTypeName != null">
+        and type_name = #{businessTypeName,jdbcType=VARCHAR}
+      </if>
+      <if test="tagName != null">
+        and name = #{tagName,jdbcType=VARCHAR}
+      </if>
+      <if test="businessAddress != null">
+        and address = #{businessAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="businessTel != null">
+        and tel = #{businessTel,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_business_type
     where business_type_id = #{businessTypeId,jdbcType=INTEGER}
