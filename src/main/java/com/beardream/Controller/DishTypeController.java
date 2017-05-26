@@ -5,10 +5,7 @@ import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.DishTypeMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
-import com.beardream.model.Dish;
-import com.beardream.model.DishType;
-import com.beardream.model.Result;
-import com.beardream.model.User;
+import com.beardream.model.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +21,7 @@ import java.util.List;
  * 菜品类别控制器
  */
 @RestController
-@RequestMapping("/api/mobile/dishtype")
+@RequestMapping("/api/dishtype")
 @Api(value = "菜品分类服务",description = "提供RESTful风格API的商家的增删改查服务")
 @PermissionModule(text = "菜品分类管理")
 public class DishTypeController {
@@ -35,10 +32,11 @@ public class DishTypeController {
     @GetMapping
     @PermissionMethod(text = "获取菜品分类信息")
 
-    public Result get(DishType dishType, BindingResult bindingResult){
-        System.out.println(dishType.getDishtypeId());
-        return ResultUtil.success(dishTypeMapper.findBySelective(dishType));
+    public Result get(Business business, DishTypeBusinessTag dishTypeBusinessTag, BindingResult bindingResult){
+        System.out.println(business.getBusinessId());
+        return ResultUtil.success(dishTypeMapper.findDishTypeBusinessTagBySelective(dishTypeBusinessTag));
     }
+
 
     @ApiOperation("添加菜品分类")
     @PostMapping

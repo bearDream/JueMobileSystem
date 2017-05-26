@@ -105,4 +105,16 @@ public class BuisnessController {
         return ResultUtil.success(businessList);
 
     }
+
+    public Result getBusiness(BusinessDishTag businessDishTag){
+        if (!TextUtil.isEmpty(businessDishTag.getBusinessId())){
+            return ResultUtil.error(-1,"商家ID不能为空");
+        }
+        if (businessService.get(businessDishTag)!=null){
+            return  ResultUtil.success(businessService.get(businessDishTag));
+        }
+        else {
+            return  ResultUtil.error(-1,"商家不存在");
+        }
+    }
 }

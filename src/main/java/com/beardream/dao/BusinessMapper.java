@@ -1,6 +1,8 @@
 package com.beardream.dao;
 
 import com.beardream.model.Business;
+import com.beardream.model.BusinessDishTag;
+import com.beardream.model.UserArticle;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +26,7 @@ public interface BusinessMapper {
     int updateByPrimaryKeyWithBLOBs(Business record);
 
     int updateByPrimaryKey(Business record);
+
+    //连接查询用户和文章
+    List<BusinessDishTag> findBusinessDishTagBySelective (BusinessDishTag businessDishTag);
 }

@@ -6,6 +6,7 @@ import com.beardream.dao.BusinessMapper;
 import com.beardream.model.Business;
 import com.beardream.model.Number;
 import com.beardream.model.Result;
+import com.beardream.model.UserArticle;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class BusinessService {
             return ResultUtil.success(businessInfo.get(0));
     }
 
+    public BusinessDishTag get(BusinessDishTag businessDishTag){
+        return mBussinessMapper.findBusinessDishTagBySelective(businessDishTag).get(0);
+    }
     //post请求
     public Result add(Business business){
         int result;
