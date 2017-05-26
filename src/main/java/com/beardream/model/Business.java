@@ -29,6 +29,8 @@ public class Business {
 
     private Float latitude;
 
+    private String level;
+
     public Float getLatitude() {
         return latitude;
     }
@@ -132,4 +134,8 @@ public class Business {
     public void setIsTake(Byte isTake) {
         this.isTake = isTake;
     }
+
+    public String getLevel() {return level;}
+
+    public void setLevel(String level) {this.level = level;}
 }

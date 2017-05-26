@@ -14,6 +14,7 @@
     <result column="longtitude" jdbcType="FLOAT" property="longtitude" />
     <result column="latitude" jdbcType="FLOAT" property="latitude" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="level" jdbcType="VARCHAR" property="level"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Business">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -65,6 +66,9 @@
       </if>
       <if test="content != null">
         and content = #{content,jdbcType=LONGVARCHAR}
+      </if>
+      <if test="level != null">
+        and level = #{level,jdbcType=VARCHAR}
       </if>
     </where>
     order by add_time desc
@@ -123,13 +127,13 @@
   <insert id="insert" parameterType="com.beardream.model.Business">
     insert into t_business (business_id, user_id, name, 
       address, tel, business_image, business_carousel_image,
-      is_show, is_take, add_time, content, longtitude, latitude
+      is_show, is_take, add_time, content, longtitude, latitude,level
       )
     values (#{businessId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{businessImage,jdbcType=VARCHAR},
       #{businessCarouselImage,jdbcType=VARCHAR},#{isShow,jdbcType=TINYINT},#{isTake,jdbcType=TINYINT},
       #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{longtitude,jdbcType=FLOAT},
-       #{latitude,jdbcType=FLOAT}
+       #{latitude,jdbcType=FLOAT},#{level,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Business">
@@ -174,6 +178,9 @@
       <if test="latitude != null">
         latitude,
       </if>
+      <if test="level != null">
+        level,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="businessId != null">
@@ -214,6 +221,9 @@
       </if>
       <if test="latitude != null">
         #{latitude,jdbcType=FLOAT},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCAHR},
       </if>
     </trim>
   </insert>
@@ -256,6 +266,9 @@
       <if test="latitude != null">
         latitude = #{latitude,jdbcType=FLOAT},
       </if>
+      <if test="level != null">
+        level = #{level,jdbcType=VARCAHR},
+      </if>
     </set>
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
@@ -272,7 +285,8 @@
       add_time = #{addTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR},
       longtitude = #{longtitude, jdbcType=FLOAT}
-      latitude = #{latitude, jdbcType=FLOAT}
+      latitude = #{latitude, jdbcType=FLOAT},
+      level = #{level,jdbcType=VARCAHR}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Business">
@@ -287,7 +301,8 @@
       is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       longtitude = #{longtitude,jdbcType=FLOAT},
-      latitude = #{latitude,jdbcType=FLOAT}
+      latitude = #{latitude,jdbcType=FLOAT},
+      level = #{level,jdbcType=VARCAHR}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
 </mapper>
