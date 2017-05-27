@@ -25,4 +25,7 @@ public interface DishMapper {
 
     int updateByPrimaryKey(Dish record);
 
+    //连接查询菜品、菜品商家和标签
+    List<DishDishBusinessTag> findDishDishBusinessTagSelective(DishDishBusinessTag dishDishBusinessTag);
+
 }

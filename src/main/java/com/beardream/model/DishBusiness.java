@@ -25,6 +25,8 @@ public class DishBusiness {
 
     private Date addtime;
 
+    private String tagId;
+
     public Integer getDishBusinessId() {
         return dishBusinessId;
     }
@@ -61,9 +63,7 @@ public class DishBusiness {
         return isFavorable;
     }
 
-    public void setIsFavorable(Boolean isFavorable) {
-        this.isFavorable = isFavorable;
-    }
+    public void setIsFavorable(Boolean isFavorable) {this.isFavorable = isFavorable;}
 
     public Boolean getIsShow() {
         return isShow;
@@ -112,4 +112,8 @@ public class DishBusiness {
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
     }
+
+    public String getTagId() {return tagId;}
+
+    public void setTagId(String tagId) {this.tagId = tagId;}
 }
