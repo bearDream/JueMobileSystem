@@ -3,10 +3,8 @@ package com.beardream.service;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.Sort;
 import com.beardream.dao.BusinessMapper;
-import com.beardream.model.Business;
+import com.beardream.model.*;
 import com.beardream.model.Number;
-import com.beardream.model.Result;
-import com.beardream.model.UserArticle;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,8 @@ public class BusinessService {
     @Autowired
     public BusinessMapper mBussinessMapper;
 
-    @Autowired TakeNumService mTakeNumService;
+    @Autowired
+    TakeNumService mTakeNumService;
 
     //获取单个商家信息
     public Result find(Business business){
@@ -34,6 +33,11 @@ public class BusinessService {
             return ResultUtil.error(-1,"商家不存在");
         else
             return ResultUtil.success(businessInfo.get(0));
+    }
+
+    // 获取某个商家的队列信息
+    public List<Number> getBusinessQue(Business business){
+        return mTakeNumService.getBusinessNum(business);
     }
 
     public BusinessDishTag get(BusinessDishTag businessDishTag){

@@ -40,7 +40,7 @@ public class Business {
         this.wait = wait;
     }
 
-    private String level;
+    private Integer level;
 
     public Float getLatitude() {
         return latitude;
@@ -146,7 +146,7 @@ public class Business {
         this.isTake = isTake;
     }
 
-    public String getLevel() {return level;}
+    public Integer getLevel() {return level;}
 
-    public void setLevel(String level) {this.level = level;}
+    public void setLevel(Integer level) {this.level = level;}
 }

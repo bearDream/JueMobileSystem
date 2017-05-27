@@ -7,9 +7,11 @@ import com.beardream.dao.RoleMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
+import com.beardream.model.Number;
 import com.beardream.service.BusinessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.validation.BindingResult;
@@ -35,11 +37,28 @@ public class BuisnessController {
 
     @ApiOperation("获取单个商家信息")
     @GetMapping
-    public Result get(Business
-                                  business, BindingResult bindingResult) {
-            System.out.println(business.getBusinessId());
-            return ResultUtil.success(businessMapper.findBySelective(business));
-        }
+    public Result get(Business business, BindingResult bindingResult) {
+        // 获取到商家的基本信息和该商家的排队情况
+        // 商家信息（包括是否开放了取号功能） + 排队的队列（有效的）
+        System.out.println(business.getBusinessId());
+        Result businessResult = mBusinessService.find(business);
+        if (businessResult.getCode() == -1)
+            return businessResult;
+
+        // 将查询出来的商家信息给business1
+        Business business1 = (Business) businessResult.getData();
+
+        // 根据business1的信息查询对应的队列信息（有效期的且是今天的）
+        List<Number> businessQueue = mBusinessService.getBusinessQue(business1);
+
+        // 将两个信息放到一个map中返回给前端
+        Map<String, Object> resultMap = new HashedMap();
+
+        resultMap.put("businessInfo", business1);
+        resultMap.put("queue", businessQueue);
+
+        return ResultUtil.success(resultMap);
+    }
 
     @ApiOperation("添加商家")
     @PostMapping
@@ -110,8 +129,8 @@ public class BuisnessController {
         if (!TextUtil.isEmpty(businessDishTag.getBusinessId())){
             return ResultUtil.error(-1,"商家ID不能为空");
         }
-        if (businessService.get(businessDishTag)!=null){
-            return  ResultUtil.success(businessService.get(businessDishTag));
+        if (mBusinessService.get(businessDishTag)!=null){
+            return  ResultUtil.success(mBusinessService.get(businessDishTag));
         }
         else {
             return  ResultUtil.error(-1,"商家不存在");
