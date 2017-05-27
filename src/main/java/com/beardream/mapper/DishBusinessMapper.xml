@@ -40,7 +40,7 @@
     values (#{dishBusinessId,jdbcType=INTEGER}, #{dishId,jdbcType=INTEGER}, #{businessId,jdbcType=INTEGER}, 
       #{dishType,jdbcType=VARCHAR}, #{isFavorable,jdbcType=BIT}, #{isShow,jdbcType=BIT}, 
       #{isTop,jdbcType=BIT}, #{orderCount,jdbcType=INTEGER}, #{dishPrice,jdbcType=REAL}, 
-      #{favorablePrice,jdbcType=REAL}, #{addtime,jdbcType=TIMESTAMP},#{tagId,jdbcType=VARCAHR})
+      #{favorablePrice,jdbcType=REAL}, #{addtime,jdbcType=TIMESTAMP},#{tagId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.DishBusiness">
     insert into t_dish_business
