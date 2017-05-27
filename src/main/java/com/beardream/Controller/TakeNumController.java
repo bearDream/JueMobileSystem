@@ -14,7 +14,10 @@ import com.beardream.service.TakeNumService;
 import io.swagger.annotations.Api;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.api.impl.WxMpTemplateMsgServiceImpl;
 import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ import java.util.List;
 public class TakeNumController {
 
     private final static Logger mLogger = LoggerFactory.getLogger("TakeNumController.class");
+
+    @Value("${TemplateId}")
+    private String mTemplateId;
 
     @Value("${push_message}")
     private String mPushMessage;
@@ -70,7 +76,7 @@ public class TakeNumController {
             return ResultUtil.error(-1,num.getMsg());
     }
 
-    // 获取用户所取到对应商家的号  eg:用户已取号，获取他的取号码
+    // 获取用户所取到对应商家的号  eg:用户已取号，获取他的取号码，以及他需要等待多少桌
     @GetMapping("/getNum")
     public Result getNum(Number number, HttpSession session){
         if (session.getAttribute(Constants.USER) == null){
@@ -79,8 +85,8 @@ public class TakeNumController {
         }
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
 
-        if (!TextUtil.isEmpty(number.getBusinessId()) && !TextUtil.isEmpty(number.getPeopleNum())){
-            return ResultUtil.error(-1,"请选择商家并填写人数后又提交");
+        if (!TextUtil.isEmpty(number.getBusinessId())){
+            return ResultUtil.error(-1,"请选择商家后又提交");
         }
 
         number.setUserId(user.getUserId());
@@ -140,6 +146,8 @@ public class TakeNumController {
             return ResultUtil.error(-1,"请选择商家并携带number后又提交");
         }
 
+        // 要被过号的这个号应该是没有过期的
+        number.setIsExpired((byte) 1);
         Result result = mTakeNumService.passNum(number);
 
         if (result.getCode() == -1) {
@@ -152,7 +160,7 @@ public class TakeNumController {
                 return ResultUtil.success("设置成功");
             }
             // 设置当前号是队列的第一个元素（因为队列已经过排序，因此第一个就是队列中对前面的号）
-            int curretNum = remainLists.get(0).getNumId();
+            int curretNum = remainLists.get(0).getNumber();
 
             // 对队列中的其他号进行推送
             for (Number remainList : remainLists) {
@@ -174,19 +182,15 @@ public class TakeNumController {
             return;
         }
 
-        StringBuilder text = new StringBuilder();
-        text.append("亲~ 您当前所取到的号是： ");
-        text.append(takeNum);
-        text.append(" 号，当前排到 ");
-        text.append(CurrentNum);
-        text.append(" 号,在你前面还有 ");
-        text.append(takeNum - CurrentNum);
-        text.append(" 桌");
-
-        WxMpKefuMessage message = WxMpKefuMessage.TEXT().toUser(user.getOpenid()).content(text.toString()).build();
-
+        WxMpTemplateMessage templateMessage = new WxMpTemplateMessage();
         try {
-            mWxMpService.getKefuService().sendKefuMessage(message);
+            templateMessage.setToUser(user.getOpenid());
+            templateMessage.setTemplateId(mTemplateId);
+            templateMessage.setUrl("");
+            templateMessage.getData().add(new WxMpTemplateData("number", takeNum + "","#003371"));
+            templateMessage.getData().add(new WxMpTemplateData("currentNumber",CurrentNum + "","#44cef6"));
+            templateMessage.getData().add(new WxMpTemplateData("waitNumber",takeNum - CurrentNum + "","#00056"));
+            mWxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
         } catch (WxErrorException e) {
             e.printStackTrace();
             mLogger.error("推送微信消息失败,原因是={}",e.getMessage());

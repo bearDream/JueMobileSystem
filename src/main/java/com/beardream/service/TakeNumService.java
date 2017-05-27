@@ -9,15 +9,13 @@ import com.beardream.model.Business;
 import com.beardream.model.Number;
 import com.beardream.model.Result;
 import com.beardream.model.User;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.jws.soap.SOAPBinding;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by bearDream on 2017/5/22.
@@ -43,40 +41,42 @@ public class TakeNumService {
     // 取号 该方法应该为一个同步方法，避免多用户同时操作该方法,造成取号数据不准确
     public Result takeNum(Number number){
         synchronized (this) {
+            // * 先保存取号用户的id，后面需要用到
+            int userId = number.getUserId();
+            // 1、判断商家是否开放取号功能
             Business business = mBusinessMapper.selectByPrimaryKey(number.getBusinessId());
             if (business == null || business.getIsTake() == 0){
                 return ResultUtil.error(-1,"商家暂未开放取号，请稍候再来哦");
             }
 
+            // 2、查出该商家当前已经取号的队列
+            number.setUserId(null);
             List<Number> queue = mNumberMapper.findBySelective(number);
 
-            // 查找该用户是否已经取过号，防止用户重复取号
+            // 3、查找该用户是否已经取过号，防止用户重复取号
             for (Number number1 : queue) {
                 if (number1.getUserId().equals(number.getUserId()) && number1.getBusinessId().equals(number.getBusinessId())){
                     return ResultUtil.error(-1,"您已在该商家取过号，不可重复取号");
                 }
             }
 
-            // 如果队列为空，则说明没有人排队,则直接插入即可
+            // 4、如果队列为空，则说明没有人排队,则直接插入即可
             if (queue.size() == 0){
                 number.setNumber(1);
             }else {
-                queue = Sort.sortNumberDesc(queue, "desc");
+                // 5、队列有人排队，则先将队列按照取号大小正序排列
+                queue = Sort.sortNumberDesc(queue, "asc");
 
-                for (Number number1 : queue){
-                    System.out.println(number1);
-                }
 
-                // 获得最大的number
+                // 6、获得最大的number
                 int maxNum = queue.get(queue.size()-1).getNumber();
-                System.out.println(maxNum);
-                //设置取的号为这个number+1添加到数据库
+                // 7、设置取的号为这个number+1添加到数据库
                 number.setNumber(maxNum+1);
             }
 
             number.setIsExpired((byte) 1);
             number.setAddTime(new Date());
-
+            number.setUserId(userId);
 
             mNumberMapper.insert(number);
             // 将取的号返回给控制器
@@ -91,9 +91,22 @@ public class TakeNumService {
         List<Number> numberList = mNumberMapper.findBySelective(number);
 
         // numberList有值说明取过号，否则说明还没有取号
-        if (numberList.size() > 0)
-            return ResultUtil.success(numberList.get(0));
-        else
+        if (numberList.size() > 0){
+            // 1、查找他需要等待的号数  businessID,is_expire
+            number.setUserId(null);
+            List<Number> waitQue = mNumberMapper.findBySelective(number);
+
+            // 2、排序
+            waitQue = Sort.sortNumberDesc(waitQue, "asc");
+
+            // 3、将排序后的第一个元素取出来，用 用户取得的号减去第一个元素的号即是需要等待的号
+            int waitNum = numberList.get(0).getNumber() - waitQue.get(0).getNumber();
+            Map<String, Object> map = new HashedMap();
+            map.put("waitNum", waitNum);
+            map.put("myNum", numberList.get(0));
+
+            return ResultUtil.success(map);
+        } else
             return ResultUtil.error(-1,"你还没取号呢，请先取号");
     }
 
@@ -102,7 +115,7 @@ public class TakeNumService {
 
         List<Number> queue = mNumberMapper.findBySelective(number);
 
-        queue = Sort.sortNumberDesc(queue, "desc");
+        queue = Sort.sortNumberDesc(queue, "asc");
 
         return ResultUtil.success(queue.get(0));
     }
@@ -117,7 +130,7 @@ public class TakeNumService {
         // 获取排队队列
         List<Number> queue = mNumberMapper.findBySelective(number);
 
-        queue = Sort.sortNumberDesc(queue, "desc");
+        queue = Sort.sortNumberDesc(queue, "asc");
 
         return queue;
     }
@@ -162,7 +175,7 @@ public class TakeNumService {
         List<Number> remainNumberList = mNumberMapper.findCurrentNumListBySelective(number);
 
         // 将该队列排序
-        remainNumberList = Sort.sortNumberDesc(remainNumberList, "desc");
+        remainNumberList = Sort.sortNumberDesc(remainNumberList, "asc");
 
         System.out.println("getRemainNums");
         for (Number number1 : remainNumberList) {

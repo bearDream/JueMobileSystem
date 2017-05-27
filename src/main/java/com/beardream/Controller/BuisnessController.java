@@ -1,5 +1,7 @@
 package com.beardream.Controller;
 
+import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.BusinessMapper;
@@ -17,6 +19,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,11 +54,44 @@ public class BuisnessController {
         // 根据business1的信息查询对应的队列信息（有效期的且是今天的）
         List<Number> businessQueue = mBusinessService.getBusinessQue(business1);
 
+        // 1-4个人是小桌   5-6个人是中桌   7人以上为大桌
+        Map kindTableMap = mBusinessService.getQueTableMap(businessQueue);
+
         // 将两个信息放到一个map中返回给前端
         Map<String, Object> resultMap = new HashedMap();
 
         resultMap.put("businessInfo", business1);
-        resultMap.put("queue", businessQueue);
+        resultMap.put("queue", kindTableMap);
+
+        return ResultUtil.success(resultMap);
+    }
+
+    @ApiOperation("商家获取自己的信息")
+    @GetMapping("/getUserBusiness")
+    public Result getBusinessUser(Business business, HttpSession session) {
+        // 获取到商家的基本信息和该商家的排队情况
+        // 商家信息（包括是否开放了取号功能） + 排队的队列（有效的）
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        business.setUserId(user.getUserId());
+        Result businessResult = mBusinessService.find(business);
+
+        if (businessResult.getCode() == -1)
+            return businessResult;
+
+        // 将查询出来的商家信息给business1
+        Business business1 = (Business) businessResult.getData();
+
+        // 根据business1的信息查询对应的队列信息（有效期的且是今天的）
+        List<Number> businessQueue = mBusinessService.getBusinessQue(business1);
+
+        // 1-4个人是小桌   5-6个人是中桌   7人以上为大桌
+        Map kindTableMap = mBusinessService.getQueTableMap(businessQueue);
+
+        // 将两个信息放到一个map中返回给前端
+        Map<String, Object> resultMap = new HashedMap();
+
+        resultMap.put("business", business1);
+        resultMap.put("queue", kindTableMap);
 
         return ResultUtil.success(resultMap);
     }

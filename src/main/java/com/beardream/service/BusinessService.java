@@ -7,6 +7,7 @@ import com.beardream.model.*;
 import com.beardream.model.Number;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,35 @@ public class BusinessService {
     // 获取某个商家的队列信息
     public List<Number> getBusinessQue(Business business){
         return mTakeNumService.getBusinessNum(business);
+    }
+
+    // 将排队信息根据人数分为三个队列（小桌，中桌，大桌）
+    // 1-4个人是小桌   5-6个人是中桌   7人以上为大桌
+    public Map getQueTableMap(List<Number> numberList){
+        Map<String, Object> resultMap = new HashedMap();
+
+        List<Number> smallQue = new ArrayList<>();
+        List<Number> mediumQue = new ArrayList<>();
+        List<Number> bigQue = new ArrayList<>();
+        for (Number number : numberList) {
+            if (number.getPeopleNum() >= 1 && number.getPeopleNum() <= 4)
+                smallQue.add(number);
+            if (number.getPeopleNum() >= 5 && number.getPeopleNum() <= 6)
+                mediumQue.add(number);
+            if (number.getPeopleNum() >= 7)
+                bigQue.add(number);
+        }
+
+        // 再排序一次
+        smallQue = Sort.sortNumberDesc(smallQue, "asc");
+        mediumQue = Sort.sortNumberDesc(mediumQue, "asc");
+        bigQue = Sort.sortNumberDesc(bigQue, "asc");
+        // 将三个集合放到map中返回给前端
+        resultMap.put("smallQue", smallQue);
+        resultMap.put("mediumQue", mediumQue);
+        resultMap.put("bigQue", bigQue);
+        resultMap.put("allNums", smallQue.size() + mediumQue.size() + bigQue.size());
+        return resultMap;
     }
 
     public BusinessDishTag get(BusinessDishTag businessDishTag){

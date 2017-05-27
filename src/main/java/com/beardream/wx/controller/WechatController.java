@@ -126,7 +126,7 @@ public class WechatController {
         WxMenuButton button = new WxMenuButton();
         button.setType("view");
         // redirectURI,  scope,  state
-        button.setUrl(wxService.oauth2buildAuthorizationUrl("http://171590mx26.51mypc.cn/api/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
+        button.setUrl(wxService.oauth2buildAuthorizationUrl("http://wx.chiprincess.cn/api/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
         button.setName("获取用户信息");
         buttons.add(button);
         wxMenu.setButtons(buttons);

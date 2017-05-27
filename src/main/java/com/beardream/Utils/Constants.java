@@ -8,8 +8,9 @@ public class Constants {
     public final static String USER = "user";
 
     //登录的url
-    public final static String LOGIN_URL = "/login";
+    public final static String LOGIN_URL = "/api/index";
+
 
     //微信验证token的url
-    public final static String TOKEN_URL = "/api/index";
+    public final static String TOKEN_URL = "/api/wechat/portal";
 }

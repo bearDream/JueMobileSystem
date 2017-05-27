@@ -32,7 +32,7 @@
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
-    user_id, username,tel, real_name, age, sex,address, logins, status, type, level, role_id,body_status,remark,headImgUrl,point
+    user_id, username,tel, real_name, age, sex,address, logins, status, type, level, role_id,body_status,remark,headImgUrl,point,openid
     from t_user
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
