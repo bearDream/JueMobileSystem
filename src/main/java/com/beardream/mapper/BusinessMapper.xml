@@ -225,7 +225,7 @@
         #{latitude,jdbcType=FLOAT},
       </if>
       <if test="level != null">
-        #{level,jdbcType=VARCAHR},
+        #{level,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -269,7 +269,7 @@
         latitude = #{latitude,jdbcType=FLOAT},
       </if>
       <if test="level != null">
-        level = #{level,jdbcType=VARCAHR},
+        level = #{level,jdbcType=VARCHAR},
       </if>
     </set>
     where business_id = #{businessId,jdbcType=INTEGER}
@@ -288,7 +288,7 @@
       content = #{content,jdbcType=LONGVARCHAR},
       longtitude = #{longtitude, jdbcType=FLOAT}
       latitude = #{latitude, jdbcType=FLOAT},
-      level = #{level,jdbcType=VARCAHR}
+      level = #{level,jdbcType=VARCHAR}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Business">
@@ -304,7 +304,7 @@
       add_time = #{addTime,jdbcType=TIMESTAMP},
       longtitude = #{longtitude,jdbcType=FLOAT},
       latitude = #{latitude,jdbcType=FLOAT},
-      level = #{level,jdbcType=VARCAHR}
+      level = #{level,jdbcType=VARCHAR}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
 </mapper>
