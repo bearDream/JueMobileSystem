@@ -2,8 +2,10 @@ package com.beardream.wx.controller;
 
 import com.beardream.Utils.Constants;
 import com.beardream.Utils.Json;
+import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.UserMapper;
+import com.beardream.model.Result;
 import com.beardream.model.User;
 import com.google.gson.Gson;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -35,7 +38,7 @@ import java.util.List;
  * 微信app进入入口，判断是否注册过，没有则执行自动注册
  */
 @Controller
-@RequestMapping("/api/index")
+@RequestMapping("/api/mobile/index")
 public class IndexController {
 
     @Value("${domain}")

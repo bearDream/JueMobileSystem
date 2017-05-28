@@ -1,7 +1,11 @@
 package com.beardream.wx.controller;
 
+import com.beardream.Utils.ResultUtil;
+import com.beardream.model.Result;
 import com.beardream.wx.config.WechatMpConfiguration;
+import com.fasterxml.classmate.ResolvedType;
 import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -28,12 +32,12 @@ import java.util.List;
  * @author Binary Wang
  */
 @RestController
-@RequestMapping("/api/wechat/portal")
+@RequestMapping("/api/mobile/wechat/portal")
 public class WechatController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private WxMpService wxService;
+    private WxMpService mWxMpService;
 
     @Autowired
     private WxMpMessageRouter router;
@@ -54,7 +58,7 @@ public class WechatController {
             throw new IllegalArgumentException("请求参数非法，请核实!");
         }
 
-        if (this.wxService.checkSignature(timestamp, nonce, signature)) {
+        if (this.mWxMpService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
         }
 
@@ -75,7 +79,7 @@ public class WechatController {
                 + " timestamp=[{}], nonce=[{}], requestBody=[\n{}\n] ",
             signature, encType, msgSignature, timestamp, nonce, requestBody);
 
-        if (!this.wxService.checkSignature(timestamp, nonce, signature)) {
+        if (!this.mWxMpService.checkSignature(timestamp, nonce, signature)) {
             throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
         }
         
@@ -92,7 +96,7 @@ public class WechatController {
         } else if ("aes".equals(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(
-                requestBody, this.wxService.getWxMpConfigStorage(), timestamp,
+                requestBody, this.mWxMpService.getWxMpConfigStorage(), timestamp,
                 nonce, msgSignature);
             this.logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
             WxMpXmlOutMessage outMessage = this.route(inMessage);
@@ -101,7 +105,7 @@ public class WechatController {
             }
 
             out = outMessage
-                .toEncryptedXml(this.wxService.getWxMpConfigStorage());
+                .toEncryptedXml(this.mWxMpService.getWxMpConfigStorage());
         }
 
         this.logger.debug("\n组装回复信息：{}", out);
@@ -126,21 +130,32 @@ public class WechatController {
         WxMenuButton button = new WxMenuButton();
         button.setType("view");
         // redirectURI,  scope,  state
-        button.setUrl(wxService.oauth2buildAuthorizationUrl("http://wx.chiprincess.cn/api/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
+        button.setUrl(mWxMpService.oauth2buildAuthorizationUrl("http://wx.chiprincess.cn/api/mobile/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
         button.setName("获取用户信息");
         buttons.add(button);
         wxMenu.setButtons(buttons);
         try {
-            wxService.getMenuService().menuCreate(wxMenu);
+            mWxMpService.getMenuService().menuCreate(wxMenu);
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
         try {
-            WxMpMenu wxMenuGet = wxService.getMenuService().menuGet();
+            WxMpMenu wxMenuGet = mWxMpService.getMenuService().menuGet();
             System.out.println(wxMenuGet.toString());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
     }
-
+    
+    @GetMapping("/getWxConfig")
+    public Result getJsConfigInfo(){
+        try {
+            System.out.println(mWxMpService.getJsapiTicket(false));
+            WxJsapiSignature wxJsapiSignature = mWxMpService.createJsapiSignature("http://localhost:8080/");
+            return ResultUtil.success(wxJsapiSignature);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+            return ResultUtil.error(-1,"获取js接口失败");
+        }
+    }
 }
