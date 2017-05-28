@@ -27,6 +27,6 @@ public interface BusinessMapper {
 
     int updateByPrimaryKey(Business record);
 
-    //连接查询用户和文章
+    //商家表 左连接菜品表 和 标签表  查询出商家信息和商家的菜品信息
     List<BusinessDishTag> findBusinessDishTagBySelective (BusinessDishTag businessDishTag);
 }

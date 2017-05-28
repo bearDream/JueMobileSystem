@@ -148,10 +148,10 @@ public class WechatController {
     }
     
     @GetMapping("/getWxConfig")
-    public Result getJsConfigInfo(){
+    public Result getJsConfigInfo(@RequestParam String url){
         try {
             System.out.println(mWxMpService.getJsapiTicket(false));
-            WxJsapiSignature wxJsapiSignature = mWxMpService.createJsapiSignature("http://localhost:8080/");
+            WxJsapiSignature wxJsapiSignature = mWxMpService.createJsapiSignature(url);
             return ResultUtil.success(wxJsapiSignature);
         } catch (WxErrorException e) {
             e.printStackTrace();
