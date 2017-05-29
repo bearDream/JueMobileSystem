@@ -11,8 +11,8 @@
     <result column="business_carousel_image" jdbcType="VARCHAR" property="businessCarouselImage" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="is_take" jdbcType="TINYINT" property="isTake" />
-    <result column="longtitude" jdbcType="FLOAT" property="longtitude" />
-    <result column="latitude" jdbcType="FLOAT" property="latitude" />
+    <result column="longtitude" jdbcType="DOUBLE" property="longtitude" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="level" jdbcType="INTEGER" property="level"/>
   </resultMap>
@@ -20,20 +20,60 @@
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
 
+  <!-- 获取指定商家的菜品信息 -->
+  <resultMap id="BusinessDishResultMap" type="com.beardream.model.DishBusiness">
+    <id column="dish_business_id" jdbcType="INTEGER" property="dishBusinessId" />
+    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
+    <result column="is_favorable" jdbcType="BIT" property="isFavorable" />
+    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="is_show" jdbcType="BIT" property="isShow" />
+    <result column="is_top" jdbcType="BIT" property="isTop" />
+    <result column="dish_price" jdbcType="REAL" property="dishPrice" />
+    <result column="favorable_price" jdbcType="REAL" property="favorablePrice" />
+    <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+  </resultMap>
 
+  <!-- 商家表、菜品表、标签表查询结果集 -->
+  <resultMap id="BusinessDishTagResultMap" type="com.beardream.model.DishBusiness">
+    <id column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="businessId" jdbcType="INTEGER" property="businessId" />
+    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
+    <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
+  </resultMap>
+
+  <sql id="business_dish_colum_list">
+    d.dish_id, d.dish_name, d.dish_image, db.business_id, d.dish_desc, db.addtime, d.dish_nutrition_status, db.dish_price
+  </sql>
   <sql id="Base_Column_List">
     business_id, user_id, name, address, tel, business_image, business_carousel_image, is_show, is_take, add_time, longtitude, latitude ,level
   </sql>
   <sql id="Blob_Column_List">
     content
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-    select 
+    select
     <include refid="Base_Column_List" />
     <include refid="Blob_Column_List" />
     from t_business
     where business_id = #{businessId,jdbcType=INTEGER}
   </select>
+
+  <!-- 获取用户到商家的距离 -->
+  <select id="findDistanceBySelective" resultType="com.beardream.model.Business">
+    select
+    fun_distance(#{latitude}, #{longtitude}, latitude, longtitude) as distance
+    from t_business
+    where business_id = #{businessId}
+  </select>
+
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
@@ -78,18 +118,6 @@
     </where>
     order by add_time desc
 </select>
-  <!-- 商家表、菜品表、标签表查询结果集 -->
-  <resultMap id="BusinessDishTagResultMap" type="com.beardream.model.BusinessDishTag">
-    <id column="business_id" jdbcType="INTEGER" property="businessId"/>
-    <result column="dish_id" jdbcType="INTEGER" property="dishId"/>
-    <result column="tag_id" jdbcType="INTEGER" property="tagId"/>
-    <result column="name" jdbcType="VARCHAR" property="businessName"/>
-    <result column="dish_name" jdbcType="VARCHAR" property="dishName"/>
-    <result column="name" jdbcType="VARCHAR" property="tagName"/>
-    <result column="tel" jdbcType="VARCHAR" property="businessTel"/>
-    <result column="address" jdbcType="VARCHAR" property="businessAddress"/>
-    <result column="add_time" jdbcType="VARCHAR" property="addTime"/>
-  </resultMap>
   <!-- 商家、菜品、标签连接查询-->
   <select id="findBusinessDishTagBySelective"  resultMap="BusinessDishTagResultMap">
     SELECT
@@ -125,20 +153,39 @@
     </where>
     order by add_time desc
   </select>
+
+  <!-- 根据用户所处状态获取指定商家的菜品信息 -->
+  <select id="findBusinessDishBySelective" resultMap="BusinessDishResultMap">
+    SELECT
+    <include refid="business_dish_colum_list" />
+    from t_dish d inner join t_dish_business db on d.dish_id=db.dish_id
+    <where>
+      <if test="dishNutritionStatus != null">
+        and dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_business
     where business_id = #{businessId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Business">
-    insert into t_business (business_id, user_id, name, 
+    insert into t_business (business_id, user_id, name,
       address, tel, business_image, business_carousel_image,
       is_show, is_take, add_time, content, longtitude, latitude,level
       )
     values (#{businessId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{businessImage,jdbcType=VARCHAR},
       #{businessCarouselImage,jdbcType=VARCHAR},#{isShow,jdbcType=TINYINT},#{isTake,jdbcType=TINYINT},
-      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{longtitude,jdbcType=FLOAT},
-       #{latitude,jdbcType=FLOAT},#{level,jdbcType=INTEGER}
+      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{longtitude,jdbcType=DOUBLE},
+       #{latitude,jdbcType=DOUBLE},#{level,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Business">
@@ -222,10 +269,10 @@
         #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="longtitude != null">
-        #{longtitude,jdbcType=FLOAT},
+        #{longtitude,jdbcType=DOUBLE},
       </if>
       <if test="latitude != null">
-        #{latitude,jdbcType=FLOAT},
+        #{latitude,jdbcType=DOUBLE},
       </if>
       <if test="level != null">
         #{level,jdbcType=INTEGER},
@@ -266,10 +313,10 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="longtitude != null">
-        longtitude = #{longtitude,jdbcType=FLOAT},
+        longtitude = #{longtitude,jdbcType=DOUBLE},
       </if>
       <if test="latitude != null">
-        latitude = #{latitude,jdbcType=FLOAT},
+        latitude = #{latitude,jdbcType=DOUBLE},
       </if>
       <if test="level != null">
         level = #{level,jdbcType=INTEGER},
@@ -289,8 +336,8 @@
       is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR},
-      longtitude = #{longtitude, jdbcType=FLOAT}
-      latitude = #{latitude, jdbcType=FLOAT},
+      longtitude = #{longtitude, jdbcType=DOUBLE}
+      latitude = #{latitude, jdbcType=DOUBLE},
       level = #{level,jdbcType=INTEGER}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
@@ -305,8 +352,8 @@
       is_show = #{isShow,jdbcType=TINYINT},
       is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      longtitude = #{longtitude,jdbcType=FLOAT},
-      latitude = #{latitude,jdbcType=FLOAT},
+      longtitude = #{longtitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
       level = #{level,jdbcType=INTEGER}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>

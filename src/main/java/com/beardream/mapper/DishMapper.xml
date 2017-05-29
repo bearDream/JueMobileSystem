@@ -8,7 +8,7 @@
     <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
-    <result column="dish_nutrition_status" jdbcType="TIMESTAMP" property="dishNutritionStatus" />
+    <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Dish">
     <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />

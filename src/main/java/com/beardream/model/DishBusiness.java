@@ -7,6 +7,8 @@ public class DishBusiness {
 
     private Integer dishId;
 
+    private String dishName;
+
     private Integer businessId;
 
     private String dishType;
@@ -26,6 +28,44 @@ public class DishBusiness {
     private Date addtime;
 
     private String tagId;
+
+    private String dishImage;
+
+    private String dishDesc;
+
+    private Integer dishNutritionStatus;
+
+    public String getDishImage() {
+        return dishImage;
+    }
+
+    public void setDishImage(String dishImage) {
+        this.dishImage = dishImage;
+    }
+
+    public Boolean getTop() {
+        return isTop;
+    }
+
+    public void setDishDesc(String dishDesc) {
+        this.dishDesc = dishDesc;
+    }
+
+    public Boolean getShow() {
+        return isShow;
+    }
+
+    public void setDishNutritionStatus(Integer dishNutritionStatus) {
+        this.dishNutritionStatus = dishNutritionStatus;
+    }
+
+    public Boolean getFavorable() {
+        return isFavorable;
+    }
+
+    public void setDishName(String dishName) {
+        this.dishName = dishName;
+    }
 
     public Integer getDishBusinessId() {
         return dishBusinessId;

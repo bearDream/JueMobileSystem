@@ -141,6 +141,8 @@ public class BuisnessController {
     @ApiOperation("分页查询商家推荐,根据不同条件进行查询")
     @GetMapping("/recommend")
     public Result getPage(Business business, Tag tag,Dish dish,
+                          @RequestParam(value = "latitude", defaultValue = "24.972967837", required = false)  double latitude,
+                          @RequestParam(value = "longtitude", defaultValue = "102.6507997513", required = false)  double longtitude,
                           @RequestParam(value = "waitSort", defaultValue = "desc", required = false)  String waitSort,
                           @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize,
@@ -149,15 +151,34 @@ public class BuisnessController {
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
 
+
+        // 获取取号界面的三个list，将三个list装到一个map中，1、按照距离排序  2、按照星级level排序  3、按照取号桌数排序
         // waitSort为1则按照等待人数从多到少排序，为0则按照从少到多排序,并且查出来的商家都是开通取号功能的
+
+        Map<String, Object> businessMap = new HashedMap();// 装三个list集合
+
+        // 一、查询按照距离排序的商家
+        Map businessLocationMap = mBusinessService.getPage(business, pageNum, pageSize);
+        List<Business> businessDistanceList = mBusinessService.getBusinessLocationSort(businessLocationMap, latitude, longtitude, waitSort);
+
+
+        // 二、查询按照星级level排序的商家
+        Map businessLevelMap = mBusinessService.getPage(business, pageNum, pageSize);
+        List<Business> businessLevelList = mBusinessService.getBusinessLevelInfoSort(businessLevelMap, "desc");
+
+
+        // 三、查询按照取号桌数排序的商家
         // 1、先从取号表 连接查询 商家表 中查询出所有 开通取号的商家信息，装在集合中
         business.setIsTake((byte) 1);
-        Map businessTakeList = mBusinessService.getPage(business, pageNum, pageSize);
-
+        Map businessTakeMap = mBusinessService.getPage(business, pageNum, pageSize);
         // 2、将开通取号功能的商家进行迭代查询每个商家的等待桌数状态,再将集合按照等待人数多少进行排序
-        List<Business> businessList = mBusinessService.getBusinessTakeInfoSort(businessTakeList, waitSort);
+        List<Business> businessTakeList = mBusinessService.getBusinessTakeInfoSort(businessTakeMap, waitSort);
 
-        return ResultUtil.success(businessList);
+        businessMap.put("distanceList", businessDistanceList);
+        businessMap.put("levelList", businessLevelList);
+        businessMap.put("takeList", businessTakeList);
+
+        return ResultUtil.success(businessMap);
 
     }
 

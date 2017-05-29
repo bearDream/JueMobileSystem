@@ -25,12 +25,23 @@ public class Business {
 
     private String content;
 
-    private Float longtitude;
+    private Double longtitude;
 
-    private Float latitude;
+    private Double latitude;
 
     // 该商家等待人数
     private Integer wait;
+
+    // 该商家距离用户的距离
+    private Double distance;
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
 
     public Integer getWait() {
         return wait;
@@ -42,19 +53,19 @@ public class Business {
 
     private Integer level;
 
-    public Float getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public Float getLongtitude() {
+    public Double getLongtitude() {
         return longtitude;
     }
 
-    public void setLatitude(Float latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public void setLongtitude(Float longtitude) {
+    public void setLongtitude(Double longtitude) {
         this.longtitude = longtitude;
     }
 

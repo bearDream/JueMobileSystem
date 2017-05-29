@@ -47,4 +47,19 @@ public class Sort {
         return businessList;
     }
 
+    // 按照距离排序
+    public static List<Business> sortBusinessDistance(List<Business> businessList, String sort){
+        Collections.sort(businessList, new Comparator<Business>() {
+            @Override
+            public int compare(Business o1, Business o2) {
+                if(o1 instanceof Business && o2 instanceof Business){
+                    Business e1 = (Business) o1;
+                    Business e2 = (Business) o2;
+                    return e1.getDistance().compareTo(e2.getDistance());
+                }
+                throw new ClassCastException("不能转换为Business类型");
+            }
+        });
+        return businessList;
+    }
 }

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Convert;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -101,6 +103,7 @@ public class BusinessService {
         return map;
     }
 
+    // 按照取号桌数排序
     public List<Business> getBusinessTakeInfoSort(Map businessMap, String waitSort){
 
         PageInfo p = (PageInfo) businessMap.get("page");
@@ -114,6 +117,43 @@ public class BusinessService {
 
         // 将等待桌数进行排序
         businessList = Sort.sortBusinessDesc(businessList, waitSort);
+
+        return businessList;
+    }
+
+    // 按照商家等级排序
+    public List<Business> getBusinessLevelInfoSort(Map businessMap, String waitSort){
+
+        PageInfo p = (PageInfo) businessMap.get("page");
+        List<Business> businessList = p.getList();
+
+        for (Business business : businessList){
+            // 根据businessId查询该商家的排队人数
+            int wait = mTakeNumService.getBusinessNum(business).size();
+            business.setWait(wait);
+        }
+
+        return businessList;
+    }
+
+    // 按照附近距离排序
+    public List<Business> getBusinessLocationSort(Map businessMap, double latitude, double longtitude, String waitSort){
+
+        PageInfo p = (PageInfo) businessMap.get("page");
+        List<Business> businessList = p.getList();
+
+        // 使用NumberFormat去小数后两位
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+
+        for (Business business : businessList){
+            // 根据businessId,用户的经纬度 查询该商家到用户的距离
+            Business businessDistance = mBussinessMapper.findDistanceBySelective(latitude, longtitude, business.getBusinessId());
+//            Business businessDistance = mBussinessMapper.findDistanceBySelective();
+            business.setDistance(Double.parseDouble(nf.format(businessDistance.getDistance() / 1000)));
+        }
+
+        businessList = Sort.sortBusinessDistance(businessList, "asc");
 
         return businessList;
     }
