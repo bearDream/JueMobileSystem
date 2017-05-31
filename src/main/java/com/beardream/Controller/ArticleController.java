@@ -3,8 +3,6 @@ package com.beardream.Controller;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.ArticleMapper;
-import com.beardream.ioc.PermissionMethod;
-import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
 import com.beardream.service.ArticleService;
 import io.swagger.annotations.Api;

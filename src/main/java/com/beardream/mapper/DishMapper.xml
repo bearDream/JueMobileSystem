@@ -42,6 +42,9 @@
       <if test="addTime != null">
         and add_time = #{addTime,jdbcType=TIMESTAMP}
       </if>
+      <if test="dishImage !=null">
+        and dish_image = #{dishIamge,jdbcType=INTEGER}
+      </if>
     </where>
     order by add_time desc
   </select>
@@ -59,9 +62,10 @@
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Dish">
     insert into t_dish (dish_id, dish_name, dish_desc, 
-      add_time, dish_content, dish_nutrition_status)
+      add_time, dish_content, dish_nutrition_status,dish_image)
     values (#{dishId,jdbcType=INTEGER}, #{dishName,jdbcType=VARCHAR}, #{dishDesc,jdbcType=VARCHAR}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{dishContent,jdbcType=LONGVARCHAR}), #{dishNutritionStatus,jdbcType=INTEGER})
+      #{addTime,jdbcType=TIMESTAMP}, #{dishContent,jdbcType=LONGVARCHAR}),
+      #{dishNutritionStatus,jdbcType=INTEGER},#{dishIamge,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Dish">
     insert into t_dish
@@ -84,6 +88,9 @@
       <if test="dishNutritionStatus != null">
         dish_nutrition_status,
       </if>
+      <if test="dishImage != null">
+        dish_image,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="dishId != null">
@@ -103,6 +110,9 @@
       </if>
       <if test="dishNutritionStatus != null">
         #{dishNutritionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dishImage != null">
+        #{dishImage,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -124,6 +134,9 @@
       <if test="dishNutritionStatus != null">
         dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER},
       </if>
+      <if test="dishImage != null">
+       dish_image = #{dishImage,jdbcType=INTEGER},
+      </if>
     </set>
     where dish_id = #{dishId,jdbcType=INTEGER}
   </update>
@@ -133,7 +146,8 @@
       dish_desc = #{dishDesc,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       dish_content = #{dishContent,jdbcType=LONGVARCHAR},
-      dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
+      dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER},
+      dish_image = #{dishImage,jdbcType=INTEGER}
     where dish_id = #{dishId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Dish">
@@ -141,7 +155,8 @@
     set dish_name = #{dishName,jdbcType=VARCHAR},
       dish_desc = #{dishDesc,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
+      dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER},
+      dish_image = #{dishImage,jdbcType=INTEGER}
     where dish_id = #{dishId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,6 +1,7 @@
 package com.beardream.dao;
 
 import com.beardream.model.DishBusiness;
+import com.beardream.model.DoubleDishBusiness;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +22,6 @@ public interface DishBusinessMapper {
     int updateByPrimaryKeySelective(DishBusiness record);
 
     int updateByPrimaryKey(DishBusiness record);
+
+    List<DoubleDishBusiness> findDoubleDishBusinessBySelective (DoubleDishBusiness doubleDishBusiness);
 }

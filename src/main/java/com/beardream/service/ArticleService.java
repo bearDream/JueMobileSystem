@@ -31,7 +31,7 @@ public class ArticleService {
 
     public Map getPage(UserArticle userArticle, int pageNum, int pageSize){
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("business_id desc");
         List<UserArticle> userArticles = articleMapper.findUserArticleBySelective(new UserArticle());
         PageInfo page = new PageInfo(userArticles);
         Map<String, Object> map = new HashMap<String, Object>();
