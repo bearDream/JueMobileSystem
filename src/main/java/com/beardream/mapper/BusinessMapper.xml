@@ -91,13 +91,11 @@
   <!-- 商家、菜品、标签连接查询-->
   <select id="findBusinessDishTagBySelective"  resultMap="BusinessDishTagResultMap">
     SELECT
-    b.business_id,b.name,b.address,b.tel,b.add_time,
-    d.dish_name,d.dish_id,d.dish_image,
-    t.tag_id,t.name
-
-    from t_business b
-    left outer join t_dish d on b.business_id = d.dish_id
-    left outer join t_tag t on b.business_id = t.tag_id
+    td.dish_name,td.dish_image,td.dish_desc,td.add_time
+    from t_dish as td right join (
+    select tdb.dish_id, tb.business_id,tb.user_id,tb.name,tb.address,tb.tel,tb.business_image
+    from t_dish_business as tdb inner join t_business as tb
+    on tdb.business_id = tb.business_id) as ttab on td.dish_id = ttab.dish_id;
     <where>
       <if test="businessId != null">
         and business_id = #{businessId,jdbcType=INTEGER}

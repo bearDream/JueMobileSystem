@@ -1,6 +1,7 @@
 package com.beardream.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by soft01 on 2017/5/26.
@@ -23,6 +24,16 @@ public class DishDishBusinessTag {
     private String dishImage;
 
     private Date addTime;
+
+    private List<DishDishBusinessTag>dishDishBusinessTags;
+
+    public List<DishDishBusinessTag> getDishDishBusinessTags() {
+        return dishDishBusinessTags;
+    }
+
+    public void setDishDishBusinessTags(List<DishDishBusinessTag> dishDishBusinessTags) {
+        this.dishDishBusinessTags = dishDishBusinessTags;
+    }
 
     public Integer getDishBusinessId() {
         return dishBusinessId;
@@ -95,4 +106,6 @@ public class DishDishBusinessTag {
     public void setDishImage(String dishImage) {
         this.dishImage = dishImage;
     }
+
+
 }
