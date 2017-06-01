@@ -19,8 +19,85 @@
     dish_business_id, dish_id, business_id, dish_type, is_favorable, is_show, is_top, 
     order_count, dish_price, favorable_price, addtime,tag_id
   </sql>
+  <!-- dish,dish_business,business-->
+  <resultMap id="DoubleDishBusinessResultMap" type="com.beardream.model.DoubleDishBusiness">
+    <id column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
+    <result column="level" jdbcType="INTEGER" property="level"/>
+    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="tagId" jdbcType="VARCHAR" property="tagId"/>
+    <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
+  </resultMap>
+  <select id="findDoubleDishBusinessBySelective" resultMap="DoubleDishBusinessResultMap">
+    SELECT d.dish_id,d.dish_name,d.dish_image,d.dish_desc,d.add_time,
+    a.business_id,a.user_id,a.`name`,a.address,a.tel,a.business_image,a.`level`,
+    a.dish_price,a.tag_id,a.dish_type
+    FROM
+    t_dish AS d ,
+    (
+      SELECT b.business_id,b.user_id,b.`name`,b.address,b.tel,b.business_image,b.`level`,b.add_time,
+      db.dish_id,db.dish_price,db.tag_id,db.dish_type
+      FROM
+      t_business b,t_dish_business db
+      WHERE b.business_id  = db.business_id
+    )
+    AS a
+    <where>
+      d.dish_id = a.dish_id
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="dishName != null">
+        and dish_name = #{dishName,jdbcType=VARCHAR}
+      </if>
+      <if test="dishDesc != null">
+        and dish_desc = #{dishDescContent,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="dishImage !=null">
+        and dish_image = #{dishImage,jdbcType=VARCHAR}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null">
+        and address = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="tel != null">
+        and tel = #{tel,jdbcType=VARCHAR}
+      </if>
+      <if test="businessImage != null">
+        and business_image = #{businessImage,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="level !=null">
+        and level = #{level,jdbcType=INTEGER}
+      </if>
+      <if test="tagId !=null">
+        and tag_id = #{tagId,jdbcType=VARCHAR}
+      </if>
+      <if test="dishType !=null">
+        and dish_type = #{dishType,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
     <include refid="Base_Column_List" />
     from t_dish_business
     where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}

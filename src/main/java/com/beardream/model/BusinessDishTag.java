@@ -1,6 +1,7 @@
 package com.beardream.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by soft01 on 2017/5/25.
@@ -17,6 +18,8 @@ public class BusinessDishTag {
     private String dishName;
 
     private String tagName;
+
+    private List<Business> posts;
 
     private String businessAddress;
 
@@ -104,5 +107,13 @@ public class BusinessDishTag {
 
     public void setAddTime(Date addTime) {
         this.addTime = addTime;
+    }
+
+    public List<Business> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Business> posts) {
+        this.posts = posts;
     }
 }

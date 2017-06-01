@@ -1,8 +1,9 @@
 package com.beardream.dao;
 
-import com.beardream.model.*;
+import com.beardream.model.Business;
+import com.beardream.model.BusinessDishTag;
+import com.beardream.model.UserArticle;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
