@@ -17,6 +17,36 @@ public class Dish {
 
     private Integer dishNutritionStatus;
 
+    private String grease;
+
+    private String heat;
+
+    private String sugar_content;
+
+    public String getGrease() {
+        return grease;
+    }
+
+    public void setGrease(String grease) {
+        this.grease = grease;
+    }
+
+    public String getHeat() {
+        return heat;
+    }
+
+    public void setHeat(String heat) {
+        this.heat = heat;
+    }
+
+    public String getSugar_content() {
+        return sugar_content;
+    }
+
+    public void setSugar_content(String sugar_content) {
+        this.sugar_content = sugar_content;
+    }
+
     public String getDishImage() {
         return dishImage;
     }

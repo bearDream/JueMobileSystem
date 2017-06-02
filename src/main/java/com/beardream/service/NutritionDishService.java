@@ -30,4 +30,9 @@ public class NutritionDishService {
         map.put("page",page);
         return map;
     }
+
+    public List getdishlist(Dish dish){
+        List<Dish> dishs = mDishMapper.findDishNutrition(dish);
+        return dishs;
+    }
 }

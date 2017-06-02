@@ -11,8 +11,8 @@
     <result column="business_carousel_image" jdbcType="VARCHAR" property="businessCarouselImage" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="is_take" jdbcType="TINYINT" property="isTake" />
-    <result column="longtitude" jdbcType="FLOAT" property="longtitude" />
-    <result column="latitude" jdbcType="FLOAT" property="latitude" />
+    <result column="longtitude" jdbcType="DOUBLE" property="longtitude" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="level" jdbcType="INTEGER" property="level"/>
   </resultMap>
@@ -133,8 +133,8 @@
     values (#{businessId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{businessImage,jdbcType=VARCHAR},
       #{businessCarouselImage,jdbcType=VARCHAR},#{isShow,jdbcType=TINYINT},#{isTake,jdbcType=TINYINT},
-      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{longtitude,jdbcType=FLOAT},
-       #{latitude,jdbcType=FLOAT},#{level,jdbcType=INTEGER}
+      #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{longtitude,jdbcType=DOUBLE},
+       #{latitude,jdbcType=DOUBLE},#{level,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Business">
@@ -218,10 +218,10 @@
         #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="longtitude != null">
-        #{longtitude,jdbcType=FLOAT},
+        #{longtitude,jdbcType=DOUBLE},
       </if>
       <if test="latitude != null">
-        #{latitude,jdbcType=FLOAT},
+        #{latitude,jdbcType=DOUBLE},
       </if>
       <if test="level != null">
         #{level,jdbcType=INTEGER},
@@ -262,10 +262,10 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="longtitude != null">
-        longtitude = #{longtitude,jdbcType=FLOAT},
+        longtitude = #{longtitude,jdbcType=DOUBLE},
       </if>
       <if test="latitude != null">
-        latitude = #{latitude,jdbcType=FLOAT},
+        latitude = #{latitude,jdbcType=DOUBLE},
       </if>
       <if test="level != null">
         level = #{level,jdbcType=INTEGER},
@@ -285,8 +285,8 @@
       is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR},
-      longtitude = #{longtitude, jdbcType=FLOAT}
-      latitude = #{latitude, jdbcType=FLOAT},
+      longtitude = #{longtitude, jdbcType=DOUBLE}
+      latitude = #{latitude, jdbcType=DOUBLE},
       level = #{level,jdbcType=INTEGER}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
@@ -301,8 +301,8 @@
       is_show = #{isShow,jdbcType=TINYINT},
       is_take = #{isTake,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      longtitude = #{longtitude,jdbcType=FLOAT},
-      latitude = #{latitude,jdbcType=FLOAT},
+      longtitude = #{longtitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
       level = #{level,jdbcType=INTEGER}
     where business_id = #{businessId,jdbcType=INTEGER}
   </update>
