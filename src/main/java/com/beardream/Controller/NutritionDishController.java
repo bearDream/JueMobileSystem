@@ -54,4 +54,14 @@ public class NutritionDishController {
 
         return ResultUtil.success(dishMap);
     }
+
+    @ApiOperation("获取营养价值菜品排行")
+    @GetMapping("/rank")
+    public Result getNutritionRank(Dish dish, HttpSession session){
+
+        List<Dish> dishList = mNutritionDishService.getdishlist(dish);
+        if (dishList.size() == 0)
+            return ResultUtil.error(-1,"数据拉取失败");
+        return ResultUtil.success(dishList);
+    }
 }

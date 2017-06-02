@@ -16,9 +16,46 @@
   <sql id="Base_Column_List">
     dish_id, dish_name, dish_image, dish_content, dish_desc, add_time, dish_nutrition_status
   </sql>
+  <sql id="Dish_Nutrition_List">
+    dish_id, dish_name, dish_image, dish_content, dish_desc, d.add_time, dish_nutrition_status,
+    grease, heat, sugar_content
+  </sql>
   <sql id="Blob_Column_List">
     dish_content
   </sql>
+
+  <!-- 连接查询菜品和营养价值 -->
+  <select id="findDishNutrition" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Dish_Nutrition_List" />
+    from t_dish d INNER JOIN t_nutrition n on d.nurtrition_id=n.nurtrition_id
+    <where>
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="dishName != null">
+        and dish_name = #{dishName,jdbcType=VARCHAR}
+      </if>
+      <if test="dishContent != null">
+        and dish_content = #{dishContent}
+      </if>
+      <if test="dishDesc != null">
+        and dish_desc = #{dishDescContent,jdbcType=VARCHAR}
+      </if>
+      <if test="dishNutritionStatus != null">
+        and dish_nutrition_status = #{dishNutritionStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="dishImage !=null">
+        and dish_image = #{dishIamge,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by d.add_time desc
+  </select>
+
+
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />

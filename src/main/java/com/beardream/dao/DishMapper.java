@@ -17,6 +17,8 @@ public interface DishMapper {
 
     List<Dish> findBySelective(Dish dish);
 
+    List<Dish> findDishNutrition(Dish dish);
+
     Dish selectByPrimaryKey(Integer dishId);
 
     int updateByPrimaryKeySelective(Dish record);
