@@ -4,11 +4,22 @@
   <resultMap id="BaseResultMap" type="com.beardream.model.Evaluate">
     <id column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="headImgUrl" jdbcType="VARCHAR" property="headImgUrl" />
+    <result column="body_status" jdbcType="TINYINT" property="bodyStatus" />
     <result column="object_id" jdbcType="INTEGER" property="objectId" />
     <result column="evaluate_type" jdbcType="TINYINT" property="evaluateType" />
     <result column="star" jdbcType="TINYINT" property="star" />
     <result column="is_anonymous" jdbcType="TINYINT" property="isAnonymous" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <!-- 文章相关的列 -->
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="articleUserAvatar" jdbcType="VARCHAR" property="articleUserAvatar" />
+    <result column="article_username" jdbcType="VARCHAR" property="articleUsername" />
+    <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="Article_content" jdbcType="VARCHAR" property="ArticleContent" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="article_addTime" jdbcType="TIMESTAMP" property="ArticleAddTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Evaluate">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -16,9 +27,36 @@
   <sql id="Base_Column_List">
     evaluate_id, user_id, object_id, evaluate_type, star, is_anonymous, add_time
   </sql>
+  <sql id="article_Column_List">
+    evaluate_id, e.user_id, object_id, evaluate_type, star, is_anonymous, add_time
+  </sql>
+  <sql id="user_Column_List">
+    username, headImgUrl, body_status
+  </sql>
   <sql id="Blob_Column_List">
     content
   </sql>
+
+  <!-- 查找对文章的所有评论 -->
+  <select id="findArticleEvaluate" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="article_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_evaluate e inner JOIN t_user u on e.user_id=u.user_id
+    where object_id = #{articleId,jdbcType=INTEGER} and evaluate_type = #{evaluateType,jdbcType=INTEGER}
+  </select>
+
+  <!-- 查找所有评论 -->
+  <select id="findEvaluate" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="article_Column_List" />,
+    <include refid="user_Column_List" />,
+    <include refid="Blob_Column_List" />
+    from t_evaluate e inner JOIN t_user u on e.user_id=u.user_id
+    where object_id = #{objectId,jdbcType=INTEGER} and evaluate_type = #{evaluateType,jdbcType=INTEGER}
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />

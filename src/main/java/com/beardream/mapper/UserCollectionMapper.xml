@@ -7,12 +7,93 @@
     <id column="collection_id" jdbcType="INTEGER" property="collectionId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="business_dish_id" jdbcType="INTEGER" property="businessDishId" />
-    <result column="collection_type" jdbcType="TINYINT" property="collectionType" />
+    <!-- 菜品相关的列 -->
+    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="dish_name" jdbcType="INTEGER" property="dishName" />
+    <result column="dish_rec_image" jdbcType="INTEGER" property="dishRecImage" />
+    <result column="dish_image" jdbcType="INTEGER" property="dishImage" />
+    <!-- 商家相关的列 -->
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <!-- 文章相关的列 -->
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="articleUserAvatar" jdbcType="VARCHAR" property="articleUserAvatar" />
+    <result column="article_username" jdbcType="VARCHAR" property="articleUsername" />
+    <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="Article_content" jdbcType="VARCHAR" property="ArticleContent" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="article_addTime" jdbcType="TIMESTAMP" property="ArticleAddTime" />
+
+    <result column="collection_type" jdbcType="INTEGER" property="collectionType" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
   </resultMap>
   <sql id="Base_Column_List">
     collection_id, user_id, business_dish_id, collection_type, add_time
   </sql>
+  <sql id="dish_Column_List">
+    collection_id, c.user_id, business_dish_id, collection_type, c.add_time, d.dish_id, d.dish_name,
+    d.dish_rec_image, d.dish_image
+  </sql>
+  <sql id="business_Column_List">
+    collection_id, c.user_id, business_dish_id, collection_type, c.add_time, b.business_id, b.name,
+    b.business_image, b.address, b.content
+  </sql>
+  <sql id="article_Column_List">
+    collection_id, c.user_id, business_dish_id, collection_type, c.add_time, a.article_id, a.title,
+    a.cover_image, a.content as Article_content, a.add_time as article_addTime, u.username as article_username, u.headImgUrl as articleUserAvatar
+  </sql>
+  <!-- findJoinDishBySelective -->
+  <select id="findJoinDishBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="dish_Column_List" />
+    from t_collection c INNER JOIN t_dish d on c.business_dish_id=d.dish_id
+    <where>
+      <if test="userId != null">
+        and c.user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="collectionType != null">
+        and collection_type = #{collectionType,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by c.add_time desc
+  </select>
+
+  <!-- findJoinBusinessBySelective -->
+  <select id="findJoinBusinessBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="business_Column_List" />
+    from t_collection c INNER JOIN t_business b on c.business_dish_id=b.business_id
+    <where>
+      <if test="userId != null">
+        and c.user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="collectionType != null">
+        and collection_type = #{collectionType,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by c.add_time desc
+  </select>
+
+  <!-- findJoinArticleBySelective -->
+  <select id="findJoinArticleBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="article_Column_List" />
+    from t_collection c INNER JOIN t_article a on c.business_dish_id=a.article_id INNER JOIN t_user u on u.user_id=a.user_id
+    <where>
+      <if test="userId != null">
+        and c.user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="collectionType != null">
+        and collection_type = #{collectionType,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by c.add_time desc
+  </select>
+
+
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
@@ -28,7 +109,7 @@
         and business_dish_id = #{businessDishId,jdbcType=INTEGER}
       </if>
       <if test="collectionType != null">
-        and collection_type = #{collectionType,jdbcType=TINYINT}
+        and collection_type = #{collectionType,jdbcType=INTEGER}
       </if>
       <if test="addTime != null">
         and add_time = #{addTime,jdbcType=TIMESTAMP}
@@ -44,7 +125,7 @@
     insert into t_collection (collection_id, user_id, business_dish_id, 
       collection_type, add_time)
     values (#{collectionId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{businessDishId,jdbcType=INTEGER}, 
-      #{collectionType,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP})
+      #{collectionType,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.UserCollection">
     insert into t_collection
@@ -76,7 +157,7 @@
         #{businessDishId,jdbcType=INTEGER},
       </if>
       <if test="collectionType != null">
-        #{collectionType,jdbcType=TINYINT},
+        #{collectionType,jdbcType=INTEGER},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -93,7 +174,7 @@
         business_dish_id = #{businessDishId,jdbcType=INTEGER},
       </if>
       <if test="collectionType != null">
-        collection_type = #{collectionType,jdbcType=TINYINT},
+        collection_type = #{collectionType,jdbcType=INTEGER},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -105,7 +186,7 @@
     update t_collection
     set user_id = #{userId,jdbcType=INTEGER},
       business_dish_id = #{businessDishId,jdbcType=INTEGER},
-      collection_type = #{collectionType,jdbcType=TINYINT},
+      collection_type = #{collectionType,jdbcType=INTEGER},
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where collection_id = #{collectionId,jdbcType=INTEGER}
   </update>

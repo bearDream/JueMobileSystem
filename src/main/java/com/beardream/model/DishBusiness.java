@@ -35,6 +35,34 @@ public class DishBusiness {
 
     private Integer dishNutritionStatus;
 
+    public String getDishName() {
+        return dishName;
+    }
+
+    public void setFavorable(Boolean favorable) {
+        isFavorable = favorable;
+    }
+
+    public Boolean getShow() {
+        return isShow;
+    }
+
+    public void setShow(Boolean show) {
+        isShow = show;
+    }
+
+    public void setTop(Boolean top) {
+        isTop = top;
+    }
+
+    public String getDishDesc() {
+        return dishDesc;
+    }
+
+    public Integer getDishNutritionStatus() {
+        return dishNutritionStatus;
+    }
+
     public String getDishImage() {
         return dishImage;
     }
@@ -49,10 +77,6 @@ public class DishBusiness {
 
     public void setDishDesc(String dishDesc) {
         this.dishDesc = dishDesc;
-    }
-
-    public Boolean getShow() {
-        return isShow;
     }
 
     public void setDishNutritionStatus(Integer dishNutritionStatus) {

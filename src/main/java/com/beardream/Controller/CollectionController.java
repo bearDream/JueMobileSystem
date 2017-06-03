@@ -1,5 +1,7 @@
 package com.beardream.Controller;
 
+import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.UserCollectionMapper;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,9 @@ public class CollectionController {
     @Autowired
     private UserCollectionMapper mUserCollectionMapper;
 
+    @Autowired
+    private CollectionService mCollectionService;
+
     /*
     Put更新数据的请求只能是参数形式，不能写在body中
      */
@@ -41,7 +47,6 @@ public class CollectionController {
 
     @ApiOperation("删除收藏")
     @DeleteMapping
-    @Log
     public Result delete(UserCollection userCollection) {
         int result;
         result = mUserCollectionMapper.deleteByPrimaryKey(userCollection.getCollectionId());
@@ -69,23 +74,22 @@ public class CollectionController {
 
     //需要分页
     // 需要两个参数： 当前所在页pageSize 需要几条数据limit
-    @ApiOperation("分页获取角色")
-    @GetMapping("/getpage")
-    @Log
-    public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+    @ApiOperation("分页获取用户收藏信息，根据不同的类别放在不同的集合中，最后装到一个大map中返回")
+    @GetMapping
+    public Result getPage(UserCollection userCollection,
+                          HttpSession session,
+                          @RequestParam(value = "collectionType", defaultValue = "1", required = false) int collectionType,
+                          @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        userCollection.setUserId(user.getUserId());
+        userCollection.setCollectionType(collectionType);
+        // 根据不同的类型拿不同的收藏集合  1：菜品  2：商家 3.文章
+        List<UserCollection> collectionList = mCollectionService.getCollectionList(userCollection, pageNum, pageSize);
+        if (collectionList.size() > 0){
+            return ResultUtil.success(collectionList);
         }
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<UserCollection> userCollections =mUserCollectionMapper.findBySelective(new UserCollection());
-        PageInfo page = new PageInfo(userCollections);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",userCollections);
-        return ResultUtil.success(map);
+        return ResultUtil.error(-1,"用户还没有收藏哟~");
     }
 
 }

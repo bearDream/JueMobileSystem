@@ -7,6 +7,12 @@ public class Evaluate {
 
     private Integer userId;
 
+    private String username;
+
+    private String headImgUrl;
+
+    private boolean bodyStatus;
+
     private Integer objectId;
 
     private Byte evaluateType;
@@ -18,6 +24,101 @@ public class Evaluate {
     private Date addTime;
 
     private String content;
+
+    // 文章相关属性
+    private Integer articleId;
+
+    private String articleUsername;
+
+    private String articleUserAvatar;
+
+    private String coverImage;
+
+    private String ArticleContent;
+
+    private String title;
+
+    private Date ArticleAddTime;
+
+    public boolean isBodyStatus() {
+        return bodyStatus;
+    }
+
+    public void setBodyStatus(boolean bodyStatus) {
+        this.bodyStatus = bodyStatus;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
+    public Integer getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
+    }
+
+    public String getArticleUsername() {
+        return articleUsername;
+    }
+
+    public void setArticleUsername(String articleUsername) {
+        this.articleUsername = articleUsername;
+    }
+
+    public String getArticleUserAvatar() {
+        return articleUserAvatar;
+    }
+
+    public void setArticleUserAvatar(String articleUserAvatar) {
+        this.articleUserAvatar = articleUserAvatar;
+    }
+
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public String getArticleContent() {
+        return ArticleContent;
+    }
+
+    public void setArticleContent(String articleContent) {
+        ArticleContent = articleContent;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getArticleAddTime() {
+        return ArticleAddTime;
+    }
+
+    public void setArticleAddTime(Date articleAddTime) {
+        ArticleAddTime = articleAddTime;
+    }
 
     public Integer getEvaluateId() {
         return evaluateId;

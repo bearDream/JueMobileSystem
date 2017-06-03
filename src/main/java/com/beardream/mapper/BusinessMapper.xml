@@ -28,6 +28,7 @@
     <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
     <result column="is_favorable" jdbcType="BIT" property="isFavorable" />
     <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
     <result column="is_show" jdbcType="BIT" property="isShow" />
     <result column="is_top" jdbcType="BIT" property="isTop" />
     <result column="dish_price" jdbcType="REAL" property="dishPrice" />

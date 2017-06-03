@@ -21,6 +21,15 @@ public interface UserCollectionMapper {
 
     List<UserCollection> findBySelective(UserCollection userCollection);
 
+    // 收藏连接菜品查询
+    List<UserCollection> findJoinDishBySelective(UserCollection userCollection);
+
+    // 收藏连接商家查询
+    List<UserCollection> findJoinBusinessBySelective(UserCollection userCollection);
+
+    // 收藏连接文章查询
+    List<UserCollection> findJoinArticleBySelective(UserCollection userCollection);
+
     int updateByPrimaryKeySelective(UserCollection record);
 
     int updateByPrimaryKey(UserCollection record);

@@ -1,5 +1,6 @@
 package com.beardream.service;
 
+import com.beardream.dao.EvaluateMapper;
 import com.beardream.dao.UserCollectionMapper;
 import com.beardream.model.Dish;
 import com.beardream.model.Log;
@@ -24,7 +25,10 @@ import java.util.Map;
 public class CollectionService {
 
     @Autowired
-    public UserCollectionMapper mUserCollectionMapper;
+    private UserCollectionMapper mUserCollectionMapper;
+
+    @Autowired
+    private EvaluateMapper mEvaluateMapper;
 
 
     //添加收藏
@@ -51,6 +55,30 @@ public class CollectionService {
             return "删除成功";
         } else {
             return "删除失败";
+        }
+    }
+
+    public List getCollectionList(UserCollection userCollection, int pageNum, int pageSize){
+        // 1、查询出收藏表基本信息
+        List<UserCollection> collectionList =mUserCollectionMapper.findBySelective(userCollection);
+        // 2、根据基本信息中的collection_type，business_dish_id连接菜品/商家/文章 进行查询
+        switch (userCollection.getCollectionType()){
+            case 1:
+                List<UserCollection> dishCollection =mUserCollectionMapper.findJoinDishBySelective(userCollection);
+                return dishCollection;
+            case 2:
+                List<UserCollection> businessCollection =mUserCollectionMapper.findJoinBusinessBySelective(userCollection);
+                return businessCollection;
+            case 3:
+                List<UserCollection> articleCollection =mUserCollectionMapper.findJoinArticleBySelective(userCollection);
+                // 查找文章的评论数量
+                for (UserCollection collection : articleCollection) {
+                    collection.setComment(mEvaluateMapper.findArticleEvaluate(collection.getArticleId(), 3).size());
+                }
+                return articleCollection;
+            default:
+                List<UserCollection> defaultCollection =mUserCollectionMapper.findJoinDishBySelective(userCollection);
+                return defaultCollection;
         }
     }
 }
