@@ -10,6 +10,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by soft01 on 2017/5/19.
@@ -25,23 +28,21 @@ public class ArticleController {
     private ArticleService articleService;
 
     @ApiOperation("分页获取用户图文")
-    @GetMapping("/getpage")
+    @GetMapping
     public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
                           UserArticle userArticle){
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
-        if (articleService.getPage(userArticle,pageNum,pageSize)!=null){
-            return ResultUtil.success(articleService.getPage(userArticle,pageNum,pageSize));
+        Map resultPage = articleService.getPage(userArticle,pageNum,pageSize);
+        List<UserArticle> userArticles = articleService.splitRecImages(resultPage);
+        if (userArticles.size() != 0){
+            return ResultUtil.success(userArticles);
         }
         else {
             return ResultUtil.error(-1,"系统错误");
         }
     }
 
-    @GetMapping
+    @ApiOperation("获取一篇文章的详情")
+    @GetMapping("/get")
     public Result getArticle(UserArticle userArticle){
         if (!TextUtil.isEmpty(userArticle.getArticleId())){
             return ResultUtil.error(-1,"文章ID不能为空");

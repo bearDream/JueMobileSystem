@@ -64,7 +64,7 @@ public class DishService {
 
     public Map getPage(Dish dish, int pageNum, int pageSize){
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("d.add_time asc");
         List<Dish> dishs =dishMapper.findBySelective(new Dish());
         PageInfo page = new PageInfo(dishs);
         Map<String, Object> map = new HashMap<String, Object>();

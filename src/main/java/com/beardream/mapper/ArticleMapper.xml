@@ -5,6 +5,8 @@
     <id column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="rec_image" jdbcType="VARCHAR" property="recImage" />
+    <result column="praise" jdbcType="INTEGER" property="praise" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
@@ -16,9 +18,12 @@
   <resultMap id="UserArticleResultMap" type="com.beardream.model.UserArticle">
     <id column="user_id" jdbcType="INTEGER" property="userId"/>
     <result column="username" jdbcType="VARCHAR" property="username"/>
+    <result column="headImgUrl" jdbcType="VARCHAR" property="headImgUrl"/>
     <result column="tel" jdbcType="VARCHAR" property="tel"/>
     <result column="article_id" jdbcType="INTEGER" property="articleId"/>
     <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
+    <result column="rec_image" jdbcType="VARCHAR" property="recImage" />
+    <result column="praise" jdbcType="INTEGER" property="praise" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
@@ -26,7 +31,7 @@
   <!-- 用户和文章连接查询-->
   <select id="findUserArticleBySelective" resultMap="UserArticleResultMap">
     SELECT
-    u.user_id,u.username,u.tel,a.article_id,a.cover_image,a.is_show,a.add_time,a.title
+    u.user_id,u.username,u.tel, u.headImgUrl, a.article_id,a.cover_image,rec_image,praise, a.is_show,a.add_time,a.title
     FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id
     <where>
       <if test="userId != null">
@@ -57,7 +62,7 @@
     order by add_time desc
   </select>
   <sql id="Base_Column_List">
-    article_id, user_id, cover_image, is_show, add_time,title
+    article_id, user_id, cover_image,rec_image, praise, is_show, add_time,title
   </sql>
   <sql id="Blob_Column_List">
     content

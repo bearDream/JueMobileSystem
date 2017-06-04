@@ -7,6 +7,7 @@
     <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
     <result column="dish_rec_image" jdbcType="VARCHAR" property="dishRecImage" />
     <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
@@ -16,6 +17,9 @@
   </resultMap>
   <sql id="Base_Column_List">
     dish_id, dish_name, dish_image, dish_rec_image, dish_content, dish_desc, add_time, dish_nutrition_status
+  </sql>
+  <sql id="type_Column_List">
+    dish_id, dish_name, dish_image, dish_rec_image, dish_content, dish_desc, d.add_time, dish_nutrition_status, type_name
   </sql>
   <sql id="Dish_Nutrition_List">
     dish_id, dish_name, dish_image, dish_rec_image, dish_content, dish_desc, d.add_time, dish_nutrition_status,
@@ -59,8 +63,8 @@
 
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
-    <include refid="Base_Column_List" />
-    from t_dish
+    <include refid="type_Column_List" />
+    from t_dish d LEFT JOIN t_dish_type dt on d.dishtype_id=dt.dishtype_id
     <where>
       <if test="dishId != null">
         and dish_id = #{dishId,jdbcType=INTEGER}
@@ -84,7 +88,7 @@
         and dish_image = #{dishIamge,jdbcType=INTEGER}
       </if>
     </where>
-    order by add_time desc
+    order by d.add_time desc
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 

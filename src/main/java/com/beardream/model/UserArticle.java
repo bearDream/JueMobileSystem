@@ -1,6 +1,7 @@
 package com.beardream.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by soft01 on 2017/5/23.
@@ -12,15 +13,56 @@ public class UserArticle {
 
     private String tel;
 
+    private String headImgUrl;
+
     private Integer articleId;
 
     private String coverImage;
+
+    private String recImage;
+
+    // 用于前端显示 recImage的小图片集合
+    private List<String> recImageList;
+
+    private Integer praise;
 
     private Byte isShow;
 
     private Date addTime;
 
     private String title;
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
+    public List<String> getRecImageList() {
+        return recImageList;
+    }
+
+    public void setRecImageList(List<String> recImageList) {
+        this.recImageList = recImageList;
+    }
+
+    public String getRecImage() {
+        return recImage;
+    }
+
+    public void setRecImage(String recImage) {
+        this.recImage = recImage;
+    }
+
+    public Integer getPraise() {
+        return praise;
+    }
+
+    public void setPraise(Integer praise) {
+        this.praise = praise;
+    }
 
     public String getTitle() {
         return title;
