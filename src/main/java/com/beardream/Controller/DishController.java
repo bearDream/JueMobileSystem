@@ -65,18 +65,9 @@ public class DishController {
 
     @ApiOperation("分页查询菜品推荐")
     @GetMapping("/recommend")
-    public Result getPage(@RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
-
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Dish> dishs =dishMapper.findBySelective(new Dish());
-        PageInfo page = new PageInfo(dishs);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",dishs);
-        return ResultUtil.success(map);
+    public Result getPage(Dish dish,
+                          @RequestParam(value = "pageNum", required = false)  int pageNum,
+                          @RequestParam(value = "pageSize", required = false)  int pageSize){
+        return ResultUtil.success(mDishService.getPage(dish, pageNum, pageSize));
     }
 }

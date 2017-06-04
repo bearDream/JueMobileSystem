@@ -17,18 +17,18 @@ import java.util.Map;
 /**
  * Created by soft01 on 2017/5/8.
             */
-    @Component
-    @Service
-    public class DishService {
+@Component
+@Service
+public class DishService {
 
-        @Autowired
-        public DishMapper dishMapper;
+    @Autowired
+    public DishMapper dishMapper;
 
-        public List find(Dish dish){
-            System.out.println(dishMapper.selectByPrimaryKey(1));
-            List<Dish> dishList = dishMapper.findBySelective(dish);
-            return dishList;
-        }
+    public List find(Dish dish){
+        System.out.println(dishMapper.selectByPrimaryKey(1));
+        List<Dish> dishList = dishMapper.findBySelective(dish);
+        return dishList;
+    }
 
     public String post(Dish dish){
         int result;
@@ -61,6 +61,7 @@ import java.util.Map;
             return "更新失败";
         }
     }
+
     public Map getPage(Dish dish, int pageNum, int pageSize){
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
@@ -68,6 +69,7 @@ import java.util.Map;
         PageInfo page = new PageInfo(dishs);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
+        map.put("list",page.getList());
         return map;
     }
 

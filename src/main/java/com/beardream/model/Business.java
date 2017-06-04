@@ -29,11 +29,72 @@ public class Business {
 
     private Double latitude;
 
+    // 商家带的两个菜品的属性
+    private Integer OneDishId;
+
+    private String OneDishName;
+
+    private String OneDishRecImage;
+
+    private Integer TwoDishId;
+
+    private String TwoDishName;
+
+    private String TwoDishRecImage;
+
     // 该商家等待人数
     private Integer wait;
 
     // 该商家距离用户的距离
     private Double distance;
+
+    public Integer getOneDishId() {
+        return OneDishId;
+    }
+
+    public void setOneDishId(Integer oneDishId) {
+        OneDishId = oneDishId;
+    }
+
+    public String getOneDishName() {
+        return OneDishName;
+    }
+
+    public void setOneDishName(String oneDishName) {
+        OneDishName = oneDishName;
+    }
+
+    public String getOneDishRecImage() {
+        return OneDishRecImage;
+    }
+
+    public void setOneDishRecImage(String oneDishRecImage) {
+        OneDishRecImage = oneDishRecImage;
+    }
+
+    public Integer getTwoDishId() {
+        return TwoDishId;
+    }
+
+    public void setTwoDishId(Integer twoDishId) {
+        TwoDishId = twoDishId;
+    }
+
+    public String getTwoDishName() {
+        return TwoDishName;
+    }
+
+    public void setTwoDishName(String twoDishName) {
+        TwoDishName = twoDishName;
+    }
+
+    public String getTwoDishRecImage() {
+        return TwoDishRecImage;
+    }
+
+    public void setTwoDishRecImage(String twoDishRecImage) {
+        TwoDishRecImage = twoDishRecImage;
+    }
 
     public Double getDistance() {
         return distance;

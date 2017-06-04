@@ -100,6 +100,7 @@ public class BusinessService {
         PageInfo page = new PageInfo(businesses);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
+        map.put("list",businesses);
         return map;
     }
 
@@ -155,6 +156,31 @@ public class BusinessService {
 
         businessList = Sort.sortBusinessDistance(businessList, "asc");
 
+        return businessList;
+    }
+
+    public List<Business> getBusinessDishList(Map businessMap, int bodyStatus){
+        List<Business> businessList = (List<Business>) businessMap.get("list");
+
+        // 遍历商家 查询商家拥有的菜品信息
+        for (Business business : businessList) {
+            List<DishBusiness> dishBusinessList = mBussinessMapper.findBusinessDishBySelective(bodyStatus, business.getBusinessId());
+            // 最多设置两个菜品，但以防查出来的该商家只有1个或零个菜品而造成数组越界问题
+            if (dishBusinessList.size() == 0) continue;
+            if (dishBusinessList.size() ==1) {
+                business.setOneDishId(dishBusinessList.get(0).getDishId());
+                business.setOneDishName(dishBusinessList.get(0).getDishName());
+                business.setOneDishRecImage(dishBusinessList.get(0).getDishRecImage());
+            }
+            if (dishBusinessList.size() >= 2) {
+                business.setOneDishId(dishBusinessList.get(0).getDishId());
+                business.setOneDishName(dishBusinessList.get(0).getDishName());
+                business.setOneDishRecImage(dishBusinessList.get(0).getDishRecImage());
+                business.setTwoDishId(dishBusinessList.get(1).getDishId());
+                business.setTwoDishName(dishBusinessList.get(1).getDishName());
+                business.setTwoDishRecImage(dishBusinessList.get(1).getDishRecImage());
+            }
+        }
         return businessList;
     }
 

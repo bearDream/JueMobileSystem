@@ -179,7 +179,27 @@ public class BuisnessController {
         businessMap.put("takeList", businessTakeList);
 
         return ResultUtil.success(businessMap);
+    }
 
+
+    // 微信端一级页面获取商家信息（一个商家图片带两个商家菜品的形式）
+    @ApiOperation("分页查询一级页面的商家推荐，隐式根据用户的body_status来查找对应的数据")
+    @GetMapping("/topBusiness")
+    public Result getTopPageBusiness(Business business,
+                                     HttpSession session,
+                                     @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum,
+                                     @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize){
+        // 0、获取用户信息，根据他的body_status来推荐商家的两个菜品
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+
+        // 1、先查询出商家来
+        Map businessMap = mBusinessService.getPage(business, pageNum, pageSize);
+        // 2、然后根据商家list遍历查询商家的两个菜品
+        List<Business> list = mBusinessService.getBusinessDishList(businessMap, user.getBodyStatus());
+
+        if (list.size() > 0)
+            return ResultUtil.success(list);
+        return ResultUtil.error(-1,"查询失败");
     }
 
     public Result getBusiness(BusinessDishTag businessDishTag){

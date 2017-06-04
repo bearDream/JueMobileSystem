@@ -5,6 +5,7 @@
     <id column="dish_id" jdbcType="INTEGER" property="dishId" />
     <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
     <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="dish_rec_image" jdbcType="VARCHAR" property="dishRecImage" />
     <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
@@ -14,10 +15,10 @@
     <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />
   </resultMap>
   <sql id="Base_Column_List">
-    dish_id, dish_name, dish_image, dish_content, dish_desc, add_time, dish_nutrition_status
+    dish_id, dish_name, dish_image, dish_rec_image, dish_content, dish_desc, add_time, dish_nutrition_status
   </sql>
   <sql id="Dish_Nutrition_List">
-    dish_id, dish_name, dish_image, dish_content, dish_desc, d.add_time, dish_nutrition_status,
+    dish_id, dish_name, dish_image, dish_rec_image, dish_content, dish_desc, d.add_time, dish_nutrition_status,
     grease, heat, sugar_content
   </sql>
   <sql id="Blob_Column_List">

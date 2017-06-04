@@ -28,6 +28,7 @@
     <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
     <result column="is_favorable" jdbcType="BIT" property="isFavorable" />
     <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="dish_rec_image" jdbcType="VARCHAR" property="dishRecImage" />
     <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
     <result column="is_show" jdbcType="BIT" property="isShow" />
     <result column="is_top" jdbcType="BIT" property="isTop" />
@@ -50,7 +51,7 @@
   </resultMap>
 
   <sql id="business_dish_colum_list">
-    d.dish_id, d.dish_name, d.dish_image, db.business_id, d.dish_desc, db.addtime, d.dish_nutrition_status, db.dish_price
+    d.dish_id, d.dish_name, d.dish_image, dish_rec_image, db.business_id, d.dish_desc, db.addtime, d.dish_nutrition_status, db.dish_price
   </sql>
   <sql id="Base_Column_List">
     business_id, user_id, name, address, tel, business_image, business_carousel_image, is_show, is_take, add_time, longtitude, latitude ,level

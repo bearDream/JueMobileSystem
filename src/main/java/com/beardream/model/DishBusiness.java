@@ -31,9 +31,19 @@ public class DishBusiness {
 
     private String dishImage;
 
+    private String dishRecImage;
+
     private String dishDesc;
 
     private Integer dishNutritionStatus;
+
+    public String getDishRecImage() {
+        return dishRecImage;
+    }
+
+    public void setDishRecImage(String dishRecImage) {
+        this.dishRecImage = dishRecImage;
+    }
 
     public String getDishName() {
         return dishName;
