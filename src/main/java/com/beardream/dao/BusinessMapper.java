@@ -32,8 +32,11 @@ public interface BusinessMapper {
     //商家表 左连接菜品表 和 标签表  查询出商家信息和商家的菜品信息
     List<BusinessDishTag> findBusinessDishTagBySelective (BusinessDishTag businessDishTag);
 
-    // 获取指定商家的菜品信息
+    // 根据用户信息获取商家拥有的菜品信息
     List<DishBusiness> findBusinessDishBySelective(@Param("dishNutritionStatus") Integer dishNutritionStatus, @Param("businessId") Integer businessId);
+
+    // 获取指定商家id的具体菜品信息
+    List<DishBusiness> findBusinessDishInfoBySelective(@Param("businessId") Integer businessId);
 
     // 查询用户到商家的距离，单位是米
     Business findDistanceBySelective(@Param("latitude") Double latitude, @Param("longtitude") Double longtitude, @Param("businessId") Integer businessId);

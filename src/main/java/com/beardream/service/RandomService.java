@@ -28,6 +28,11 @@ public class RandomService {
     @Autowired
     public BusinessMapper mBussinessMapper;
 
+    /*
+        v1.0.0版获取随机菜品
+        由于该版获取的失败率太高因此该版作废，建议使用getRandomDishesNew版本
+     */
+    @Deprecated
     public Result getRandomDishes(HttpSession session){
         // 1、获取用户的，body_status来推荐相应的菜品
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
@@ -47,6 +52,38 @@ public class RandomService {
             return ResultUtil.error(-1,"生成失败，请再试一次哦~");
         }
         return ResultUtil.success(dishList);
+    }
+
+    public Result getRandomDishesNew(HttpSession session){
+        // 1、获取用户的，body_status来推荐相应的菜品
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        Integer bodyStatus = Integer.valueOf(user.getBodyStatus());
+
+        // 2、直接连接dish_business和dish表查询得出 哪个商家可能有这三个符合用户要求的菜品
+        Business business = new Business();
+        business.setIsShow((byte) 1);
+        List<DishBusiness> dishList = mBussinessMapper.findBusinessDishBySelective(bodyStatus, null);
+        // 根据这个list遍历找到businessNum大于等于三的商家id，然后再进行随机选择
+        List<DishBusiness> canRandomBusinessList = new ArrayList<>();
+        for (DishBusiness dishBusiness : dishList) {
+            if (dishBusiness.getBusinessNum() >= 3){
+                canRandomBusinessList.add(dishBusiness);
+            }
+        }
+
+        // 没有符合条件的商家则无法生成
+        if (canRandomBusinessList.size() == 0)
+            return ResultUtil.error(-1,"生成失败，请再试一次哦~");
+
+        // 随机获取一个商家id来进行查找，此处的商家一定是可以生成三个菜的
+        int max = canRandomBusinessList.size() - 1;
+        int businessId = canRandomBusinessList.get(new Random().nextInt(max)).getBusinessId();
+        List<DishBusiness> dishes = mBussinessMapper.findBusinessDishInfoBySelective(businessId);
+
+        if (dishList.size() <= 0){
+            return ResultUtil.error(-1,"生成失败，请再试一次哦~");
+        }
+        return ResultUtil.success(dishes);
     }
 
 }

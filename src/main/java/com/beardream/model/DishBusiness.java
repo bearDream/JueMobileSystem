@@ -37,6 +37,17 @@ public class DishBusiness {
 
     private Integer dishNutritionStatus;
 
+    // 有该菜的商家数量
+    private Integer businessNum;
+
+    public Integer getBusinessNum() {
+        return businessNum;
+    }
+
+    public void setBusinessNum(Integer businessNum) {
+        this.businessNum = businessNum;
+    }
+
     public String getDishRecImage() {
         return dishRecImage;
     }

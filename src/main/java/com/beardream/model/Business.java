@@ -48,6 +48,17 @@ public class Business {
     // 该商家距离用户的距离
     private Double distance;
 
+    // 有该菜的商家数量
+    private Integer businessNum;
+
+    public Integer getBusinessNum() {
+        return businessNum;
+    }
+
+    public void setBusinessNum(Integer businessNum) {
+        this.businessNum = businessNum;
+    }
+
     public Integer getOneDishId() {
         return OneDishId;
     }

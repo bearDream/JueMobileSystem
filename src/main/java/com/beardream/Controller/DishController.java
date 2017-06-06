@@ -35,10 +35,12 @@ public class DishController {
     private DishService mDishService;
 
     @ApiOperation("获取单个菜品信息")
-    @GetMapping
-    public Result get(Dish dish, BindingResult bindingResult){
-        System.out.println(dish.getDishId());
-        return ResultUtil.success(mDishService.find(dish));
+    @RequestMapping(value = "/{dishId}", method = RequestMethod.GET)
+    public Result get(@PathVariable Integer dishId){
+        if (!TextUtil.isEmpty(dishId))
+            return ResultUtil.error(-1,"菜品id不能为空");
+        System.out.println(dishId);
+        return ResultUtil.success(mDishService.find(dishId));
     }
 
     @ApiOperation("添加菜品")

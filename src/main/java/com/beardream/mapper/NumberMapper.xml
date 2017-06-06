@@ -164,4 +164,13 @@
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where num_id = #{numId,jdbcType=INTEGER}
   </update>
+  <update id="updateExpiredBySelective" >
+    update t_number
+    set is_expired = 1
+    <where>
+      <if test="addTime != null">
+        DATE_FORMAT(add_time, '%m-%d-%Y') &lt; DATE_FORMAT(#{addTime}, '%m-%d-%Y')
+      </if>
+    </where>
+  </update>
 </mapper>

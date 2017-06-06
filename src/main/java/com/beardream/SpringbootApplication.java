@@ -19,11 +19,13 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternUtils;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 
 @MapperScan("com.beardream.dao")
 @EnableAutoConfiguration
+@EnableScheduling
 @SpringBootApplication
 @ComponentScan
 public class SpringbootApplication {

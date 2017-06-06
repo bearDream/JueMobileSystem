@@ -74,7 +74,7 @@ public class TakeNumService {
                 number.setNumber(maxNum+1);
             }
 
-            number.setIsExpired((byte) 1);
+            number.setIsExpired((byte) 0);
             number.setAddTime(new Date());
             number.setUserId(userId);
 
@@ -125,7 +125,7 @@ public class TakeNumService {
         // 根据商家id查询当前排队数，等待人数
         Number number = new Number();
         // 只要有效的号
-        number.setIsExpired((byte) 1);
+        number.setIsExpired((byte) 0);
         number.setBusinessId(business.getBusinessId());
         // 获取排队队列
         List<Number> queue = mNumberMapper.findBySelective(number);
@@ -137,7 +137,7 @@ public class TakeNumService {
 
     // 叫号  获取这个被叫号的用户的用户信息  根据user_id获取
     public Result callNum(Number number) {
-        number.setIsExpired((byte) 1);
+        number.setIsExpired((byte) 0);
         List<Number> numberList = mNumberMapper.findBySelective(number);
         int userId = numberList.get(0).getUserId();
 
@@ -154,13 +154,14 @@ public class TakeNumService {
     public Result passNum(Number number) {
 
         // 查找过号的 这个号 的相关信息
+        number.setIsExpired((byte) 0);
         List<Number> numberList = mNumberMapper.findBySelective(number);
 
         if (numberList.size() > 0){
             // 将该号设置过期
             number.setNumId(numberList.get(0).getNumId());
             number.setAddTime(numberList.get(0).getAddTime());
-            number.setIsExpired((byte) 2);
+            number.setIsExpired((byte) 1);
             mNumberMapper.updateByPrimaryKeySelective(number);
             // 获取后面的所有号
             List<Number> remainList = getRemainNums(number);

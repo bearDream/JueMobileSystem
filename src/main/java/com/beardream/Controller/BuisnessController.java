@@ -169,7 +169,7 @@ public class BuisnessController {
 
         // 三、查询按照取号桌数排序的商家
         // 1、先从取号表 连接查询 商家表 中查询出所有 开通取号的商家信息，装在集合中
-        business.setIsTake((byte) 1);
+        business.setIsTake((byte) 0);
         Map businessTakeMap = mBusinessService.getPage(business, pageNum, pageSize);
         // 2、将开通取号功能的商家进行迭代查询每个商家的等待桌数状态,再将集合按照等待人数多少进行排序
         Map businessTakeList = mBusinessService.getBusinessTakeInfoSort(businessTakeMap, waitSort);

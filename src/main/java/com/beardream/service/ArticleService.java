@@ -10,12 +10,14 @@ import com.beardream.model.User;
 import com.beardream.model.UserArticle;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import com.sun.xml.internal.ws.util.ReadAllStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -43,7 +45,7 @@ public class ArticleService {
         return map;
     }
 
-    public Map splitRecImages(Map articleMap){
+    public Map splitRecImages(Map articleMap) throws UnsupportedEncodingException {
         PageInfo p = (PageInfo) articleMap.get("page");
         List<UserArticle> userArticles = p.getList();
 
@@ -57,6 +59,8 @@ public class ArticleService {
                     articles.add(recImages[i]);
                 userArticle.setRecImageList(articles);
             }
+            // 转码用户username
+            userArticle.setUsername(MimeUtility.decodeText(userArticle.getUsername()));
         }
 
         p.setList(userArticles);

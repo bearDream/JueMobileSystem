@@ -5,12 +5,14 @@ import com.beardream.Utils.TextUtil;
 import com.beardream.dao.ArticleMapper;
 import com.beardream.model.*;
 import com.beardream.service.ArticleService;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,12 @@ public class ArticleController {
     public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
                           UserArticle userArticle){
         Map resultPage = mArticleService.getPage(userArticle,pageNum,pageSize);
-        resultPage = mArticleService.splitRecImages(resultPage);
+        try {
+            resultPage = mArticleService.splitRecImages(resultPage);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResultUtil.error(-1,"系统错误");
+        }
         if (resultPage.get("page") != null){
             return ResultUtil.success(resultPage);
         }
@@ -49,6 +56,12 @@ public class ArticleController {
             return ResultUtil.error(-1,"文章ID不能为空");
         }
         UserArticle userArticle1 = mArticleService.get(userArticle);
+        try {
+            userArticle1.setUsername(MimeUtility.decodeText(userArticle1.getUsername()));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResultUtil.error(-1,"系统错误");
+        }
         if (userArticle1!=null){
             return  ResultUtil.success(userArticle1);
         }

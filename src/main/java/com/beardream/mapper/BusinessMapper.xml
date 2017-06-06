@@ -7,6 +7,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="businessNum" jdbcType="INTEGER" property="businessNum" />
     <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
     <result column="business_carousel_image" jdbcType="VARCHAR" property="businessCarouselImage" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
@@ -28,6 +29,7 @@
     <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
     <result column="is_favorable" jdbcType="BIT" property="isFavorable" />
     <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="businessNum" jdbcType="INTEGER" property="businessNum" />
     <result column="dish_rec_image" jdbcType="VARCHAR" property="dishRecImage" />
     <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
     <result column="is_show" jdbcType="BIT" property="isShow" />
@@ -51,6 +53,9 @@
   </resultMap>
 
   <sql id="business_dish_colum_list">
+    COUNT(db.business_id) as businessNum, d.dish_id, d.dish_name, d.dish_image, dish_rec_image, db.business_id, d.dish_desc, db.addtime, d.dish_nutrition_status, db.dish_price
+  </sql>
+  <sql id="business_dishInfo_colum_list">
     d.dish_id, d.dish_name, d.dish_image, dish_rec_image, db.business_id, d.dish_desc, db.addtime, d.dish_nutrition_status, db.dish_price
   </sql>
   <sql id="Base_Column_List">
@@ -154,7 +159,7 @@
     order by add_time desc
   </select>
 
-  <!-- 根据用户所处状态获取指定商家的菜品信息 -->
+  <!-- 根据用户所处状态获取指定商家拥有的菜品数量 -->
   <select id="findBusinessDishBySelective" resultMap="BusinessDishResultMap">
     SELECT
     <include refid="business_dish_colum_list" />
@@ -163,6 +168,20 @@
       <if test="dishNutritionStatus != null">
         and dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
       </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+    </where>
+    GROUP BY db.business_id
+    order by add_time desc
+  </select>
+
+  <!-- 根据指定商家id获取菜品信息 -->
+  <select id="findBusinessDishInfoBySelective" resultMap="BusinessDishResultMap">
+    SELECT
+    <include refid="business_dishInfo_colum_list" />
+    from t_dish d inner join t_dish_business db on d.dish_id=db.dish_id
+    <where>
       <if test="businessId != null">
         and business_id = #{businessId,jdbcType=INTEGER}
       </if>

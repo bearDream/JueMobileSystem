@@ -37,6 +37,6 @@ public class RandomDishController {
     @GetMapping
     public Result get(HttpSession session) {
         // 根据用户的特征body_status来获取不同的三个菜品
-        return mRandomService.getRandomDishes(session);
+        return mRandomService.getRandomDishesNew(session);
     }
 }

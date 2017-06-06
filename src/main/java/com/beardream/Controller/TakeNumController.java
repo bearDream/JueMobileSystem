@@ -4,9 +4,12 @@ import com.beardream.Utils.Constants;
 import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
+import com.beardream.dao.BusinessMapper;
+import com.beardream.dao.NumberMapper;
 import com.beardream.dao.UserMapper;
 import com.beardream.enums.ResultEnum;
 import com.beardream.exception.UserException;
+import com.beardream.model.Business;
 import com.beardream.model.Number;
 import com.beardream.model.Result;
 import com.beardream.model.User;
@@ -55,6 +58,12 @@ public class TakeNumController {
     @Autowired
     private UserMapper mUserMapper;
 
+    @Autowired
+    private BusinessMapper mBusinessMapper;
+
+    @Autowired
+    private NumberMapper mNumberMapper;
+
     // 取号
     @GetMapping("/takeNum")
     public Result takeNum(Number number, HttpSession session){
@@ -68,7 +77,7 @@ public class TakeNumController {
             return ResultUtil.error(-1,"请选择商家并填写人数后又提交");
         }
         number.setUserId(user.getUserId());
-        number.setIsExpired((byte) 1); // 设置为没有过期
+        number.setIsExpired((byte) 0); // 设置为没有过期
         Result num = mTakeNumService.takeNum(number);
         if (num.getCode() != -1)
             return ResultUtil.success(num.getData());
@@ -90,7 +99,7 @@ public class TakeNumController {
         }
 
         number.setUserId(user.getUserId());
-        number.setIsExpired((byte) 1);
+        number.setIsExpired((byte) 0);
         Result num = mTakeNumService.getCurrentNum(number);
 
         if (num.getCode() == -1)
@@ -107,7 +116,7 @@ public class TakeNumController {
             return ResultUtil.error(-1,"请选择商家后又提交");
         }
 
-        number.setIsExpired((byte) 1);
+        number.setIsExpired((byte) 0);
         Result num = mTakeNumService.refreshNum(number);
 
         if (num.getCode() == -1)
@@ -128,12 +137,15 @@ public class TakeNumController {
         // 根据number，businessId，is_expire来查找被叫号的顾客
         Result result = mTakeNumService.callNum(number);
 
+        number.setIsExpired((byte) 0);
+        number = mNumberMapper.findBySelective(number).get(0);
+
         if (result.getCode() == -1) {
             return ResultUtil.error(-1,result.getMsg());
         }else {
             // 对过号（被叫号的）顾客进行消息推送
             User user = (User) result.getData();
-            pushMsg(number.getNumber(), number.getNumber(), user.getUserId());
+            pushMsg(number.getNumber(), number.getNumber(), user.getUserId(), number.getPeopleNum(), number.getBusinessId());
             return ResultUtil.success(result.getMsg());
         }
     }
@@ -164,7 +176,7 @@ public class TakeNumController {
 
             // 对队列中的其他号进行推送
             for (Number remainList : remainLists) {
-                pushMsg(remainList.getNumId(), curretNum, remainList.getUserId());
+                pushMsg(remainList.getNumId(), curretNum, remainList.getUserId(), remainList.getPeopleNum(), remainList.getBusinessId());
             }
 
             return ResultUtil.success(result.getMsg());
@@ -172,14 +184,26 @@ public class TakeNumController {
     }
 
     // 微信推送消息过号
-    public void pushMsg(int takeNum, int CurrentNum, int userId){
+    public void pushMsg(int takeNum, int CurrentNum, int userId, int peopleNum, int businessId){
 
         // 根据userId查找openid
         User user = mUserMapper.selectByPrimaryKey(userId);
 
+        Business business = mBusinessMapper.selectByPrimaryKey(businessId);
         if (!TextUtil.isEmpty(user.getOpenid())){
             mLogger.error("推送微信消息失败,原因是={}","用户openid为空");
             return;
+        }
+
+        String tableType = null;
+        if (peopleNum <= 4){
+            tableType = "小桌";
+        }
+        if (peopleNum >= 5 && peopleNum <= 6){
+            tableType = "中桌";
+        }
+        if (peopleNum > 6){
+            tableType = "大桌";
         }
 
         WxMpTemplateMessage templateMessage = new WxMpTemplateMessage();
@@ -187,9 +211,13 @@ public class TakeNumController {
             templateMessage.setToUser(user.getOpenid());
             templateMessage.setTemplateId(mTemplateId);
             templateMessage.setUrl("");
-            templateMessage.getData().add(new WxMpTemplateData("number", takeNum + "","#003371"));
-            templateMessage.getData().add(new WxMpTemplateData("currentNumber",CurrentNum + "","#44cef6"));
-            templateMessage.getData().add(new WxMpTemplateData("waitNumber",takeNum - CurrentNum + "","#00056"));
+            templateMessage.getData().add(new WxMpTemplateData("first", "Hey! 小蕨叫你来吃饭啦~","#003371"));
+            templateMessage.getData().add(new WxMpTemplateData("keyword1", business.getName() + "","#003371"));
+//            templateMessage.getData().add(new WxMpTemplateData("keyword2", CurrentNum + "","#003371")); // 当前排到的号
+            templateMessage.getData().add(new WxMpTemplateData("keyword2", takeNum + "","#003371"));
+            templateMessage.getData().add(new WxMpTemplateData("keyword3",tableType + "","#44cef6"));
+            templateMessage.getData().add(new WxMpTemplateData("keyword4",takeNum - CurrentNum + "","#00056"));
+            templateMessage.getData().add(new WxMpTemplateData("remark","小蕨随时为你服务哦~","#00056"));
             mWxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
         } catch (WxErrorException e) {
             e.printStackTrace();
