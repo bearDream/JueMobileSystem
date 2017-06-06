@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,11 +64,14 @@ public class UserController {
         return ResultUtil.success(-1,"手机号码已被注册");
     }
 
-    @PutMapping()
     @ApiOperation("修改用户")
-    public Object alter(User user, BindingResult bindingResult){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Result alter(@RequestBody User user){
 
-        return ResultUtil.error(-1,"修改信息失败");
+        Result result = userService.alterUser(user);
+        if (result.getCode()!=-1)
+            return ResultUtil.success("设置成功");
+        return ResultUtil.error(-1,"设置失败");
     }
 
 }

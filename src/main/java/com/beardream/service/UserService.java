@@ -1,7 +1,9 @@
 package com.beardream.service;
 
 import com.beardream.Utils.MD5;
+import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
+import com.beardream.model.Result;
 import com.beardream.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,5 +44,13 @@ public class UserService{
 
     public Object get(User user)throws Exception {
         return userMapper.selectByPrimaryKey(user.getUserId());
+    }
+
+    public Result alterUser(User user){
+
+        Integer result = userMapper.updateByPrimaryKeySelective(user);
+        if (result > 0)
+            return ResultUtil.success(result);
+        return ResultUtil.error(-1,"修改失败");
     }
 }

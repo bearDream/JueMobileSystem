@@ -44,7 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (env.equals("dev")){
             User user = new User();
             Gson gson = new Gson();
-            user = mUserMapper.selectByPrimaryKey(2);
+            user = mUserMapper.selectByPrimaryKey(13);
             user.setUsername(MimeUtility.decodeText(user.getUsername()));
             System.out.println(user.getUsername());
             session.setAttribute(Constants.USER, gson.toJson(user));
