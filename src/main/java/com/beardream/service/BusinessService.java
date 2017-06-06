@@ -105,7 +105,7 @@ public class BusinessService {
     }
 
     // 按照取号桌数排序
-    public List<Business> getBusinessTakeInfoSort(Map businessMap, String waitSort){
+    public Map getBusinessTakeInfoSort(Map businessMap, String waitSort){
 
         PageInfo p = (PageInfo) businessMap.get("page");
         List<Business> businessList = p.getList();
@@ -119,11 +119,15 @@ public class BusinessService {
         // 将等待桌数进行排序
         businessList = Sort.sortBusinessDesc(businessList, waitSort);
 
-        return businessList;
+        p.setList(businessList);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page", p);
+
+        return map;
     }
 
     // 按照商家等级排序
-    public List<Business> getBusinessLevelInfoSort(Map businessMap, String waitSort){
+    public Map getBusinessLevelInfoSort(Map businessMap, String waitSort){
 
         PageInfo p = (PageInfo) businessMap.get("page");
         List<Business> businessList = p.getList();
@@ -134,11 +138,17 @@ public class BusinessService {
             business.setWait(wait);
         }
 
-        return businessList;
+        businessList = Sort.sortBusinessLevel(businessList, "desc");
+
+        p.setList(businessList);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page", p);
+
+        return map;
     }
 
     // 按照附近距离排序
-    public List<Business> getBusinessLocationSort(Map businessMap, double latitude, double longtitude, String waitSort){
+    public Map getBusinessLocationSort(Map businessMap, double latitude, double longtitude, String waitSort){
 
         PageInfo p = (PageInfo) businessMap.get("page");
         List<Business> businessList = p.getList();
@@ -156,11 +166,16 @@ public class BusinessService {
 
         businessList = Sort.sortBusinessDistance(businessList, "asc");
 
-        return businessList;
+        p.setList(businessList);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page", p);
+
+        return map;
     }
 
-    public List<Business> getBusinessDishList(Map businessMap, int bodyStatus){
-        List<Business> businessList = (List<Business>) businessMap.get("list");
+    public Map getBusinessDishList(Map businessMap, int bodyStatus){
+        PageInfo p = (PageInfo) businessMap.get("page");
+        List<Business> businessList = p.getList();
 
         // 遍历商家 查询商家拥有的菜品信息
         for (Business business : businessList) {
@@ -181,7 +196,11 @@ public class BusinessService {
                 business.setTwoDishRecImage(dishBusinessList.get(1).getDishRecImage());
             }
         }
-        return businessList;
+
+        p.setList(businessList);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page", p);
+        return map;
     }
 
 }

@@ -17,6 +17,8 @@ public class UserArticle {
 
     private Integer articleId;
 
+    private String content;
+
     private String coverImage;
 
     private String recImage;
@@ -31,6 +33,14 @@ public class UserArticle {
     private Date addTime;
 
     private String title;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getHeadImgUrl() {
         return headImgUrl;

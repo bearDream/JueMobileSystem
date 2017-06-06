@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -25,16 +26,16 @@ public class ArticleController {
     private ArticleMapper articleMapper;
 
     @Autowired
-    private ArticleService articleService;
+    private ArticleService mArticleService;
 
     @ApiOperation("分页获取用户图文")
     @GetMapping
     public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
                           UserArticle userArticle){
-        Map resultPage = articleService.getPage(userArticle,pageNum,pageSize);
-        List<UserArticle> userArticles = articleService.splitRecImages(resultPage);
-        if (userArticles.size() != 0){
-            return ResultUtil.success(userArticles);
+        Map resultPage = mArticleService.getPage(userArticle,pageNum,pageSize);
+        resultPage = mArticleService.splitRecImages(resultPage);
+        if (resultPage.get("page") != null){
+            return ResultUtil.success(resultPage);
         }
         else {
             return ResultUtil.error(-1,"系统错误");
@@ -47,12 +48,19 @@ public class ArticleController {
         if (!TextUtil.isEmpty(userArticle.getArticleId())){
             return ResultUtil.error(-1,"文章ID不能为空");
         }
-        if (articleService.get(userArticle)!=null){
-            return  ResultUtil.success(articleService.get(userArticle));
+        UserArticle userArticle1 = mArticleService.get(userArticle);
+        if (userArticle1!=null){
+            return  ResultUtil.success(userArticle1);
         }
         else {
             return  ResultUtil.error(-1,"文章不存在");
         }
+    }
+
+    @ApiOperation("上传文章接口")
+    @PostMapping
+    public @ResponseBody Result addArticle(@RequestBody UserArticle userArticle, HttpSession session){
+        return  mArticleService.addArticle(userArticle, session);
     }
 
 }

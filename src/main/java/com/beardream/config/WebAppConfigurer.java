@@ -25,7 +25,9 @@ public class WebAppConfigurer extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns(Constants.LOGIN_URL)
-                .excludePathPatterns(Constants.TOKEN_URL);
+                .excludePathPatterns(Constants.TOKEN_URL)
+                .excludePathPatterns(Constants.FILE_URL)
+                .excludePathPatterns(Constants.MENU_URL);
         super.addInterceptors(registry);
     }
 

@@ -62,4 +62,21 @@ public class Sort {
         });
         return businessList;
     }
+
+    // 按照等级排序
+    public static List<Business> sortBusinessLevel(List<Business> businessList, String sort) {
+        Collections.sort(businessList, new Comparator<Business>() {
+            @Override
+            public int compare(Business o1, Business o2) {
+                if (o1 instanceof Business && o2 instanceof Business) {
+                    Business e1 = (Business) o1;
+                    Business e2 = (Business) o2;
+                    return e1.getLevel().compareTo(e2.getLevel());
+                }
+                throw new ClassCastException("不能转换为Business类型");
+            }
+        });
+        return businessList;
+    }
+
 }

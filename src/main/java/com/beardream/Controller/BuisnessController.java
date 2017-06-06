@@ -159,12 +159,12 @@ public class BuisnessController {
 
         // 一、查询按照距离排序的商家
         Map businessLocationMap = mBusinessService.getPage(business, pageNum, pageSize);
-        List<Business> businessDistanceList = mBusinessService.getBusinessLocationSort(businessLocationMap, latitude, longtitude, waitSort);
+        Map businessDistanceList = mBusinessService.getBusinessLocationSort(businessLocationMap, latitude, longtitude, waitSort);
 
 
         // 二、查询按照星级level排序的商家
         Map businessLevelMap = mBusinessService.getPage(business, pageNum, pageSize);
-        List<Business> businessLevelList = mBusinessService.getBusinessLevelInfoSort(businessLevelMap, "desc");
+        Map businessLevelList = mBusinessService.getBusinessLevelInfoSort(businessLevelMap, "desc");
 
 
         // 三、查询按照取号桌数排序的商家
@@ -172,7 +172,7 @@ public class BuisnessController {
         business.setIsTake((byte) 1);
         Map businessTakeMap = mBusinessService.getPage(business, pageNum, pageSize);
         // 2、将开通取号功能的商家进行迭代查询每个商家的等待桌数状态,再将集合按照等待人数多少进行排序
-        List<Business> businessTakeList = mBusinessService.getBusinessTakeInfoSort(businessTakeMap, waitSort);
+        Map businessTakeList = mBusinessService.getBusinessTakeInfoSort(businessTakeMap, waitSort);
 
         businessMap.put("distanceList", businessDistanceList);
         businessMap.put("levelList", businessLevelList);
@@ -195,10 +195,10 @@ public class BuisnessController {
         // 1、先查询出商家来
         Map businessMap = mBusinessService.getPage(business, pageNum, pageSize);
         // 2、然后根据商家list遍历查询商家的两个菜品
-        List<Business> list = mBusinessService.getBusinessDishList(businessMap, user.getBodyStatus());
+        Map businessDishMap = mBusinessService.getBusinessDishList(businessMap, user.getBodyStatus());
 
-        if (list.size() > 0)
-            return ResultUtil.success(list);
+        if (businessDishMap.get("page") != null)
+            return ResultUtil.success(businessDishMap);
         return ResultUtil.error(-1,"查询失败");
     }
 

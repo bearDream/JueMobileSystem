@@ -132,6 +132,7 @@ public class UploadController {
             }
             String file_url = executeUpload(uploadDir, file);
             url = upload_url + "?url=" + file_url;// 将图片路径返回
+            System.out.println("存储的url: " + url);
             // 将相关的文件信息写入数据库
             FileUpload files = new FileUpload();
             files.setType(type);

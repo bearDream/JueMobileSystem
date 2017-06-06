@@ -31,7 +31,7 @@
   <!-- 用户和文章连接查询-->
   <select id="findUserArticleBySelective" resultMap="UserArticleResultMap">
     SELECT
-    u.user_id,u.username,u.tel, u.headImgUrl, a.article_id,a.cover_image,rec_image,praise, a.is_show,a.add_time,a.title
+    u.user_id,u.username,u.tel, u.headImgUrl, a.article_id,a.cover_image,rec_image,praise, content, praise, a.is_show,a.add_time,a.title
     FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id
     <where>
       <if test="userId != null">
@@ -80,10 +80,10 @@
     where article_id = #{articleId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Article">
-    insert into t_article (article_id, user_id, cover_image, 
+    insert into t_article (article_id, user_id, cover_image, rec_image
       is_show, add_time, content, title
       )
-    values (#{articleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{coverImage,jdbcType=VARCHAR}, 
+    values (#{articleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{coverImage,jdbcType=VARCHAR}, #{recImage,jdbcType=VARCHAR},
       #{isShow,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}, #{title,jdbcType=VARCHAR}
       )
   </insert>
@@ -98,6 +98,9 @@
       </if>
       <if test="coverImage != null">
         cover_image,
+      </if>
+      <if test="recImage != null">
+        rec_image,
       </if>
       <if test="isShow != null">
         is_show,
@@ -121,6 +124,9 @@
       </if>
       <if test="coverImage != null">
         #{coverImage,jdbcType=VARCHAR},
+      </if>
+      <if test="recImage != null">
+        #{recImage,jdbcType=VARCHAR},
       </if>
       <if test="isShow != null">
         #{isShow,jdbcType=TINYINT},
