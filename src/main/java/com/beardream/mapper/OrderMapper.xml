@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beardream.dao.OrderMapper">
   <resultMap id="BaseResultMap" type="com.beardream.model.Order">
-    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="dish_id" jdbcType="VARCHAR" property="dishId" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="order_pice" jdbcType="REAL" property="orderPice" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -25,11 +25,11 @@
     select 
     <include refid="Base_Column_List" />
     from t_order
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_order
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Order">
     insert into t_order (order_id, user_id, dish_id, 
@@ -37,7 +37,7 @@
       order_status, weixing_tranid, tran_time, 
       tran_money, prepay_id, openid, 
       business_id, evaluate_id)
-    values (#{orderId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{dishId,jdbcType=INTEGER}, 
+    values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{dishId,jdbcType=VARCHAR},
       #{addTime,jdbcType=TIMESTAMP}, #{orderPice,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{weixingTranid,jdbcType=VARCHAR}, #{tranTime,jdbcType=TIMESTAMP}, 
       #{tranMoney,jdbcType=TIMESTAMP}, #{prepayId,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
@@ -137,11 +137,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Order">
     update t_order
     <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="dishId != null">
-        dish_id = #{dishId,jdbcType=INTEGER},
+        dish_id = #{dishId,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -177,12 +180,13 @@
         evaluate_id = #{evaluateId,jdbcType=INTEGER},
       </if>
     </set>
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Order">
     update t_order
-    set user_id = #{userId,jdbcType=INTEGER},
-      dish_id = #{dishId,jdbcType=INTEGER},
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      dish_id = #{dishId,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       order_pice = #{orderPice,jdbcType=REAL},
       remark = #{remark,jdbcType=VARCHAR},
@@ -194,6 +198,6 @@
       openid = #{openid,jdbcType=VARCHAR},
       business_id = #{businessId,jdbcType=INTEGER},
       evaluate_id = #{evaluateId,jdbcType=INTEGER}
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -4,3 +4,10 @@ wechat:
     secret: ea9752893e26be73b12304d5262d7ed2
     token: jue
     aesKey:
+  pay:
+    appId: wx4c1dfadf4a576fe7
+    mchId: 1443689602
+    mchKey: huyifan121014318huyifan121014318
+    subAppId:
+    subMchId:
+    keyPath:

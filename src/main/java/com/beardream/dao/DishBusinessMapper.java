@@ -3,6 +3,7 @@ package com.beardream.dao;
 import com.beardream.model.DishBusiness;
 import com.beardream.model.DoubleDishBusiness;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface DishBusinessMapper {
 
     DishBusiness selectByPrimaryKey(Integer dishBusinessId);
 
+    DishBusiness findDishBusinessBySelective(@Param(value = "dishBusinessId") Integer dishBusinessId);
 
     int updateByPrimaryKeySelective(DishBusiness record);
 

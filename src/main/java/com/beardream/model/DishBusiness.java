@@ -37,8 +37,18 @@ public class DishBusiness {
 
     private Integer dishNutritionStatus;
 
+    private String name;
+
     // 有该菜的商家数量
     private Integer businessNum;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getBusinessNum() {
         return businessNum;

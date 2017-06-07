@@ -54,7 +54,6 @@ public class NutritionService {
 
     public String put(Nutrition nutrition){
         int result;
-        System.out.println(nutrition.getNurtritionId());
         result = nutritionMapper.updateByPrimaryKeySelective(nutrition);
         if (result > 0) {
             return "更新成功";

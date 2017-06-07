@@ -36,7 +36,7 @@ public interface BusinessMapper {
     List<DishBusiness> findBusinessDishBySelective(@Param("dishNutritionStatus") Integer dishNutritionStatus, @Param("businessId") Integer businessId);
 
     // 获取指定商家id的具体菜品信息
-    List<DishBusiness> findBusinessDishInfoBySelective(@Param("businessId") Integer businessId);
+    List<DishBusiness> findBusinessDishInfoBySelective(@Param("dishNutritionStatus") Integer dishNutritionStatus, @Param("businessId") Integer businessId);
 
     // 查询用户到商家的距离，单位是米
     Business findDistanceBySelective(@Param("latitude") Double latitude, @Param("longtitude") Double longtitude, @Param("businessId") Integer businessId);

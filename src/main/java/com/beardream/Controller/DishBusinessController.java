@@ -9,10 +9,9 @@ import com.beardream.service.DishBusinessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Created by soft01 on 2017/5/27.
@@ -26,7 +25,7 @@ public class DishBusinessController {
         private DishBusinessMapper dishBusinessMapper;
 
         @Autowired
-        private DishBusinessService dishBusinessService;
+        private DishBusinessService mDishBusinessService;
 
         @ApiOperation("分页获取商家及菜品")
         @GetMapping("/getpage")
@@ -37,11 +36,22 @@ public class DishBusinessController {
             if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
                 return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
             }
-            if (dishBusinessService.getPage(doubleDishBusiness, pageNum, pageSize) != null) {
-                return ResultUtil.success(dishBusinessService.getPage(doubleDishBusiness, pageNum, pageSize));
+            if (mDishBusinessService.getPage(doubleDishBusiness, pageNum, pageSize) != null) {
+                return ResultUtil.success(mDishBusinessService.getPage(doubleDishBusiness, pageNum, pageSize));
             } else {
                 return ResultUtil.error(-1, "系统错误");
             }
+        }
+
+        // 今天吃啥的菜品订单，根据dishBusinessId来获取菜品
+        @GetMapping(value = "/{dishBusinessId}")
+        public Result getDishBusinessInfo(@PathVariable String dishBusinessId) {
+
+            Map map = mDishBusinessService.getDishInfo(dishBusinessId);
+            if (map.get("dishList") != null) {
+                return ResultUtil.success(map);
+            }
+            return ResultUtil.error(-1,"系统出错");
         }
 
         @GetMapping
@@ -49,8 +59,8 @@ public class DishBusinessController {
             if (!TextUtil.isEmpty(doubleDishBusiness.getBusinessId())) {
                 return ResultUtil.error(-1, "商家ID不能为空");
             }
-            if (dishBusinessService.get(doubleDishBusiness) != null) {
-                return ResultUtil.success(dishBusinessService.get(doubleDishBusiness));
+            if (mDishBusinessService.get(doubleDishBusiness) != null) {
+                return ResultUtil.success(mDishBusinessService.get(doubleDishBusiness));
             } else {
                 return ResultUtil.error(-1, "商家不存在");
             }

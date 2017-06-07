@@ -5,7 +5,13 @@
     <id column="dish_business_id" jdbcType="INTEGER" property="dishBusinessId" />
     <result column="dish_id" jdbcType="INTEGER" property="dishId" />
     <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="dish_type" jdbcType="VARCHAR" property="dishType" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
+    <result column="dish_rec_image" jdbcType="VARCHAR" property="dishRecImage" />
+    <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
+    <result column="dish_nutrition_status" jdbcType="VARCHAR" property="dishNutritionStatus" />
     <result column="is_favorable" jdbcType="BIT" property="isFavorable" />
     <result column="is_show" jdbcType="BIT" property="isShow" />
     <result column="is_top" jdbcType="BIT" property="isTop" />
@@ -97,6 +103,13 @@
     </where>
     order by add_time desc
   </select>
+
+  <select id="findDishBusinessBySelective" resultMap="BaseResultMap">
+    SELECT db.*, d.*
+    from t_dish_business db inner join t_dish d on db.dish_id=d.dish_id
+    where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <include refid="Base_Column_List" />
     from t_dish_business

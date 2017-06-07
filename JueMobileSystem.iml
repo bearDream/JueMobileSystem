@@ -39,8 +39,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.5.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:1.5.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:1.5.2.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.11" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.11" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:1.7.24" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:log4j-over-slf4j:1.7.24" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.yaml:snakeyaml:1.17" level="project" />
@@ -156,5 +154,13 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="library" name="Maven: com.github.binarywang:weixin-java-pay:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jodd:jodd-http:3.7" level="project" />
+    <orderEntry type="library" name="Maven: org.jodd:jodd-upload:3.7" level="project" />
+    <orderEntry type="library" name="Maven: org.jodd:jodd-core:3.7" level="project" />
+    <orderEntry type="library" name="Maven: com.github.binarywang:qrcode-utils:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.zxing:core:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.11" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.11" level="project" />
   </component>
 </module>

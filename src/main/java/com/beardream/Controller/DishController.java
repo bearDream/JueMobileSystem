@@ -6,6 +6,7 @@ import com.beardream.dao.DishMapper;
 import com.beardream.ioc.*;
 import com.beardream.model.*;
 import com.beardream.service.DishService;
+import com.beardream.service.NutritionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -29,10 +30,10 @@ import java.util.Map;
 public class DishController {
 
     @Autowired
-    private DishMapper dishMapper;
+    private DishService mDishService;
 
     @Autowired
-    private DishService mDishService;
+    private NutritionService mNutritionService;
 
     @ApiOperation("获取单个菜品信息")
     @RequestMapping(value = "/{dishId}", method = RequestMethod.GET)
@@ -60,8 +61,9 @@ public class DishController {
 
     @ApiOperation("更新菜品")
     @PutMapping
-    public Result put(Dish dish){
+    public Result put(Dish dish, Nutrition nutrition){
         System.out.println(dish.getDishId());
+        mNutritionService.put(nutrition);
         return ResultUtil.success(mDishService.put(dish));
     }
 

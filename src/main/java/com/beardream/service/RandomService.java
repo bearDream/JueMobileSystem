@@ -78,7 +78,7 @@ public class RandomService {
         // 随机获取一个商家id来进行查找，此处的商家一定是可以生成三个菜的
         int max = canRandomBusinessList.size() - 1;
         int businessId = canRandomBusinessList.get(new Random().nextInt(max)).getBusinessId();
-        List<DishBusiness> dishes = mBussinessMapper.findBusinessDishInfoBySelective(businessId);
+        List<DishBusiness> dishes = mBussinessMapper.findBusinessDishInfoBySelective(bodyStatus, businessId);
 
         if (dishList.size() <= 0){
             return ResultUtil.error(-1,"生成失败，请再试一次哦~");

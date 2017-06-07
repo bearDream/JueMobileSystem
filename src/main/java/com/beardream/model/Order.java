@@ -3,11 +3,11 @@ package com.beardream.model;
 import java.util.Date;
 
 public class Order {
-    private Integer orderId;
+    private String orderId;
 
     private Integer userId;
 
-    private Integer dishId;
+    private String dishId;
 
     private Date addTime;
 
@@ -31,11 +31,11 @@ public class Order {
 
     private Integer evaluateId;
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
@@ -47,11 +47,11 @@ public class Order {
         this.userId = userId;
     }
 
-    public Integer getDishId() {
+    public String getDishId() {
         return dishId;
     }
 
-    public void setDishId(Integer dishId) {
+    public void setDishId(String dishId) {
         this.dishId = dishId;
     }
 
