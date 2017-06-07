@@ -14,6 +14,7 @@ import com.github.binarywang.wxpay.bean.request.WxPayBaseRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayBaseResult;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.Api;
@@ -113,19 +114,15 @@ public class OrderController {
 
     @ResponseBody
     @RequestMapping("/payNotify")
-    public String payNotify(HttpServletRequest request, HttpServletResponse response) {
+    public Result payNotify(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
-            WxPayOrderNotifyResult result = mWxPayService.getOrderNotifyResult(xmlResult);
-            // 结果正确
-            String orderId = result.getOutTradeNo();
-            String tradeNo = result.getTransactionId();
-            String totalFee = WxPayBaseResult.feeToYuan(result.getTotalFee());
-            //自己处理订单的业务逻辑，需要判断订单是否已经支付过，否则可能会重复调用
-            return WxPayOrderNotifyResponse.success("处理成功!");
+            String xmlResult = mOrderService.payNotify(request, response);
+            System.out.println("支付回调xml结果");
+            System.out.println(xmlResult);
+            return ResultUtil.success(xmlResult);
         } catch (Exception e) {
             logger.error("微信回调结果异常,异常原因{}", e.getMessage());
-            return WxPayOrderNotifyResponse.fail(e.getMessage());
+            return ResultUtil.error(-1,e.getMessage());
         }
     }
 }
