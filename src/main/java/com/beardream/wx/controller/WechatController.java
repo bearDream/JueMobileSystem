@@ -168,7 +168,7 @@ public class WechatController {
         WxMenuButton buttonSecond = new WxMenuButton();
         buttonSecond.setType("view");
 //         redirectURI,  scope,  state
-        buttonSecond.setUrl(mWxMpService.oauth2buildAuthorizationUrl("http://wx.chiprincess.cn/api/mobile/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
+        buttonSecond.setUrl(mWxMpService.oauth2buildAuthorizationUrl("https://wx.chiprincess.cn/api/mobile/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
         buttonSecond.setName("美味蕨菜");
         buttons.add(buttonSecond);
         // 设置三级菜单的第三项

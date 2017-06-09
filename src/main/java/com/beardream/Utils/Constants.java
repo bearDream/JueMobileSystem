@@ -18,4 +18,7 @@ public class Constants {
 
     //微信创建菜单
     public final static String MENU_URL = "/api/mobile/wechat/portal/menucreate";
+
+    //微信支付成功后的回调
+    public final static String PAYNOTIFY_URL = "/api/mobile/order/payNotify";
 }

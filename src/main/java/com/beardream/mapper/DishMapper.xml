@@ -60,7 +60,7 @@
     order by d.add_time desc
   </select>
 
-
+  <!-- 连接查询菜品和菜品分类 -->
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="type_Column_List" />

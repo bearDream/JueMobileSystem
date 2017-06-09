@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -63,11 +64,18 @@ public class OrderController {
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
         order.setUserId(user.getUserId());
         order.setAddTime(new Date());
-        String orderNo = "";
-        orderNo = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        orderNo += user.getUserId();
-        order.setOrderId(orderNo);
-        Result result = mOrderService.order(order);
+        Result result = null;
+        if (!TextUtil.isEmpty(order.getOrderId())){
+            String orderNo = "";
+            orderNo = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            orderNo += user.getUserId();
+            System.out.println("订单号是: " + orderNo);
+            order.setOrderId(orderNo);
+            result = mOrderService.order(order);
+        }else {
+            order.setOrderStatus((byte) 0);
+            result = mOrderService.update(order);
+        }
 
         // 若订单入库成功，则调用微信api调用统一下单
         if (result.getCode() != -1){
@@ -90,7 +98,7 @@ public class OrderController {
             request.setSpbillCreateIp(ip);
             request.setBody("蕨菜美食订单");
             request.setOpenid(user.getOpenid());
-            request.setOutTradeNo(orderNo);
+            request.setOutTradeNo(order.getOrderId());
             request.setTotalFee(WxPayBaseRequest.yuanToFee(String.valueOf(order.getOrderPice())));
             request.setTimeStart(startTime);
             request.setTimeExpire(expireTime);
@@ -100,10 +108,10 @@ public class OrderController {
             try {
                 // 该方法会自动调用统一下单方法，不需要手动执行
                 Map jsApiParams = mWxPayService.getPayInfo(request);
-                String prepayId = (String) jsApiParams.get("package");
+                String prepayId = (String) jsApiParams.get("package").toString().split("=")[1];
                 order.setPrepayId(prepayId);
                 mOrderService.update(order);
-                return ResultUtil.success(mWxPayService.getPayInfo(request));
+                return ResultUtil.success(jsApiParams);
             } catch (WxErrorException e) {
                 e.printStackTrace();
             }
@@ -112,18 +120,43 @@ public class OrderController {
             return ResultUtil.error(-1,"订单入库失败，请稍后重新尝试支付");
     }
 
+    /*
+        用户支付成功后，微信回调NotifyURL会访问该方法用以处理订单状态
+     */
     @ResponseBody
     @RequestMapping("/payNotify")
-    public Result payNotify(HttpServletRequest request, HttpServletResponse response) {
+    public String payNotify(HttpServletRequest request, HttpServletResponse response) {
+        String xmlResult = mOrderService.payNotify(request, response);
         try {
-            String xmlResult = mOrderService.payNotify(request, response);
             System.out.println("支付回调xml结果");
             System.out.println(xmlResult);
-            return ResultUtil.success(xmlResult);
+            return xmlResult;
         } catch (Exception e) {
             logger.error("微信回调结果异常,异常原因{}", e.getMessage());
-            return ResultUtil.error(-1,e.getMessage());
+            return xmlResult;
         }
+    }
+
+    /*
+        支付成功后，根据prepayId查询用户订单信息
+     */
+    @GetMapping(value = "/{prepayId}")
+    public Result queryOrder(@PathVariable String prepayId) {
+        if (!TextUtil.isEmpty(prepayId))
+            return ResultUtil.error(-1,"预支付订单id不能为空");
+
+        return mOrderService.queryOrder(prepayId);
+    }
+
+    /*
+        查询订单详细信息，商家信息，菜品信息以及订单状态，三个信息装在一个map中返回前端
+     */
+    @GetMapping(value = "/get")
+    public Result queryOrderInfo(@Param(value = "orderId") String orderId) {
+        if (!TextUtil.isEmpty(orderId))
+            return ResultUtil.error(-1,"订单id不能为空");
+
+        return mOrderService.queryOrderInfo(orderId);
     }
 }
 

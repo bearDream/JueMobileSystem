@@ -6,27 +6,63 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="dish_id" jdbcType="VARCHAR" property="dishId" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
-    <result column="order_pice" jdbcType="REAL" property="orderPice" />
+    <result column="order_pice" jdbcType="DOUBLE" property="orderPice" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
     <result column="weixing_tranid" jdbcType="VARCHAR" property="weixingTranid" />
     <result column="tran_time" jdbcType="TIMESTAMP" property="tranTime" />
-    <result column="tran_money" jdbcType="TIMESTAMP" property="tranMoney" />
+    <result column="tran_money" jdbcType="DOUBLE" property="tranMoney" />
     <result column="prepay_id" jdbcType="VARCHAR" property="prepayId" />
     <result column="openid" jdbcType="VARCHAR" property="openid" />
     <result column="business_id" jdbcType="INTEGER" property="businessId" />
     <result column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
   </resultMap>
   <sql id="Base_Column_List">
-    order_id, user_id, dish_id, add_time, order_pice, remark, order_status, weixing_tranid, 
-    tran_time, tran_money, prepay_id, openid, business_id, evaluate_id
+    *
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_order
     where order_id = #{orderId,jdbcType=VARCHAR}
   </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_order
+    <where>
+      <if test="orderId != null">
+        and order_id = #{orderId}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="dishId != null">
+        and dish_id = #{dishId}
+      </if>
+      <if test="orderPice != null">
+        and order_pice = #{orderPice}
+      </if>
+      <if test="orderStatus != null">
+        and order_status = #{orderStatus}
+      </if>
+      <if test="tranMoney != null">
+        and tran_money = #{tranMoney}
+      </if>
+      <if test="prepayId != null">
+        and prepay_id = #{prepayId}
+      </if>
+      <if test="openid != null">
+        and openid = #{openid}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_order
     where order_id = #{orderId,jdbcType=VARCHAR}
@@ -38,9 +74,9 @@
       tran_money, prepay_id, openid, 
       business_id, evaluate_id)
     values (#{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{dishId,jdbcType=VARCHAR},
-      #{addTime,jdbcType=TIMESTAMP}, #{orderPice,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{orderPice,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR},
       #{orderStatus,jdbcType=TINYINT}, #{weixingTranid,jdbcType=VARCHAR}, #{tranTime,jdbcType=TIMESTAMP}, 
-      #{tranMoney,jdbcType=TIMESTAMP}, #{prepayId,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{tranMoney,jdbcType=DOUBLE}, #{prepayId,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR},
       #{businessId,jdbcType=INTEGER}, #{evaluateId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Order">
@@ -103,7 +139,7 @@
         #{addTime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderPice != null">
-        #{orderPice,jdbcType=REAL},
+        #{orderPice,jdbcType=DOUBLE},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -118,7 +154,7 @@
         #{tranTime,jdbcType=TIMESTAMP},
       </if>
       <if test="tranMoney != null">
-        #{tranMoney,jdbcType=TIMESTAMP},
+        #{tranMoney,jdbcType=DOUBLE},
       </if>
       <if test="prepayId != null">
         #{prepayId,jdbcType=VARCHAR},
@@ -150,7 +186,7 @@
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderPice != null">
-        order_pice = #{orderPice,jdbcType=REAL},
+        order_pice = #{orderPice,jdbcType=DOUBLE},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -165,7 +201,7 @@
         tran_time = #{tranTime,jdbcType=TIMESTAMP},
       </if>
       <if test="tranMoney != null">
-        tran_money = #{tranMoney,jdbcType=TIMESTAMP},
+        tran_money = #{tranMoney,jdbcType=DOUBLE},
       </if>
       <if test="prepayId != null">
         prepay_id = #{prepayId,jdbcType=VARCHAR},
@@ -188,12 +224,12 @@
       user_id = #{userId,jdbcType=INTEGER},
       dish_id = #{dishId,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      order_pice = #{orderPice,jdbcType=REAL},
+      order_pice = #{orderPice,jdbcType=DOUBLE},
       remark = #{remark,jdbcType=VARCHAR},
       order_status = #{orderStatus,jdbcType=TINYINT},
       weixing_tranid = #{weixingTranid,jdbcType=VARCHAR},
       tran_time = #{tranTime,jdbcType=TIMESTAMP},
-      tran_money = #{tranMoney,jdbcType=TIMESTAMP},
+      tran_money = #{tranMoney,jdbcType=DOUBLE},
       prepay_id = #{prepayId,jdbcType=VARCHAR},
       openid = #{openid,jdbcType=VARCHAR},
       business_id = #{businessId,jdbcType=INTEGER},

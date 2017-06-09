@@ -9,6 +9,7 @@ import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -68,6 +69,12 @@ public class ArticleController {
         else {
             return  ResultUtil.error(-1,"文章不存在");
         }
+    }
+
+    @ApiOperation("更新文章接口")
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Result alter(@RequestBody UserArticle userArticle){
+            return mArticleService.update(userArticle);
     }
 
     @ApiOperation("上传文章接口")

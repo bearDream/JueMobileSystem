@@ -11,7 +11,7 @@ public class Order {
 
     private Date addTime;
 
-    private Float orderPice;
+    private Double orderPice;
 
     private String remark;
 
@@ -21,7 +21,7 @@ public class Order {
 
     private Date tranTime;
 
-    private Date tranMoney;
+    private Double tranMoney;
 
     private String prepayId;
 
@@ -63,11 +63,11 @@ public class Order {
         this.addTime = addTime;
     }
 
-    public Float getOrderPice() {
+    public Double getOrderPice() {
         return orderPice;
     }
 
-    public void setOrderPice(Float orderPice) {
+    public void setOrderPice(Double orderPice) {
         this.orderPice = orderPice;
     }
 
@@ -103,11 +103,11 @@ public class Order {
         this.tranTime = tranTime;
     }
 
-    public Date getTranMoney() {
+    public Double getTranMoney() {
         return tranMoney;
     }
 
-    public void setTranMoney(Date tranMoney) {
+    public void setTranMoney(Double tranMoney) {
         this.tranMoney = tranMoney;
     }
 

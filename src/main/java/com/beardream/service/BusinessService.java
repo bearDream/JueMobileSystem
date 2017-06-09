@@ -179,7 +179,7 @@ public class BusinessService {
 
         // 遍历商家 查询商家拥有的菜品信息
         for (Business business : businessList) {
-            List<DishBusiness> dishBusinessList = mBussinessMapper.findBusinessDishBySelective(bodyStatus, business.getBusinessId());
+            List<DishBusiness> dishBusinessList = mBussinessMapper.findBusinessAllDishBySelective(bodyStatus, business.getBusinessId());
             // 最多设置两个菜品，但以防查出来的该商家只有1个或零个菜品而造成数组越界问题
             if (dishBusinessList.size() == 0) continue;
             if (dishBusinessList.size() ==1) {

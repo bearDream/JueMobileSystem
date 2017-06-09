@@ -176,6 +176,22 @@
     order by add_time desc
   </select>
 
+  <!-- 根据用户所处状态获取指定商家拥有的所有菜品 -->
+  <select id="findBusinessAllDishBySelective" resultMap="BusinessDishResultMap">
+    SELECT
+    d.dish_id, d.dish_name, d.dish_image, dish_rec_image, db.business_id, db.dish_business_id, d.dish_desc, db.addtime, d.dish_nutrition_status, db.dish_price
+    from t_dish d inner join t_dish_business db on d.dish_id=db.dish_id
+    <where>
+      <if test="dishNutritionStatus != null">
+        and dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
   <!-- 根据指定商家id获取菜品信息 -->
   <select id="findBusinessDishInfoBySelective" resultMap="BusinessDishResultMap">
     SELECT

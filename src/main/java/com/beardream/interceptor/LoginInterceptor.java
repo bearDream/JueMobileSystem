@@ -42,9 +42,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // 开发阶段改为自动登录，不需要每次请求登录
         if (env.equals("dev")){
-            User user = new User();
             Gson gson = new Gson();
-            user = mUserMapper.selectByPrimaryKey(13);
+            User user = mUserMapper.selectByPrimaryKey(13);
             user.setUsername(MimeUtility.decodeText(user.getUsername()));
             System.out.println(user.getUsername());
             session.setAttribute(Constants.USER, gson.toJson(user));

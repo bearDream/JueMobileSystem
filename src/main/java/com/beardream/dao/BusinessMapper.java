@@ -35,6 +35,9 @@ public interface BusinessMapper {
     // 根据用户信息获取商家拥有的菜品信息
     List<DishBusiness> findBusinessDishBySelective(@Param("dishNutritionStatus") Integer dishNutritionStatus, @Param("businessId") Integer businessId);
 
+    // 根据用户信息获取商家拥有的所有菜品信息
+    List<DishBusiness> findBusinessAllDishBySelective(@Param("dishNutritionStatus") Integer dishNutritionStatus, @Param("businessId") Integer businessId);
+
     // 获取指定商家id的具体菜品信息
     List<DishBusiness> findBusinessDishInfoBySelective(@Param("dishNutritionStatus") Integer dishNutritionStatus, @Param("businessId") Integer businessId);
 

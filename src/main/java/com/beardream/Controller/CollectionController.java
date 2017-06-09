@@ -58,17 +58,8 @@ public class CollectionController {
 
     @ApiOperation("添加收藏")
     @PostMapping
-    public Result post(UserCollection userCollection) {
-        int result;
-        List<UserCollection> u = mUserCollectionMapper.findBySelective(userCollection);
-        if (u.size() > 0)
-            return ResultUtil.error(-1, "添加失败，收藏已存在");
-        userCollection.setAddTime(new Date());
-        result = mUserCollectionMapper.insertSelective(userCollection);
-        if (result > 0)
-            return ResultUtil.success("添加成功");
-        else
-            return ResultUtil.error(-1, "添加失败");
+    public @ResponseBody Result post(@RequestBody UserCollection userCollection, HttpSession session) {
+        return mCollectionService.add(userCollection, session);
     }
 
 

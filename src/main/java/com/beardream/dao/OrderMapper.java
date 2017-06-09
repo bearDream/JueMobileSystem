@@ -4,6 +4,8 @@ import com.beardream.model.Order;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Mapper
 public interface OrderMapper {
@@ -13,7 +15,9 @@ public interface OrderMapper {
 
     int insertSelective(Order record);
 
-    Order selectByPrimaryKey(Integer orderId);
+    Order selectByPrimaryKey(String orderId);
+
+    List<Order> findBySelective(Order record);
 
     int updateByPrimaryKeySelective(Order record);
 

@@ -1,17 +1,18 @@
 package com.beardream.service;
 
+import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
+import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.EvaluateMapper;
 import com.beardream.dao.UserCollectionMapper;
-import com.beardream.model.Dish;
-import com.beardream.model.Log;
-import com.beardream.model.Nutrition;
-import com.beardream.model.UserCollection;
+import com.beardream.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,15 +33,19 @@ public class CollectionService {
 
 
     //添加收藏
-    public String add(UserCollection userCollection) {
+    public Result add(UserCollection userCollection, HttpSession session) {
         int result;
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        List<UserCollection> u = mUserCollectionMapper.findBySelective(userCollection);
+        if (u.size() > 0)
+            return ResultUtil.error(-1, "添加失败，收藏已存在");
         userCollection.setAddTime(new Date());
+        userCollection.setUserId(user.getUserId());
         result = mUserCollectionMapper.insertSelective(userCollection);
-        if (result > 0) {
-            return "收藏成功";
-        } else {
-            return "收藏失败";
-        }
+        if (result > 0)
+            return ResultUtil.success("添加成功");
+        else
+            return ResultUtil.error(-1, "添加失败");
     }
 
     /*删除收藏

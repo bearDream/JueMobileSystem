@@ -34,6 +34,27 @@ public class UserArticle {
 
     private String title;
 
+    // 收藏表的信息
+    private Integer collectionId;
+
+    private Integer collectionType;
+
+    public Integer getCollectionId() {
+        return collectionId;
+    }
+
+    public void setCollectionId(Integer collectionId) {
+        this.collectionId = collectionId;
+    }
+
+    public Integer getCollectionType() {
+        return collectionType;
+    }
+
+    public void setCollectionType(Integer collectionType) {
+        this.collectionType = collectionType;
+    }
+
     public String getContent() {
         return content;
     }

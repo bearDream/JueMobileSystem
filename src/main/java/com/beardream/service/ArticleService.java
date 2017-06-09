@@ -90,4 +90,14 @@ public class ArticleService {
         return ResultUtil.success("发表失败，请稍候重试");
     }
 
+    public Result update(UserArticle userArticle) {
+        if (userArticle.getPraise() == 1){
+            int result = mArticleMapper.praiseArticleByPrimaryKey(userArticle);
+            if (result == 1){
+                return ResultUtil.success("点赞成功");
+            }
+            return ResultUtil.success("点赞失败");
+        }
+        return null;
+    }
 }

@@ -28,4 +28,7 @@ public interface ArticleMapper {
 
     //连接查询用户和文章
     List<UserArticle> findUserArticleBySelective (UserArticle userArticle);
+
+    //对文章进行点赞
+    Integer praiseArticleByPrimaryKey (UserArticle userArticle);
 }
