@@ -69,7 +69,7 @@ public class BuisnessController {
 
     @ApiOperation("商家获取自己的信息")
     @GetMapping("/getUserBusiness")
-    public Result getBusinessUser(Business business, HttpSession session) {
+    public Result getUserBusiness(Business business, HttpSession session) {
         // 获取到商家的基本信息和该商家的排队情况
         // 商家信息（包括是否开放了取号功能） + 排队的队列（有效的）
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);

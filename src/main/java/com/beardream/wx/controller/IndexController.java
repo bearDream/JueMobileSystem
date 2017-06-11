@@ -7,11 +7,11 @@ import com.beardream.Utils.TextUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.model.Result;
 import com.beardream.model.User;
+import com.beardream.wx.handler.MiniHandler;
 import com.google.gson.Gson;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.http.HttpResponse;
@@ -29,6 +29,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -47,6 +48,10 @@ public class IndexController {
     String appid;
     @Value("${appSecret}")
     String appSecret;
+    @Value("${miniAppId}")
+    String miniAppId;
+    @Value("${miniSecret}")
+    String miniSecret;
 
     @Autowired
     private UserMapper mUserMapper;
@@ -110,8 +115,6 @@ public class IndexController {
         //出错的情况
         return new ModelAndView(redirectView);
     }
-
-
 
     public boolean login(String openid,  HttpSession session) throws UnsupportedEncodingException {
         logger.info("this is loginController");
