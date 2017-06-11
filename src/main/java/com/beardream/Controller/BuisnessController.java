@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,8 +126,8 @@ public class BuisnessController {
     }
 
     @ApiOperation("更新商家")
-    @PutMapping
-    public Result put(Business business){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Result put(@RequestBody Business business){
         int result;
         System.out.println(business.getBusinessId());
         business.setAddTime(new Date());
