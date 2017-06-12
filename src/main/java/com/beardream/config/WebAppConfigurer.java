@@ -28,7 +28,9 @@ public class WebAppConfigurer extends WebMvcConfigurerAdapter {
                 .excludePathPatterns(Constants.TOKEN_URL)
                 .excludePathPatterns(Constants.FILE_URL)
                 .excludePathPatterns(Constants.MENU_URL)
-                .excludePathPatterns(Constants.PAYNOTIFY_URL);
+                .excludePathPatterns(Constants.PAYNOTIFY_URL)
+                .excludePathPatterns(Constants.MINI_LOGIN_URL)
+                .excludePathPatterns(Constants.MINI_ISLOGIN_URL);
         super.addInterceptors(registry);
     }
 

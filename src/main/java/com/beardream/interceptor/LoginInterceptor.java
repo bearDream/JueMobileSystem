@@ -49,7 +49,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             session.setAttribute(Constants.USER, gson.toJson(user));
         }else {
             //生产模式下，执行下面代码判断是否登录
-            if (session.getAttribute(Constants.USER) == null){
+            if (session.getAttribute(Constants.USER) == null && request.getHeader("thirdSession") == null){
                 //未登录
                 try {
                     out = response.getWriter();

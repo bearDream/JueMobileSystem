@@ -115,16 +115,15 @@
       tel, real_name, age, 
       sex, id_card, bank_card, 
       address, weixin, openid, 
-      logins, alipay, status, role_id, body_status, headImgUrl, remark, point
+      logins, alipay, status, role_id, body_status, headImgUrl, remark, point,
       type, level)
     values (#{userId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{sex,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
       #{logins,jdbcType=INTEGER}, #{alipay,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{type,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{roleId,jdbcType=INTEGER},
-      #{bodyStatus,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
-      ,#{point,jdbcType=INTEGER})
+      #{roleId,jdbcType=INTEGER}, #{bodyStatus,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{point,jdbcType=INTEGER},#{type,jdbcType=INTEGER},#{level,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.User">
     insert into t_user

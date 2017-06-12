@@ -6,20 +6,26 @@ import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.RoleMapper;
+import com.beardream.dao.UserMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
 import com.beardream.model.Number;
 import com.beardream.service.BusinessService;
+import com.beardream.service.CommonService;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +43,13 @@ public class BuisnessController {
     private  BusinessMapper businessMapper;
 
     @Autowired
+    private UserMapper mUserMapper;
+
+    @Autowired
     private BusinessService mBusinessService;
+
+    @Autowired
+    private CommonService mCommonService;
 
     @ApiOperation("获取单个商家信息")
     @GetMapping
@@ -69,10 +81,22 @@ public class BuisnessController {
 
     @ApiOperation("商家获取自己的信息")
     @GetMapping("/getUserBusiness")
-    public Result getUserBusiness(Business business, HttpSession session) {
+    public Result getUserBusiness(Business business, HttpSession session, @RequestHeader HttpHeaders headers) {
         // 获取到商家的基本信息和该商家的排队情况
         // 商家信息（包括是否开放了取号功能） + 排队的队列（有效的）
-        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        User user = null;
+        List headList = headers.get("thirdSession");
+        String thirdSession = String.valueOf(headList.get(0));
+        System.out.println(thirdSession);
+        if (thirdSession != null){
+            Result res = mCommonService.getUserInfoByThirdSession((Map) session.getAttribute(thirdSession));
+            if(res.getCode() == -1){
+                return res;
+            }
+            user = (User) res.getData();
+        }else {
+            user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        }
         business.setUserId(user.getUserId());
         Result businessResult = mBusinessService.find(business);
 
@@ -99,7 +123,23 @@ public class BuisnessController {
 
     @ApiOperation("添加商家")
     @PostMapping
-    public Result post(Business business){
+    public Result post(Business business,
+                       @RequestHeader HttpHeaders headers,
+                       HttpSession session){
+        User user = null;
+        List headList = headers.get("thirdSession");
+        String thirdSession = String.valueOf(headList.get(0));
+        if (thirdSession != null){
+            Result res = mCommonService.getUserInfoByThirdSession((Map) session.getAttribute(thirdSession));
+            if(res.getCode() == -1){
+                return res;
+            }
+            user = (User) res.getData();
+        }else {
+            user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        }
+
+
         int result;
         if (business == null)
             return ResultUtil.error(-1,"没有参数");
@@ -107,6 +147,7 @@ public class BuisnessController {
         if (b.size()>0)
             return  ResultUtil.error(-1,"添加失败，商家已存在");
         business.setAddTime(new Date());
+        business.setUserId(user.getUserId());
         result = businessMapper.insertSelective(business);
         if (result > 0 )
             return  ResultUtil.success("添加成功");

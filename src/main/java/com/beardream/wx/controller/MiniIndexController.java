@@ -5,32 +5,26 @@ import com.beardream.dao.UserMapper;
 import com.beardream.model.MiniSession;
 import com.beardream.model.Result;
 import com.beardream.model.User;
+import com.beardream.model.WxUser;
+import com.beardream.service.CommonService;
 import com.beardream.wx.handler.MiniHandler;
 import com.google.gson.Gson;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
-import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by laxzhang on 2017/5/12.
@@ -54,6 +48,9 @@ public class MiniIndexController {
     @Autowired
     private UserMapper mUserMapper;
 
+    @Autowired
+    private CommonService mCommonService;
+
     private final static Logger logger = LoggerFactory.getLogger("MiniIndexController.class");
 
     @GetMapping
@@ -68,17 +65,23 @@ public class MiniIndexController {
         System.out.println("获取到用户的信息：");
         System.out.println(result);
         MiniSession miniSession = new Gson().fromJson(result, MiniSession.class);
-        System.out.println(miniSession.getSession_key());
-        System.out.println(miniSession.getOpenid());
+
+        List is_reg = mUserMapper.findSelective(new User(miniSession.getOpenid()));
+
+        // 根据openid查找该用户是否注册过，若没有注册返回错误码1，前端将再次发请求将数据注册进来
+        if (is_reg.size() == 0)
+            return ResultUtil.error(2,"请先注册",miniSession.getOpenid());
+
         // 4、生成三方session并存储微信返回的session，以三方session为key，session_key + openid为value写入session存储
 
         String thirdSession = MD5.GetMD5Code(miniSession.getSession_key());
 
-        List info = new ArrayList();
-        info.add(miniSession.getSession_key());
-        info.add(miniSession.getOpenid());
+        Map<String, Object> info = new HashMap<>();
+        info.put("session_key", miniSession.getSession_key());
+        info.put("openid", miniSession.getOpenid());
         session.setAttribute(thirdSession, info);
         session.setMaxInactiveInterval(miniSession.getExpires_in());
+        System.out.println(session.getAttribute(thirdSession));
         // 5、将三方session返回给用户
         return ResultUtil.success(thirdSession);
 
@@ -90,15 +93,39 @@ public class MiniIndexController {
     @GetMapping("/isLogin")
     public Result isLogin(@RequestParam(value="thirdSession", required=false) String thirdSession, HttpSession session){
 
-        // 1、用户将三方session写入storage
         if (session.getAttribute(thirdSession) == null)
             return ResultUtil.error(-1,"未登录");
 
-        MiniSession miniSession = new Gson().fromJson((String) session.getAttribute(thirdSession), MiniSession.class);
-        User user = new User();
-        user.setOpenid(miniSession.getOpenid());
-        User userInfo = mUserMapper.findSelective(user).get(0);
+        Result res = mCommonService.getUserInfoByThirdSession((Map) session.getAttribute(thirdSession));
+        if(res.getCode() == -1){
+            return res;
+        }
+
+        User user = (User) res.getData();
         // 2、 后续根据三方session来查看用户是否登陆
-        return ResultUtil.success(userInfo);
+        return res;
+    }
+
+    // 将用户信息注册写入数据库
+    @PostMapping("/register")
+    public Result register(WxUser wxUser){
+
+        User user =  new User();
+        try {
+            user.setUsername(MimeUtility.encodeText(wxUser.getNickName()));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResultUtil.error(-1,"注册失败");
+        }
+        user.setOpenid(wxUser.getOpenid());
+        user.setSex(wxUser.getGender());
+        user.setLogins(1);
+        user.setBodyStatus((byte) 0);
+        user.setAddress(wxUser.getCountry() + wxUser.getProvince() + wxUser.getCity());
+        int res = mUserMapper.insert(user);
+        if (res != 0)
+            return ResultUtil.success("注册成功");
+
+        return ResultUtil.error(-1,"注册失败");
     }
 }

@@ -45,6 +45,12 @@ public class User {
 
     private Byte bodyStatus;
 
+    public User() {
+    }
+    public User(String openid) {
+        this.openid = openid;
+    }
+
     public Integer getPoint() {
         return point;
     }
