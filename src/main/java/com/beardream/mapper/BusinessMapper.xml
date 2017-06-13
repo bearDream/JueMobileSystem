@@ -65,6 +65,13 @@
     content
   </sql>
 
+  <select id="findBusinessFuzzyList" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    <include refid="Blob_Column_List" />
+    from t_business
+    where name LIKE concat(concat('%',#{name}),'%')
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />
