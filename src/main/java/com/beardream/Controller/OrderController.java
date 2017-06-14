@@ -34,10 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by soft01 on 2017/5/27.
@@ -157,6 +154,16 @@ public class OrderController {
             return ResultUtil.error(-1,"订单id不能为空");
 
         return mOrderService.queryOrderInfo(orderId);
+    }
+
+    @GetMapping("/orders")
+    public Result queryAllOrders(HttpSession session){
+
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+
+        List<Order> orderList = mOrderService.queryAllOrders(user);
+
+        return ResultUtil.success(orderList);
     }
 }
 

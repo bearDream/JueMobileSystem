@@ -5,10 +5,7 @@ import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.DishBusinessMapper;
 import com.beardream.dao.DishMapper;
 import com.beardream.dao.OrderMapper;
-import com.beardream.model.Business;
-import com.beardream.model.DishBusiness;
-import com.beardream.model.Order;
-import com.beardream.model.Result;
+import com.beardream.model.*;
 import com.github.binarywang.wxpay.bean.WxPayOrderNotifyResponse;
 import com.github.binarywang.wxpay.bean.result.WxPayBaseResult;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderNotifyResult;
@@ -64,6 +61,13 @@ public class OrderService {
         if (result > 0)
             return ResultUtil.success("更新成功");
         return ResultUtil.error(-1,"更新失败");
+    }
+
+    // 查询用户的所有订单
+    public List queryAllOrders(User user){
+        Order order = new Order(user.getUserId());
+        List<Order> orders = mOrderMapper.findBySelective(order);
+        return orders;
     }
 
     public String payNotify(HttpServletRequest request, HttpServletResponse response){

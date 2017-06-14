@@ -29,6 +29,24 @@
     dish_content
   </sql>
 
+
+  <!-- 查询推荐菜品 -->
+  <select id="findRecommendList" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    <include refid="Blob_Column_List" />
+    from t_dish
+    ORDER BY add_time DESC limit 10
+  </select>
+  <!-- 模糊查询菜品 -->
+  <select id="findDishFuzzyList" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    from t_dish
+    where dish_name LIKE concat(concat('%',#{dishName}),'%')
+  </select>
+
+
   <!-- 连接查询菜品和营养价值 -->
   <select id="findDishNutrition" resultMap="BaseResultMap">
     SELECT

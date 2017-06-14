@@ -31,6 +31,12 @@ public class Order {
 
     private Integer evaluateId;
 
+    public Order() {}
+
+    public Order(Integer userId) {
+        this.userId = userId;
+    }
+
     public String getOrderId() {
         return orderId;
     }

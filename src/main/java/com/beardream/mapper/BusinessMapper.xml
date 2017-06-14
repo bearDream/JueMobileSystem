@@ -65,6 +65,15 @@
     content
   </sql>
 
+  <!-- 查询推荐商家 -->
+  <select id="findRecommendList" resultMap="ResultMapWithBLOBs">
+    SELECT
+    <include refid="Base_Column_List" />
+    <include refid="Blob_Column_List" />
+    from t_business
+    ORDER BY level DESC limit 10
+  </select>
+  <!-- 模糊查询商家信息 -->
   <select id="findBusinessFuzzyList" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />

@@ -44,6 +44,9 @@ public interface BusinessMapper {
     // 查询用户到商家的距离，单位是米
     Business findDistanceBySelective(@Param("latitude") Double latitude, @Param("longtitude") Double longtitude, @Param("businessId") Integer businessId);
 
+    // 推荐商家查询
+    List<Business> findRecommendList();
+
     // 模糊查询商家
     List<Business> findBusinessFuzzyList(@Param("name") String name);
 }

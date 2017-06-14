@@ -1,7 +1,9 @@
 package com.beardream.dao;
 
+import com.beardream.model.Business;
 import com.beardream.model.Dish;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +28,10 @@ public interface DishMapper {
     int updateByPrimaryKeyWithBLOBs(Dish record);
 
     int updateByPrimaryKey(Dish record);
+
+    // 推荐菜品查询
+    List<Dish> findRecommendList();
+
+    // 模糊查询菜品
+    List<Dish> findDishFuzzyList(@Param("dishName") String dishName);
 }
