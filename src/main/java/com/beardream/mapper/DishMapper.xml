@@ -9,6 +9,12 @@
     <result column="dish_content" jdbcType="VARCHAR" property="dishContent" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
+
+    <!-- 菜品相关营养价值 -->
+    <result column="heat" jdbcType="VARCHAR" property="heat" />
+    <result column="grease" jdbcType="VARCHAR" property="grease" />
+    <result column="sugar_content" jdbcType="VARCHAR" property="sugarContent" />
+
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
   </resultMap>
@@ -108,14 +114,16 @@
     </where>
     order by d.add_time desc
   </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
-    <include refid="Base_Column_List" />
+    <include refid="Dish_Nutrition_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_dish
+    from t_dish d INNER JOIN t_nutrition n on d.nurtrition_id=n.nurtrition_id
     where dish_id = #{dishId,jdbcType=INTEGER}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dish
     where dish_id = #{dishId,jdbcType=INTEGER}
