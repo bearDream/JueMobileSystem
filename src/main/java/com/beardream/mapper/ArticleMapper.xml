@@ -38,7 +38,7 @@
     FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id left JOIN t_collection c on a.article_id=c.business_dish_id
     <where>
       <if test="userId != null">
-        and user_id = #{userId}
+        and a.user_id = #{userId}
       </if>
       <if test="username != null">
         and username = #{username}

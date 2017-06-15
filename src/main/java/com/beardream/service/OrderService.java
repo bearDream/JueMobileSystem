@@ -48,6 +48,10 @@ public class OrderService {
     @Resource(name = "wxPayService")
     private WxPayService mWxPayService;
 
+    public Order queryByOrderId(String orderId){
+        return mOrderMapper.selectByPrimaryKey(orderId);
+    }
+
     public Result order(Order order){
         order.setOrderStatus((byte) 0);
         int res = mOrderMapper.insertSelective(order);

@@ -100,4 +100,10 @@ public class ArticleService {
         }
         return null;
     }
+
+    public List getOwnArticle(User user) {
+        UserArticle userArticle = new UserArticle(user.getUserId());
+        List<UserArticle> list = mArticleMapper.findUserArticleBySelective(userArticle);
+        return list;
+    }
 }

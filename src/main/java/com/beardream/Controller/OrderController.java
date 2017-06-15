@@ -63,6 +63,7 @@ public class OrderController {
         order.setAddTime(new Date());
         Result result = null;
         if (!TextUtil.isEmpty(order.getOrderId())){
+            // 若是用户第一次下单，则应该生成订单号
             String orderNo = "";
             orderNo = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             orderNo += user.getUserId();
@@ -70,8 +71,10 @@ public class OrderController {
             order.setOrderId(orderNo);
             result = mOrderService.order(order);
         }else {
+            // 若是用户再次发起支付请求，则应该根据之前的订单号查询到订单内容
             order.setOrderStatus((byte) 0);
             result = mOrderService.update(order);
+            order = mOrderService.queryByOrderId(order.getOrderId());
         }
 
         // 若订单入库成功，则调用微信api调用统一下单

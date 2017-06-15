@@ -39,6 +39,13 @@ public class UserArticle {
 
     private Integer collectionType;
 
+    public UserArticle() {
+    }
+
+    public UserArticle(Integer userId) {
+        this.userId = userId;
+    }
+
     public Integer getCollectionId() {
         return collectionId;
     }

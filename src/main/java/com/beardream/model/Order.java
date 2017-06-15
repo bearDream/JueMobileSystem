@@ -1,6 +1,7 @@
 package com.beardream.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private String orderId;
@@ -31,10 +32,62 @@ public class Order {
 
     private Integer evaluateId;
 
+    // 与订单相关的商家信息
+    private String name;
+
+    private String address;
+
+    private String tel;
+
+    private String businessImage;
+
+    // 与订单相关的菜品信息
+    private List<Dish> dishs;
+
     public Order() {}
 
     public Order(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getBusinessImage() {
+        return businessImage;
+    }
+
+    public void setBusinessImage(String businessImage) {
+        this.businessImage = businessImage;
+    }
+
+    public List<Dish> getDishs() {
+        return dishs;
+    }
+
+    public void setDishs(List<Dish> dishs) {
+        this.dishs = dishs;
     }
 
     public String getOrderId() {

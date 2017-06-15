@@ -1,5 +1,7 @@
 package com.beardream.Controller;
 
+import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.ArticleMapper;
@@ -33,7 +35,8 @@ public class ArticleController {
 
     @ApiOperation("分页获取用户图文")
     @GetMapping
-    public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
+    public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
                           UserArticle userArticle){
         Map resultPage = mArticleService.getPage(userArticle,pageNum,pageSize);
         try {
@@ -48,6 +51,16 @@ public class ArticleController {
         else {
             return ResultUtil.error(-1,"系统错误");
         }
+    }
+
+    @ApiOperation("获取用户发布的图文")
+    @GetMapping("/own")
+    public Result getPage(HttpSession session){
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        List<UserArticle> userArticleList = mArticleService.getOwnArticle(user);
+        if (userArticleList.size() == 0)
+            return ResultUtil.error(-1,"您还没发布任何图文呢");
+        return ResultUtil.success(userArticleList);
     }
 
     @ApiOperation("获取一篇文章的详情")

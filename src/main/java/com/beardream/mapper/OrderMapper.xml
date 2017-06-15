@@ -14,11 +14,20 @@
     <result column="tran_money" jdbcType="DOUBLE" property="tranMoney" />
     <result column="prepay_id" jdbcType="VARCHAR" property="prepayId" />
     <result column="openid" jdbcType="VARCHAR" property="openid" />
+
+    <result column="business_image" jdbcType="VARCHAR" property="businessImage" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+
     <result column="business_id" jdbcType="INTEGER" property="businessId" />
     <result column="evaluate_id" jdbcType="INTEGER" property="evaluateId" />
   </resultMap>
   <sql id="Base_Column_List">
     *
+  </sql>
+  <sql id="Base_Business_Column_List">
+    o.*, b.name, b.address, b.tel, b.business_image
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -29,14 +38,14 @@
 
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
-    <include refid="Base_Column_List" />
-    from t_order
+    <include refid="Base_Business_Column_List" />
+    from t_order o INNER JOIN t_business b on o.business_id=b.business_id
     <where>
       <if test="orderId != null">
         and order_id = #{orderId}
       </if>
       <if test="userId != null">
-        and user_id = #{userId}
+        and o.user_id = #{userId}
       </if>
       <if test="dishId != null">
         and dish_id = #{dishId}
@@ -57,10 +66,10 @@
         and openid = #{openid}
       </if>
       <if test="businessId != null">
-        and business_id = #{businessId}
+        and o.business_id = #{businessId}
       </if>
     </where>
-    order by add_time desc
+    order by o.add_time desc
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

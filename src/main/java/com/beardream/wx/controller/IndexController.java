@@ -62,7 +62,11 @@ public class IndexController {
     private final static Logger logger = LoggerFactory.getLogger("IndexController.class");
 
     @GetMapping()
-    public ModelAndView index(@RequestParam(value="url", required=false) String url,@RequestParam(value="code", required=false) String code, HttpSession session, HttpServletRequest request, HttpResponse response) throws UnsupportedEncodingException {
+    public ModelAndView index(@RequestParam(value="url", required=false) String url,
+                              @RequestParam(value="code", required=true) String code,
+                              HttpSession session,
+                              HttpServletRequest request,
+                              HttpResponse response) throws UnsupportedEncodingException {
 
         logger.info("domain={}", domain);
 
@@ -147,7 +151,7 @@ public class IndexController {
                 int result = mUserMapper.insertSelective(user);
                 if (result > 0){
                     session.setAttribute(Constants.USER, gson.toJson(user));
-                    session.setMaxInactiveInterval(-1);// 永远不会过期
+                    session.setMaxInactiveInterval(60*60*24*1);// 一天的有效
                 }else {
                     //注册失败，返回到错误页面
                     return false;
