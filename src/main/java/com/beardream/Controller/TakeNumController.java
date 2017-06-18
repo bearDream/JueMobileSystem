@@ -176,7 +176,7 @@ public class TakeNumController {
 
             // 对队列中的其他号进行推送
             for (Number remainList : remainLists) {
-                pushMsg(remainList.getNumId(), curretNum, remainList.getUserId(), remainList.getPeopleNum(), remainList.getBusinessId());
+                pushMsg(remainList.getNumber(), curretNum, remainList.getUserId(), remainList.getPeopleNum(), remainList.getBusinessId());
             }
 
             return ResultUtil.success(result.getMsg());

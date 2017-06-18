@@ -17,6 +17,36 @@ public class Number {
 
     private Date addTime;
 
+    // 用户信息
+    private String username;
+
+    private String headImgUrl;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
+
+    public Number() {
+    }
+
+    public Number(Integer businessId, Date addTime, Integer number) {
+        this.businessId = businessId;
+        this.addTime = addTime;
+        this.number = number;
+    }
+
     public Integer getNumId() {
         return numId;
     }

@@ -13,6 +13,9 @@
   <sql id="Base_Column_List">
     num_id, user_id, business_id, number, is_expired, people_num, add_time
   </sql>
+  <sql id="User_Column_List">
+    u.user_id, username, headImgUrl
+  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -22,14 +25,15 @@
 
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
-    <include refid="Base_Column_List" />
-    from t_number
+    num_id, n.user_id, business_id, number, is_expired, people_num, n.add_time,
+    <include refid="User_Column_List" />
+    from t_number n left join t_user u on n.user_id = u.user_id
     <where>
       <if test="numId != null">
         and num_id = #{numId,jdbcType=INTEGER}
       </if>
       <if test="userId != null">
-        and user_id = #{userId,jdbcType=VARCHAR}
+        and n.user_id = #{userId,jdbcType=VARCHAR}
       </if>
       <if test="businessId != null">
         and business_id = #{businessId}
@@ -44,10 +48,10 @@
         and people_num = #{peopleNum,jdbcType=VARCHAR}
       </if>
       <if test="addTime != null">
-        AND DATE(add_time)=#{addTime,jdbcType=TIMESTAMP}
+        AND DATE(n.add_time)=#{addTime,jdbcType=TIMESTAMP}
       </if>
     </where>
-    order by add_time desc
+    order by n.add_time desc
   </select>
 
   <!-- 查询过号的后面的所有号 -->

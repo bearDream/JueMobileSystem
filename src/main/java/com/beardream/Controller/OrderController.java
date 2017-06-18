@@ -168,5 +168,15 @@ public class OrderController {
 
         return ResultUtil.success(orderList);
     }
+
+    @GetMapping("/checked")
+    public Result check(@Param(value = "orderId") String orderId){
+
+        if (!TextUtil.isEmpty(orderId)){
+            ResultUtil.error(-1,"订单号不能为空！");
+        }
+
+        return mOrderService.checked(orderId);
+    }
 }
 

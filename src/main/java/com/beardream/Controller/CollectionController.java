@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +77,13 @@ public class CollectionController {
         userCollection.setUserId(user.getUserId());
         userCollection.setCollectionType(collectionType);
         // 根据不同的类型拿不同的收藏集合  1：菜品  2：商家 3.文章
-        List<UserCollection> collectionList = mCollectionService.getCollectionList(userCollection, pageNum, pageSize);
+        List<UserCollection> collectionList = null;
+        try {
+            collectionList = mCollectionService.getCollectionList(userCollection, pageNum, pageSize);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResultUtil.error(-1,"转码失败");
+        }
         if (collectionList.size() > 0){
             return ResultUtil.success(collectionList);
         }

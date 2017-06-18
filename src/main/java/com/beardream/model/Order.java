@@ -46,6 +46,11 @@ public class Order {
 
     public Order() {}
 
+    public Order(String orderId, Byte orderStatus) {
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+    }
+
     public Order(Integer userId) {
         this.userId = userId;
     }

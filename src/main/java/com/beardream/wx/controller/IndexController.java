@@ -149,6 +149,8 @@ public class IndexController {
                 user.setHeadImgUrl(wxMpUser.getHeadImgUrl());
                 user.setRemark("微信自动注册");
                 int result = mUserMapper.insertSelective(user);
+                session.setAttribute(Constants.USER, gson.toJson(user));
+                session.setMaxInactiveInterval(-1);// 永远不会过期
                 if (result > 0){
                     session.setAttribute(Constants.USER, gson.toJson(user));
                     session.setMaxInactiveInterval(60*60*24*1);// 一天的有效

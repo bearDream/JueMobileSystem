@@ -8,11 +8,13 @@ import com.beardream.dao.UserCollectionMapper;
 import com.beardream.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +65,7 @@ public class CollectionService {
         }
     }
 
-    public List getCollectionList(UserCollection userCollection, int pageNum, int pageSize){
+    public List getCollectionList(UserCollection userCollection, int pageNum, int pageSize) throws UnsupportedEncodingException {
         // 1、查询出收藏表基本信息
         List<UserCollection> collectionList =mUserCollectionMapper.findBySelective(userCollection);
         // 2、根据基本信息中的collection_type，business_dish_id连接菜品/商家/文章 进行查询
@@ -79,6 +81,7 @@ public class CollectionService {
                 // 查找文章的评论数量
                 for (UserCollection collection : articleCollection) {
                     collection.setComment(mEvaluateMapper.findArticleEvaluate(collection.getArticleId(), 3).size());
+                    collection.setArticleUsername(MimeUtility.decodeText(collection.getArticleUsername()));
                 }
                 return articleCollection;
             default:

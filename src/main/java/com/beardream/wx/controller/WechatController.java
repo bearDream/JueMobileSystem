@@ -130,54 +130,52 @@ public class WechatController {
         List<WxMenuButton> buttonOneList = new ArrayList<WxMenuButton>();
         WxMenuButton button = new WxMenuButton();
         // 加入第一个子菜单
-        WxMenuButton buttonOne_1 = new WxMenuButton();
-        buttonOne_1.setName("菠萝");
-        buttonOne_1.setUrl("https://kdt.im/c_cvBr");
-        buttonOne_1.setType("view");
-        buttonOneList.add(buttonOne_1);
+//        WxMenuButton buttonOne_1 = new WxMenuButton();
+//        buttonOne_1.setName("菠萝");
+//        buttonOne_1.setUrl("https://kdt.im/c_cvBr");
+//        buttonOne_1.setType("view");
+//        buttonOneList.add(buttonOne_1);
         // 加入第二个子菜单
-        WxMenuButton buttonOne_2 = new WxMenuButton();
-        buttonOne_2.setName("木瓜");
-        buttonOne_2.setUrl("https://kdt.im/r8BKvr");
-        buttonOne_2.setType("view");
-        buttonOneList.add(buttonOne_2);
+//        WxMenuButton buttonOne_2 = new WxMenuButton();
+//        buttonOne_2.setName("木瓜");
+//        buttonOne_2.setUrl("https://kdt.im/r8BKvr");
+//        buttonOne_2.setType("view");
+//        buttonOneList.add(buttonOne_2);
         // 加入第三个子菜单
-        WxMenuButton buttonOne_3 = new WxMenuButton();
-        buttonOne_3.setName("柠檬");
-        buttonOne_3.setUrl("https://kdt.im/eAQsvr");
-        buttonOne_3.setType("view");
-        buttonOneList.add(buttonOne_3);
+//        WxMenuButton buttonOne_3 = new WxMenuButton();
+//        buttonOne_3.setName("柠檬");
+//        buttonOne_3.setUrl("https://kdt.im/eAQsvr");
+//        buttonOne_3.setType("view");
+//        buttonOneList.add(buttonOne_3);
         // 加入第四个子菜单
-        WxMenuButton buttonOne_4 = new WxMenuButton();
-        buttonOne_4.setName("芒果");
-        buttonOne_4.setUrl("https://kdt.im/cnBCvr");
-        buttonOne_4.setType("view");
-        buttonOneList.add(buttonOne_4);
+//        WxMenuButton buttonOne_4 = new WxMenuButton();
+//        buttonOne_4.setName("芒果");
+//        buttonOne_4.setUrl("https://kdt.im/cnBCvr");
+//        buttonOne_4.setType("view");
+//        buttonOneList.add(buttonOne_4);
         // 加入第五个子菜单
-        WxMenuButton buttonOne_5 = new WxMenuButton();
-        buttonOne_5.setName("牛油果");
-        buttonOne_5.setUrl("https://kdt.im/sS-Cvr");
-        buttonOne_5.setType("view");
-        buttonOneList.add(buttonOne_5);
+//        WxMenuButton buttonOne_5 = new WxMenuButton();
+//        buttonOne_5.setName("牛油果");
+//        buttonOne_5.setUrl("https://kdt.im/sS-Cvr");
+//        buttonOne_5.setType("view");
+//        buttonOneList.add(buttonOne_5);
         // 设置一级菜单
-        WxMenuButton buttonOneBase = new WxMenuButton();
-        buttonOneBase.setName("水果");
-        buttonOneBase.setSubButtons(buttonOneList);
-        buttons.add(buttonOneBase);
+//        WxMenuButton buttonOneBase = new WxMenuButton();
+//        buttonOneBase.setName("水果");
+//        buttonOneBase.setSubButtons(buttonOneList);
+//        buttons.add(buttonOneBase);
         // 设置一级菜单的第二项
         WxMenuButton buttonSecond = new WxMenuButton();
         buttonSecond.setType("view");
-//         redirectURI,  scope,  state
         buttonSecond.setUrl(mWxMpService.oauth2buildAuthorizationUrl("https://wx.chiprincess.cn/api/mobile/index", WxConsts.OAUTH2_SCOPE_USER_INFO, "STATE"));
-        buttonSecond.setName("美味蕨菜");
+        buttonSecond.setName("点击进入美味蕨菜");
         buttons.add(buttonSecond);
         // 设置三级菜单的第三项
-        WxMenuButton buttonThird = new WxMenuButton();
-        buttonThird.setType("view");
-//         redirectURI,  scope,  state
-        buttonThird.setUrl("https://kdt.im/FGEgDr");
-        buttonThird.setName("小店");
-        buttons.add(buttonThird);
+//        WxMenuButton buttonThird = new WxMenuButton();
+//        buttonThird.setType("view");
+//        buttonThird.setUrl("https://kdt.im/FGEgDr");
+//        buttonThird.setName("小店");
+//        buttons.add(buttonThird);
         wxMenu.setButtons(buttons);
         try {
             mWxMpService.getMenuService().menuCreate(wxMenu);

@@ -95,7 +95,7 @@ public class BusinessService {
 
     public Map getPage(Business business, int pageNum, int pageSize) {
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time desc");
         List<Business> businesses =mBussinessMapper.findBySelective(business);
         PageInfo page = new PageInfo(businesses);
         Map<String, Object> map = new HashMap<String, Object>();

@@ -16,6 +16,9 @@ public class Constants {
     //判断小程序是否登录的url
     public final static String MINI_ISLOGIN_URL = "/api/mobile/mini/isLogin";
 
+    // 特殊用途（抽奖等）的url
+    public final static String SPECIAL_URL = "/api/mobile/special";
+
     // 文件的url
     public final static String FILE_URL = "/api/file";
 

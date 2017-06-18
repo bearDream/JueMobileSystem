@@ -40,26 +40,26 @@ public class TakeNumService {
 
     // 取号 该方法应该为一个同步方法，避免多用户同时操作该方法,造成取号数据不准确
     public Result takeNum(Number number){
+
+        // * 先保存取号用户的id，后面需要用到
+        int userId = number.getUserId();
+        // 1、判断商家是否开放取号功能
+        Business business = mBusinessMapper.selectByPrimaryKey(number.getBusinessId());
+        if (business == null || business.getIsTake() == 0){
+            return ResultUtil.error(-1,"商家暂未开放取号，请稍候再来哦");
+        }
+
+        // 2、查出该商家当前已经取号的队列
+        number.setUserId(null);
+        List<Number> queue = mNumberMapper.findBySelective(number);
+
+        // 3、查找该用户是否已经取过号，防止用户重复取号
+        for (Number number1 : queue) {
+            if (number1.getUserId().equals(number.getUserId()) && number1.getBusinessId().equals(number.getBusinessId())){
+                return ResultUtil.error(-1,"您已在该商家取过号，不可重复取号");
+            }
+        }
         synchronized (this) {
-            // * 先保存取号用户的id，后面需要用到
-            int userId = number.getUserId();
-            // 1、判断商家是否开放取号功能
-            Business business = mBusinessMapper.selectByPrimaryKey(number.getBusinessId());
-            if (business == null || business.getIsTake() == 0){
-                return ResultUtil.error(-1,"商家暂未开放取号，请稍候再来哦");
-            }
-
-            // 2、查出该商家当前已经取号的队列
-            number.setUserId(null);
-            List<Number> queue = mNumberMapper.findBySelective(number);
-
-            // 3、查找该用户是否已经取过号，防止用户重复取号
-            for (Number number1 : queue) {
-                if (number1.getUserId().equals(number.getUserId()) && number1.getBusinessId().equals(number.getBusinessId())){
-                    return ResultUtil.error(-1,"您已在该商家取过号，不可重复取号");
-                }
-            }
-
             // 4、如果队列为空，则说明没有人排队,则直接插入即可
             if (queue.size() == 0){
                 number.setNumber(1);
@@ -79,9 +79,9 @@ public class TakeNumService {
             number.setUserId(userId);
 
             mNumberMapper.insert(number);
-            // 将取的号返回给控制器
-            return ResultUtil.success(number.getNumber().toString());
         }
+        // 将取的号返回给控制器
+        return ResultUtil.success(number.getNumber().toString());
     }
 
     // 获取用户所取的号 （顾客访问）

@@ -193,7 +193,6 @@ public class BuisnessController {
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
 
-
         // 获取取号界面的三个list，将三个list装到一个map中，1、按照距离排序  2、按照星级level排序  3、按照取号桌数排序
         // waitSort为1则按照等待人数从多到少排序，为0则按照从少到多排序,并且查出来的商家都是开通取号功能的
 

@@ -139,4 +139,13 @@ public class OrderService {
         map.put("business", business);
         return ResultUtil.success(map);
     }
+
+    public Result checked(String orderId) {
+        Order order = new Order(orderId, (byte) 2);
+
+        int res = mOrderMapper.updateByPrimaryKeySelective(order);
+        if (res == 1)
+            return ResultUtil.success("更新成功");
+        return ResultUtil.error(-1,"更新失败");
+    }
 }
