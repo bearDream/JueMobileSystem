@@ -26,6 +26,9 @@ public interface ArticleMapper {
 
     int updateByPrimaryKey(Article record);
 
+    // 查询所有文章，并且获取文章是否被某用户收藏的信息
+    List<UserArticle> findAllArticleInfoBySelective (UserArticle userArticle);
+
     //连接查询用户和文章
     List<UserArticle> findUserArticleBySelective (UserArticle userArticle);
 

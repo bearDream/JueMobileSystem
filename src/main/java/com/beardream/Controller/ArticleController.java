@@ -7,6 +7,7 @@ import com.beardream.Utils.TextUtil;
 import com.beardream.dao.ArticleMapper;
 import com.beardream.model.*;
 import com.beardream.service.ArticleService;
+import com.beardream.service.CollectionService;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,11 +28,12 @@ import java.util.Map;
 @RequestMapping("/api/mobile/article")
 @Api(value = "图文服务",description = "提供RESTful风格API的图文的增删改查服务")
 public class ArticleController {
-    @Autowired
-    private ArticleMapper articleMapper;
 
     @Autowired
     private ArticleService mArticleService;
+
+    @Autowired
+    private CollectionService mCollectionService;
 
     @ApiOperation("分页获取用户图文")
     @GetMapping
@@ -65,11 +67,15 @@ public class ArticleController {
 
     @ApiOperation("获取一篇文章的详情")
     @GetMapping("/get")
-    public Result getArticle(UserArticle userArticle){
+    public Result getArticle(UserArticle userArticle, HttpSession session){
         if (!TextUtil.isEmpty(userArticle.getArticleId())){
             return ResultUtil.error(-1,"文章ID不能为空");
         }
         UserArticle userArticle1 = mArticleService.get(userArticle);
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        userArticle1.setUserId(user.getUserId());
+
+        userArticle1 = mCollectionService.queryArticleCollect(userArticle1);
         try {
             userArticle1.setUsername(MimeUtility.decodeText(userArticle1.getUsername()));
         } catch (UnsupportedEncodingException e) {

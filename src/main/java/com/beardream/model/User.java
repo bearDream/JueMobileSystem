@@ -39,11 +39,31 @@ public class User {
 
     private Byte level;
 
+    private Double lontitude;
+
+    private Double latitude;
+
     private Integer roleId;
 
     private Integer point;
 
     private Byte bodyStatus;
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLontitude() {
+        return lontitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLontitude(Double lontitude) {
+        this.lontitude = lontitude;
+    }
 
     public User() {
     }

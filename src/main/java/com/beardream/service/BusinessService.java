@@ -38,6 +38,15 @@ public class BusinessService {
             return ResultUtil.success(businessInfo.get(0));
     }
 
+    //获取用户到商家之间的距离
+    public Result Distance(Business business, Double lontitude, Double latitude){
+        Business businessInfo = mBussinessMapper.findDistanceBySelective(latitude, lontitude, business.getBusinessId());
+        if (businessInfo == null)
+            return ResultUtil.error(-1,"商家不存在");
+        else
+            return ResultUtil.success(businessInfo);
+    }
+
     // 获取某个商家的队列信息
     public List<Number> getBusinessQue(Business business){
         return mTakeNumService.getBusinessNum(business);

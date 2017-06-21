@@ -21,6 +21,8 @@ public interface UserCollectionMapper {
 
     List<UserCollection> findBySelective(UserCollection userCollection);
 
+    UserCollection findByUserObjId(UserCollection userCollection);
+
     // 收藏连接菜品查询
     List<UserCollection> findJoinDishBySelective(UserCollection userCollection);
 

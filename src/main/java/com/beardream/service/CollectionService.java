@@ -38,6 +38,7 @@ public class CollectionService {
     public Result add(UserCollection userCollection, HttpSession session) {
         int result;
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        userCollection.setUserId(user.getUserId());
         List<UserCollection> u = mUserCollectionMapper.findBySelective(userCollection);
         if (u.size() > 0)
             return ResultUtil.error(-1, "添加失败，收藏已存在");
@@ -63,6 +64,19 @@ public class CollectionService {
         } else {
             return "删除失败";
         }
+    }
+
+    public UserArticle queryArticleCollect(UserArticle userArticle){
+        // 根据articleid和用户id查询该用户是否收藏过文章
+        UserCollection userCollection = new UserCollection(userArticle.getUserId(), userArticle.getArticleId());
+        UserCollection articles = mUserCollectionMapper.findByUserObjId(userCollection);
+        if (articles != null){
+            userArticle.setCollectionId(articles.getCollectionId());
+            return userArticle;
+        }else {
+            return userArticle;
+        }
+
     }
 
     public List getCollectionList(UserCollection userCollection, int pageNum, int pageSize) throws UnsupportedEncodingException {

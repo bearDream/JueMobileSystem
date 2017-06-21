@@ -33,9 +33,8 @@
   <!-- 用户和文章连接查询-->
   <select id="findUserArticleBySelective" resultMap="UserArticleResultMap">
     SELECT
-    u.user_id,u.username,u.tel, u.headImgUrl, a.article_id,a.cover_image,rec_image,praise, content, praise, a.is_show,a.add_time,a.title,
-    c.collection_id, c.collection_type
-    FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id left JOIN t_collection c on a.article_id=c.business_dish_id
+    u.user_id,u.username,u.tel, u.headImgUrl, a.article_id,a.cover_image,rec_image,praise, content, praise, a.is_show,a.add_time,a.title
+    FROM t_user u INNER JOIN t_article a on u.user_id=a.user_id
     <where>
       <if test="userId != null">
         and a.user_id = #{userId}
@@ -62,8 +61,9 @@
         and add_time = #{addTime}
       </if>
     </where>
-    order by add_time desc
+    order by praise desc
   </select>
+
   <sql id="Base_Column_List">
     article_id, user_id, cover_image,rec_image, praise, is_show, add_time,title
   </sql>

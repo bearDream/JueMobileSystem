@@ -50,6 +50,14 @@ public class UserCollection {
 
     private Date ArticleAddTime;
 
+    public UserCollection() {
+    }
+
+    public UserCollection(Integer userId, Integer businessDishId) {
+        this.userId = userId;
+        this.businessDishId = businessDishId;
+    }
+
     public Integer getComment() {
         return comment;
     }

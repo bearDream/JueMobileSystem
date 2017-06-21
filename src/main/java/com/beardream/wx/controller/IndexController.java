@@ -138,6 +138,8 @@ public class IndexController {
             if (users.size() > 0){
                 //用户session过期，执行登录后返回
                 user = users.get(0);
+                System.out.println(user.getOpenid());
+                System.out.println(user.getHeadImgUrl());
                 session.setAttribute(Constants.USER, gson.toJson(user));
                 session.setMaxInactiveInterval(-1);// 永远不会过期
 
@@ -149,8 +151,6 @@ public class IndexController {
                 user.setHeadImgUrl(wxMpUser.getHeadImgUrl());
                 user.setRemark("微信自动注册");
                 int result = mUserMapper.insertSelective(user);
-                session.setAttribute(Constants.USER, gson.toJson(user));
-                session.setMaxInactiveInterval(-1);// 永远不会过期
                 if (result > 0){
                     session.setAttribute(Constants.USER, gson.toJson(user));
                     session.setMaxInactiveInterval(60*60*24*1);// 一天的有效

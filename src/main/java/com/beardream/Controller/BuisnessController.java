@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
@@ -53,7 +54,10 @@ public class BuisnessController {
 
     @ApiOperation("获取单个商家信息")
     @GetMapping
-    public Result get(Business business, BindingResult bindingResult) {
+    public Result get(Business business,
+                      @Param(value = "userLontitude") Double lontitude,
+                      @Param(value = "userLatitude") Double latitude,
+                      BindingResult bindingResult) {
         // 获取到商家的基本信息和该商家的排队情况
         // 商家信息（包括是否开放了取号功能） + 排队的队列（有效的）
         System.out.println(business.getBusinessId());
@@ -63,6 +67,8 @@ public class BuisnessController {
 
         // 将查询出来的商家信息给business1
         Business business1 = (Business) businessResult.getData();
+        if (lontitude != null && latitude != null)
+            business1 = (Business) mBusinessService.Distance(business1, lontitude, latitude).getData();
 
         // 根据business1的信息查询对应的队列信息（有效期的且是今天的）
         List<Number> businessQueue = mBusinessService.getBusinessQue(business1);
@@ -197,6 +203,7 @@ public class BuisnessController {
         // waitSort为1则按照等待人数从多到少排序，为0则按照从少到多排序,并且查出来的商家都是开通取号功能的
 
         Map<String, Object> businessMap = new HashedMap();// 装三个list集合
+        business.setIsShow((byte)1);
 
         // 一、查询按照距离排序的商家
         Map businessLocationMap = mBusinessService.getPage(business, pageNum, pageSize);
@@ -234,6 +241,7 @@ public class BuisnessController {
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
 
         // 1、先查询出商家来
+        business.setIsShow((byte)1);
         Map businessMap = mBusinessService.getPage(business, pageNum, pageSize);
         // 2、然后根据商家list遍历查询商家的两个菜品
         Map businessDishMap = mBusinessService.getBusinessDishList(businessMap, user.getBodyStatus());

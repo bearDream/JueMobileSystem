@@ -5,9 +5,11 @@ import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.ArticleMapper;
+import com.beardream.dao.UserCollectionMapper;
 import com.beardream.model.Result;
 import com.beardream.model.User;
 import com.beardream.model.UserArticle;
+import com.beardream.model.UserCollection;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
@@ -29,6 +31,9 @@ public class ArticleService {
 
     @Autowired
     private ArticleMapper mArticleMapper;
+
+    @Autowired
+    private UserCollectionMapper mUserCollectionMapper;
 
     public UserArticle get(UserArticle userArticle){
         return mArticleMapper.findUserArticleBySelective(userArticle).get(0);
@@ -72,6 +77,9 @@ public class ArticleService {
     // 上传文章
     public Result addArticle(UserArticle userArticle, HttpSession session){
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+
+        if (!TextUtil.isEmpty(user.getUserId()))
+            return ResultUtil.error(-1,"未登录");
 
         if (!TextUtil.isEmpty(userArticle.getTitle()))
             return ResultUtil.error(-1,"请检查文章标题是否填写");
