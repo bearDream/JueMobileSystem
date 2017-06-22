@@ -68,7 +68,7 @@ public class CollectionService {
 
     public UserArticle queryArticleCollect(UserArticle userArticle){
         // 根据articleid和用户id查询该用户是否收藏过文章
-        UserCollection userCollection = new UserCollection(userArticle.getUserId(), userArticle.getArticleId());
+        UserCollection userCollection = new UserCollection(userArticle.getUserId(), userArticle.getArticleId(), 3);
         UserCollection articles = mUserCollectionMapper.findByUserObjId(userCollection);
         if (articles != null){
             userArticle.setCollectionId(articles.getCollectionId());
@@ -76,8 +76,19 @@ public class CollectionService {
         }else {
             return userArticle;
         }
-
     }
+
+    public UserCollection queryBusinessDishCollect(UserCollection userCollection){
+        // 根据businessDishId和用户id查询该用户是否收藏过文章
+        UserCollection business = mUserCollectionMapper.findByUserObjId(userCollection);
+        if (business != null){
+            userCollection.setCollectionId(business.getCollectionId());
+            return userCollection;
+        }else {
+            return userCollection;
+        }
+    }
+
 
     public List getCollectionList(UserCollection userCollection, int pageNum, int pageSize) throws UnsupportedEncodingException {
         // 1、查询出收藏表基本信息

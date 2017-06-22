@@ -153,7 +153,7 @@ public class IndexController {
                 int result = mUserMapper.insertSelective(user);
                 if (result > 0){
                     session.setAttribute(Constants.USER, gson.toJson(user));
-                    session.setMaxInactiveInterval(60*60*24*1);// 一天的有效
+                    session.setMaxInactiveInterval(60*1);// 一分钟的有效时间，刚注册的用户的session不能太长
                 }else {
                     //注册失败，返回到错误页面
                     return false;

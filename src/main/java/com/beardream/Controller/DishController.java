@@ -1,10 +1,13 @@
 package com.beardream.Controller;
 
+import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.DishMapper;
 import com.beardream.ioc.*;
 import com.beardream.model.*;
+import com.beardream.service.CollectionService;
 import com.beardream.service.DishService;
 import com.beardream.service.NutritionService;
 import com.github.pagehelper.PageHelper;
@@ -16,6 +19,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +39,26 @@ public class DishController {
     @Autowired
     private NutritionService mNutritionService;
 
+    @Autowired
+    private CollectionService mCollectionService;
+
+
     @ApiOperation("获取单个菜品信息")
     @RequestMapping(value = "/{dishId}", method = RequestMethod.GET)
-    public Result get(@PathVariable Integer dishId){
+    public Result get(@PathVariable Integer dishId, HttpSession session){
         if (!TextUtil.isEmpty(dishId))
             return ResultUtil.error(-1,"菜品id不能为空");
         System.out.println(dishId);
-        return ResultUtil.success(mDishService.find(dishId));
+        Dish dish = mDishService.find(dishId);
+
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+
+        if (user != null){
+            UserCollection userCollection = new UserCollection(user.getUserId(), dishId, 1);
+            userCollection = mCollectionService.queryBusinessDishCollect(userCollection);
+            dish.setCollectionId(userCollection.getCollectionId());
+        }
+        return ResultUtil.success(dish);
     }
 
     @ApiOperation("添加菜品")

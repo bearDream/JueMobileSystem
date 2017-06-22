@@ -72,6 +72,9 @@
       <if test="businessDishId != null">
         and business_dish_id = #{businessDishId,jdbcType=INTEGER}
       </if>
+      <if test="collectionType != null">
+        and collection_type = #{collectionType,jdbcType=INTEGER}
+      </if>
     </where>
     order by add_time desc
   </select>

@@ -51,6 +51,17 @@ public class Business {
     // 有该菜的商家数量
     private Integer businessNum;
 
+    // 用户收藏商家的id
+    private Integer collectionId;
+
+    public Integer getCollectionId() {
+        return collectionId;
+    }
+
+    public void setCollectionId(Integer collectionId) {
+        this.collectionId = collectionId;
+    }
+
     public Integer getBusinessNum() {
         return businessNum;
     }

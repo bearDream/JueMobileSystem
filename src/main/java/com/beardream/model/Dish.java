@@ -31,6 +31,17 @@ public class Dish {
 
     private Integer dishNutritionStatus;
 
+    // 用户收藏菜品的colletionId
+    private Integer collectionId;
+
+    public Integer getCollectionId() {
+        return collectionId;
+    }
+
+    public void setCollectionId(Integer collectionId) {
+        this.collectionId = collectionId;
+    }
+
     public Integer getDishtypeId() {
         return dishtypeId;
     }

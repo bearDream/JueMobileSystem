@@ -12,6 +12,7 @@ import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
 import com.beardream.model.Number;
 import com.beardream.service.BusinessService;
+import com.beardream.service.CollectionService;
 import com.beardream.service.CommonService;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
@@ -44,7 +45,7 @@ public class BuisnessController {
     private  BusinessMapper businessMapper;
 
     @Autowired
-    private UserMapper mUserMapper;
+    private CollectionService mCollectionService;
 
     @Autowired
     private BusinessService mBusinessService;
@@ -57,6 +58,7 @@ public class BuisnessController {
     public Result get(Business business,
                       @Param(value = "userLontitude") Double lontitude,
                       @Param(value = "userLatitude") Double latitude,
+                      HttpSession session,
                       BindingResult bindingResult) {
         // 获取到商家的基本信息和该商家的排队情况
         // 商家信息（包括是否开放了取号功能） + 排队的队列（有效的）
@@ -69,6 +71,15 @@ public class BuisnessController {
         Business business1 = (Business) businessResult.getData();
         if (lontitude != null && latitude != null)
             business1 = (Business) mBusinessService.Distance(business1, lontitude, latitude).getData();
+
+        // 如果是用户查看该商家的情况，则还应该拿到他是否收藏了该商家的信息
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        if (user != null) {
+            // 根据用户id， dish_business_id查询是否收藏过
+            UserCollection userCollection = new UserCollection(user.getUserId(), business1.getBusinessId(), 3);
+            userCollection = mCollectionService.queryBusinessDishCollect(userCollection);
+            business1.setCollectionId(userCollection.getCollectionId());
+        }
 
         // 根据business1的信息查询对应的队列信息（有效期的且是今天的）
         List<Number> businessQueue = mBusinessService.getBusinessQue(business1);

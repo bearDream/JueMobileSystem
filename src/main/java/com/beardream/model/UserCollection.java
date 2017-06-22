@@ -53,9 +53,10 @@ public class UserCollection {
     public UserCollection() {
     }
 
-    public UserCollection(Integer userId, Integer businessDishId) {
+    public UserCollection(Integer userId, Integer businessDishId, Integer collectionType) {
         this.userId = userId;
         this.businessDishId = businessDishId;
+        this.collectionType = collectionType;
     }
 
     public Integer getComment() {
