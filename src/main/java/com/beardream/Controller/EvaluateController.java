@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +34,10 @@ public class EvaluateController {
 
     @ApiOperation("发表评价")
     @PostMapping
-    public Result post(UserCollection userCollection) {
-        //TODO
-        return ResultUtil.success("");
+    public @ResponseBody Result post(@RequestBody Evaluate evaluate,
+                                     HttpSession session) {
+        User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+        return mEvaluateService.add(evaluate, user);
     }
 
 
@@ -43,7 +45,13 @@ public class EvaluateController {
     @GetMapping
     public Result getPage(Evaluate evaluate) {
         // 根据object_id 和 evaluate_type 来决定获取的评价
-        List<Evaluate> evaluateList = mEvaluateService.getEvaluateList(evaluate);
+        List<Evaluate> evaluateList = null;
+        try {
+            evaluateList = mEvaluateService.getEvaluateList(evaluate);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResultUtil.error(-1,"转码出错");
+        }
         if (evaluateList.size() != 0)
             return ResultUtil.success(evaluateList);
         return ResultUtil.error(-1,"还没有人来评价哦");

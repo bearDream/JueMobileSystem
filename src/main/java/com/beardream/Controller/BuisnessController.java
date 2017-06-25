@@ -240,6 +240,34 @@ public class BuisnessController {
         return ResultUtil.success(businessMap);
     }
 
+    // 根据菜品id查询拥有该菜品的所有商家
+    @ApiOperation("分页查询商家推荐,根据不同条件进行查询")
+    @GetMapping("/dishBusiness")
+    public Result getBusinessPage(@RequestParam(value = "dishId", required = false)  Integer dishId,
+                          @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize){
+
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+
+        if (!TextUtil.isEmpty(dishId)){
+            return ResultUtil.error(-1,"菜品id不能为空！");
+        }
+
+        Map<String, Object> businessMap = new HashedMap();// 装三个list集合
+        Business business = new Business();
+        business.setIsShow((byte)1);
+
+
+        // 二、根据菜品id查询会该菜品的所有商家
+        Map businessLevelMap = mBusinessService.getDishBusiness(dishId, pageNum, pageSize);
+        Map businessLevelList = mBusinessService.getBusinessLevelInfoSort(businessLevelMap, "desc");
+
+        businessMap.put("levelList", businessLevelList);
+        return ResultUtil.success(businessMap);
+    }
+
 
     // 微信端一级页面获取商家信息（一个商家图片带两个商家菜品的形式）
     @ApiOperation("分页查询一级页面的商家推荐，隐式根据用户的body_status来查找对应的数据")

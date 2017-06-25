@@ -113,6 +113,17 @@ public class BusinessService {
         return map;
     }
 
+    public Map getDishBusiness(Integer dishId, int pageNum, int pageSize) {
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time desc");
+        List<Business> businesses =mBussinessMapper.findDishBusiness(dishId);
+        PageInfo page = new PageInfo(businesses);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        map.put("list",businesses);
+        return map;
+    }
+
     // 按照取号桌数排序
     public Map getBusinessTakeInfoSort(Map businessMap, String waitSort){
 

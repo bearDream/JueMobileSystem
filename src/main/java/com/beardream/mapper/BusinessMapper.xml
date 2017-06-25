@@ -225,6 +225,14 @@
   </select>
 
 
+  <!-- 根据菜品id查询拥有该菜的额所有商家 -->
+  <select id="findDishBusiness" resultMap="BaseResultMap">
+    SELECT b.*
+    FROM jue.t_business b inner join jue.t_dish_business db on b.business_id=db.business_id
+    where db.dish_id=#{dishId,jdbcType=INTEGER} and b.is_show=1
+    group by b.business_id
+    order by order_count desc;
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_business

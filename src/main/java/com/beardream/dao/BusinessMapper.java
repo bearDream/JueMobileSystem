@@ -49,4 +49,7 @@ public interface BusinessMapper {
 
     // 模糊查询商家
     List<Business> findBusinessFuzzyList(@Param("name") String name);
+
+    // 根据菜品id查询商家
+    List<Business> findDishBusiness(@Param("dishId") Integer dishId);
 }
