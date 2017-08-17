@@ -45,7 +45,6 @@ public class DishBusinessService {
             dish.setDishName(dishBusiness.getDishName());
             dish.setDishDesc(dishBusiness.getDishDesc());
             dish.setDishImage(dishBusiness.getDishImage());
-            //TODO
 
             dishList.add(dish);
         }

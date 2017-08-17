@@ -246,4 +246,34 @@ public class User {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", tel='" + tel + '\'' +
+                ", headImgUrl='" + headImgUrl + '\'' +
+                ", remark='" + remark + '\'' +
+                ", realName='" + realName + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", bankCard='" + bankCard + '\'' +
+                ", address='" + address + '\'' +
+                ", weixin='" + weixin + '\'' +
+                ", openid='" + openid + '\'' +
+                ", logins=" + logins +
+                ", alipay='" + alipay + '\'' +
+                ", status=" + status +
+                ", type=" + type +
+                ", level=" + level +
+                ", lontitude=" + lontitude +
+                ", latitude=" + latitude +
+                ", roleId=" + roleId +
+                ", point=" + point +
+                ", bodyStatus=" + bodyStatus +
+                '}';
+    }
 }

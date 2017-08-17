@@ -43,6 +43,14 @@
     from t_user
     where tel = #{tel, jdbcType=VARCHAR}
   </select>
+
+  <select id="findByOpenId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_user
+    where openid = #{openid, jdbcType=VARCHAR}
+  </select>
+
   <select id="findSelective" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />

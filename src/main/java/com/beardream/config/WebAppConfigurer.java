@@ -24,6 +24,7 @@ public class WebAppConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns(Constants.REDIRECT_URL)
                 .excludePathPatterns(Constants.LOGIN_URL)
                 .excludePathPatterns(Constants.TOKEN_URL)
                 .excludePathPatterns(Constants.FILE_URL)

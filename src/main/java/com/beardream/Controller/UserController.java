@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,15 @@ public class UserController {
     public Result get(HttpSession session) throws Exception {
         // 从session中获取用户的登录信息
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
-        user = (User) userService.get(user);
+        if(user != null)
+            System.out.println(user.toString());
+        else
+            System.out.println("user is null!!!!!!!!!!!!!!!");
+        user = userService.findByOpenId(user);
+        if(user != null)
+            System.out.println(user.toString());
+        else
+            System.out.println("select user is null!!!!!!!!!!!!!!!");
         // 将用户名转码发送给前端
         user.setUsername(MimeUtility.decodeText(user.getUsername()));
         return ResultUtil.success(user);

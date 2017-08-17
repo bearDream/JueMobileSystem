@@ -7,8 +7,11 @@ public class Constants {
 
     public final static String USER = "user";
 
+    //重定向的url
+    public final static String REDIRECT_URL = "/api/mobile/redirect";
+
     //登录的url
-    public final static String LOGIN_URL = "/api/mobile/index";
+    public final static String LOGIN_URL = "/api/mobile";
 
     //小程序登录的url
     public final static String MINI_LOGIN_URL = "/api/mobile/mini";

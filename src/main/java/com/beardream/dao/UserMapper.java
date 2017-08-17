@@ -29,4 +29,5 @@ public interface UserMapper {
 
     int deleteByPrimaryKey(Integer userId);
 
+    User findByOpenId(String openid);
 }
