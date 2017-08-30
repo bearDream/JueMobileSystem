@@ -148,6 +148,19 @@ public class TextUtil {
         return sb.toString();
     }
 
+    // 比较两个字符串是否相等，如果都为null也为相等
+    public static boolean StringCompare(String s1, String s2) {
+        // 一个为null，一个不为null则说明不相等
+        if(s1 == null && s2 != null)
+            return false;
+        if(s1 != null && s2 == null)
+            return false;
+        if(s1 == null && s2 == null)
+            return true;
+        if(s1.equals(s2))
+            return true;
+        return false;
+    }
 
     public static String getRandomUUID() {
         return java.util.UUID.randomUUID().toString().replace("-", "");
